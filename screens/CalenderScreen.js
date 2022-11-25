@@ -14,13 +14,15 @@ function CalenderScreen({ navigation }) {
   <View style={styles.container}>
     <View >
       <Calendar
-        // Initially visible month. Default = now
-        initialDate={'2022-11-24'}
-        // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+        // 처음에 보이는 달. default = 지금
+        // initialDate={'2022-11-24'}
+        // 선택할 수 있는 최소 날짜, 이전 날짜는 회색으로 표시 기본= 표시 안됨
+        // 일기를 적기 시작한 날 시작
         minDate={'2022-10-10'}
-        // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+        // 선택할 수 있는 최대 날짜 , 이후 날짜는 회색을 표시 기본 = 표시안됨
+        // 오늘 날짜를 최대로 선정
         maxDate={'2022-12-12'}
-        // Handler which gets executed on day press. Default = undefined
+        //day press에서 실행되는 핸들러 기본값 = 정의되지 않음
         onDayPress={day => {
           console.log('selected day', day);
         }}
@@ -34,7 +36,7 @@ function CalenderScreen({ navigation }) {
         onMonthChange={month => {
           console.log('month changed', month);
         }}
-        // Hide month navigation arrows. Default = false
+        // 월 탐색 화살표 숨기기 기본 = 거짓
         hideArrows={true}
         // Replace default arrows with custom ones (direction can be 'left' or 'right')
         renderArrow={direction => <Arrow />}
@@ -69,7 +71,19 @@ function CalenderScreen({ navigation }) {
     </View>
         <Text style={styles.textStyle}>XXXX년 XX월 XX일 X요일</Text>
     {/* 카드 가로 뷰 */}
-    <Card id='1'></Card>
+          <View style={styles.cardContainer}>
+            <SafeAreaView>
+              {/* 가로 스크롤 뷰 */}
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal style={styles.scrollView}  >
+                  {/* 카드 버튼이벤트 */}
+                  <View style={styles.notCard}></View>
+                  <Card id='1'></Card>
+                  <View style={styles.notCard}></View>
+              </ScrollView>
+            </SafeAreaView>
+          </View>
     </View>
   );
 }
@@ -90,4 +104,27 @@ const styles = StyleSheet.create({
     color:'#fff',
     padding:SCREEN_WIDTH/10
   },
+  moon: {
+    marginTop: 8,
+  },
+
+  moonText: {
+    marginBottom: 16,
+    marginLeft: 24,
+    marginRight: 24,
+    color: "#fff",
+    fontSize: 24,
+  },
+
+  scrollView: {
+    marginBottom: 16,
+  },
+
+  cardContainer: {
+    height: SCREEN_HEIGHT / 2,
+  },
+  notCard:{
+    width: SCREEN_WIDTH / 3,
+    height: SCREEN_HEIGHT / 3,
+  }
 })

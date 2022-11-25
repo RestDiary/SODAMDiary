@@ -34,13 +34,15 @@ return (
                 showsHorizontalScrollIndicator={false}
                 horizontal style={styles.scrollView} >
                   {/*----------------------------<day>------------------------------  */}
-                  {/* 카드 버튼이벤트 */}
+                  {/* 카드 버튼이벤트 , 한칸을 투명하게 카드하나 더 만들면 양쪽으로 온다*/}
+                  <View style={styles.notCard}></View>
                   <Card id='1'></Card>
                   <Card id='1'></Card>
                   <Card id='1'></Card>
                   <Card id='1'></Card>
                   <Card id='1'></Card>
                   <Card id='1'></Card>
+                  <View style={styles.notCard}></View>
               </ScrollView>
             </SafeAreaView>
           </View>
@@ -56,12 +58,14 @@ return (
                 horizontal style={styles.scrollView} >
 
                 {/*----------------------------<day>------------------------------  */}
+                <View style={styles.notCard}></View>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
+                <View style={styles.notCard}></View>
                 {/*----------------------------</day>-----------------------------  */}
               </ScrollView>
             </SafeAreaView>
@@ -79,8 +83,10 @@ return (
 
                 {/*----------------------------<day>------------------------------  */}
                   {/* 카드 버튼이벤트 */}
+                  <View style={styles.notCard}></View>
                   <Card id='1'></Card>
                   <Card id='1'></Card>
+                  <View style={styles.notCard}></View>
                 {/*----------------------------</day>-----------------------------  */}
 
               </ScrollView>
@@ -98,11 +104,13 @@ return (
                 horizontal style={styles.scrollView} >
 
                 {/*----------------------------<day>------------------------------  */}
+                <View style={styles.notCard}></View>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
                 <Card id='1'></Card>
+                <View style={styles.notCard}></View>
 
                 {/*----------------------------</day>-----------------------------  */}
               </ScrollView>
@@ -155,4 +163,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     height: SCREEN_HEIGHT / 3,
   },
+  notCard:{
+    width: SCREEN_WIDTH / 3,
+    height: SCREEN_HEIGHT / 3,
+  }
 });

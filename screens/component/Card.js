@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     },
     front:{
         width: SCREEN_WIDTH / 3,
-        height: SCREEN_HEIGHT / 3.3,
+        height: SCREEN_HEIGHT / 3,
         backgroundColor: "#152F5E",
         marginRight: 16,
         alignItems: 'center',
@@ -113,11 +113,11 @@ const styles = StyleSheet.create({
         position: "absolute",
         backfaceVisibility: "hidden",
         //IOS
-        shadowColor: "#ffffff", //그림자색
-        shadowOpacity: 0.3,//그림자 투명도
-        shadowOffset: { width: 2, height: 2 }, //그림자 위치
+        // shadowColor: "#ffffff", //그림자색
+        // shadowOpacity: 0.3,//그림자 투명도
+        // shadowOffset: { width: 2, height: 2 }, //그림자 위치
         //ANDROID
-        elevation: 3,
+        // elevation: 3,
     },
     back: {
         width: SCREEN_WIDTH / 3,
@@ -129,11 +129,11 @@ const styles = StyleSheet.create({
         position: "relative",
         backfaceVisibility: "hidden",
         //IOS
-        shadowColor: "#ffffff", //그림자색
-        shadowOpacity: 0.3,//그림자 투명도
-        shadowOffset: { width: 2, height: 2 }, //그림자 위치
+        // shadowColor: "#ffffff", //그림자색
+        // shadowOpacity: 0.3,//그림자 투명도
+        // shadowOffset: { width: 2, height: 2 }, //그림자 위치
         //ANDROID
-        elevation: 3,
+        // elevation: 3,
       },
       backText:{
         color:"white",
