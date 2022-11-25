@@ -5,7 +5,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
 import {Image} from 'react-native';
 
-
+//사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
 function HomeScreen({ navigation }) {
@@ -26,6 +26,7 @@ function HomeScreen({ navigation }) {
                         
                     </View>
                     <View style={styles.content}>
+                        {/* 새로로 긴 위젯을 위한 위젯 나누기 View */}
                         <View style={styles.headWidgetContainer}>
                                 <View style={styles.headWidgetDiv1} >
                                     <TouchableOpacity  onPress={(screen) => moveNavigate('Calender')}>
@@ -99,7 +100,7 @@ export default HomeScreen;
 
 
 
-
+// 반응형 css
 const styles = StyleSheet.create({
     container:{
         flex:1,
