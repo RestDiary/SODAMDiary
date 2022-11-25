@@ -134,7 +134,7 @@ function WriteScreen({ navigation }) {
       />
 
       {/*--------------------- 에디터 --------------------- */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} flex="0.8">
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex:0.8}}>
         <SafeAreaView>
           <ScrollView>
             <RichEditor
