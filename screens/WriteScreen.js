@@ -43,10 +43,13 @@ function WriteScreen({ navigation }) {
     const replaceHTML = descHTML.replace(/<(.|\n)*?>/g, "").trim();
     const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, "").trim();
 
+    console.log(replaceHTML)
+    console.log(replaceWhiteSpace)
+
     if (replaceWhiteSpace.length <= 0) {
       setShowDescError(true);
     } else {
-      // send data to your server!
+      // send data to your server! 여기에 어싱크 스토리지
     }
   };
   
@@ -137,6 +140,30 @@ function WriteScreen({ navigation }) {
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex:0.8}}>
         <SafeAreaView>
           <ScrollView>
+            {/* 음성 플레이어 영역 */}
+            <View style={{ backgroundColor: 'red' }}>
+              <View style={{ height: 40, backgroundColor: 'blue' }}>
+                <Text>
+                  ㅎㅇ
+                </Text>
+              </View>
+              <View style={{ height: 40, backgroundColor: 'blue' }}>
+                <Text>
+                  ㅎㅇ
+                </Text>
+              </View>
+              <View style={{ height: 40, backgroundColor: 'blue' }}>
+                <Text>
+                  ㅎㅇ
+                </Text>
+              </View>
+              <View style={{ height: 40, backgroundColor: 'blue' }}>
+                <Text>
+                  ㅎㅇ
+                </Text>
+              </View>
+            </View>
+
             <RichEditor
               ref={richText} // from useRef()
               onChange={richTextHandle}
@@ -148,8 +175,10 @@ function WriteScreen({ navigation }) {
                 color: "white",
               }}
               style={{ ...styles.richTextEditorStyle}}
-              initialHeight={SCREEN_HEIGHT / 2}
-            />
+              initialHeight={SCREEN_HEIGHT / 2}>
+
+                
+              </RichEditor>
           </ScrollView>
         </SafeAreaView>
       </KeyboardAvoidingView>
@@ -164,16 +193,12 @@ function WriteScreen({ navigation }) {
         </TouchableOpacity>
       </View>
     </View>
-
-
-
   );
 }
 
 export default WriteScreen;
 
 const styles = StyleSheet.create({
-
   errorTextStyle: {
     color: "#fff",
   },
