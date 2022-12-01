@@ -1,19 +1,55 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert } from 'react-native';
 import { actions, RichEditor, RichToolbar, } from "react-native-pell-rich-editor";
 import { MaterialIcons } from '@expo/vector-icons';
+import {Picker} from '@react-native-picker/picker';
+import { Chip } from 'react-native-paper';
+
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function WriteScreen({ navigation }) {
   const voice = require("../assets/images/voice.png");
-  const [titleText, onChangeTitleText] = React.useState("");
-  const [feelingText, onChangeFeelingText] = React.useState("");
-  const [dateText, onChangeDateText] = React.useState("");
+  const [titleText, onChangeTitleText] = useState("");
+  const [feelingText, onChangeFeelingText] = useState("");
+  const [dateText, onChangeDateText] = useState("");
   const richText = React.useRef();
-  const [descHTML, setDescHTML] = React.useState("");
-  const [showDescError, setShowDescError] = React.useState(false);
+  const [descHTML, setDescHTML] = useState("");
+  const [showDescError, setShowDescError] = useState(false);
 
-  // 현기가 할 것. (음성 녹음)
+  //감정 Picker
+  const [selectedEmotion, setSelectedEmotion] = useState();
+  const [Emotions, setEmotions] = useState([]);
+
+  //감정 키워드 추가
+  const addEmotion = (keyword) => {
+    if(Emotions.length>=3){
+      Alert.alert("최대 3개까지만 선택할 수 있어요.")
+      return
+    }
+
+    if(Emotions.includes(keyword)){
+      Alert.alert("이미 선택한 감정이에요.")
+      return
+    }
+
+    let temp = [...Emotions]
+
+    temp.push(keyword)
+    setEmotions(temp)
+  }
+  
+  //키워드 제거
+  const delEmotion = (keyword) => {
+    console.log("여기"+keyword)
+    let temp = [...Emotions]
+    
+    setEmotions(temp.filter((i) => i !== keyword ))
+  }
+
+  //Date Time Picker
+  const [date, setDate] = useState(new Date());
+
+  // 음성녹음
   function insertVoice() {
     // you can easily add videos from your gallery
     RichText.current?.insertVoice(
@@ -39,23 +75,25 @@ function WriteScreen({ navigation }) {
     }
   };
 
+  //저장 버튼 
   const submitContentHandle = () => {
     const replaceHTML = descHTML.replace(/<(.|\n)*?>/g, "").trim();
     const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, "").trim();
 
-    console.log(replaceHTML)
-    console.log(replaceWhiteSpace)
+    console.log("replaceHTML : ", replaceHTML)
+    console.log("replaceWhiteSpace", replaceWhiteSpace)
 
     if (replaceWhiteSpace.length <= 0) {
       setShowDescError(true);
     } else {
+      console.log("저장해욧")
+      console.log("titleText : "+titleText, "feelingText : "+feelingText, "dateText : "+dateText)
       // send data to your server! 여기에 어싱크 스토리지
     }
   };
   
   return (
     <View style={styles.container}>
-
       {/* 제목 */}
       <SafeAreaView style={styles.titleLayout}>
         <TextInput
@@ -65,30 +103,61 @@ function WriteScreen({ navigation }) {
           style={styles.title}
           onChangeText={onChangeTitleText}
           value={titleText}
+          returnKeyType="next"
+          maxLength = {30}
         />
+      </SafeAreaView>
+
+      {/* 감정선택 */}
+      <SafeAreaView style={styles.feelingLayout}>
+        {/* 오늘의 기분 키워드 피커 */}
+        <View>
+          <Picker
+            style={styles.feeling}
+            onValueChange={(itemValue) =>addEmotion(itemValue)}>
+            <Picker.Item enabled={false} label="감정 선택" value="emo" />
+            <Picker.Item label="추억" value="추억" />
+            <Picker.Item label="추천" value="추천" />
+            <Picker.Item label="성취" value="성취" />
+            <Picker.Item label="좋음" value="좋음" />
+            <Picker.Item label="즐거움" value="즐거움" />
+            <Picker.Item label="행복" value="행복" />
+            <Picker.Item label="기대" value="기대" />
+            <Picker.Item label="감사" value="감사" />
+            <Picker.Item label="부러움" value="부러움" />
+            <Picker.Item label="당황" value="당황" />
+            <Picker.Item label="피곤" value="피곤" />
+            <Picker.Item label="안타까움" value="안타까움" />
+            <Picker.Item label="슬픔" value="슬픔" />
+            <Picker.Item label="실망" value="실망" />
+            <Picker.Item label="아픔" value="아픔" />
+            <Picker.Item label="불행" value="불행" />
+            <Picker.Item label="우울" value="우울" />
+          </Picker>
+        </View>
+
+        {/* 선택한 감정 보이는 곳 */}
+        <View style={styles.feelingBtnBox}>
+          {Emotions &&
+            Emotions.map((emo, index) => {
+              return (
+              <Chip compact='true' onClose={(keyword) => delEmotion(emo)}>
+                {emo}
+              </Chip>
+              )
+            })
+          }
+        </View>
       </SafeAreaView>
 
       {/* 날짜 */}
       <SafeAreaView style={styles.extendLayout}>
         <View style={styles.dateLayout}>
-          <TextInput
-            placeholder="날짜선택:"
-            placeholderTextColor={"#456185"}
-            style={styles.date}
-            onChangeText={onChangeDateText}
-            value={dateText}
-          ></TextInput>
-        </View>
-
-        {/* 오늘의 기분 */}
-        <View style={styles.feelingLayout}>
-          <TextInput
-            placeholder="기분:"
-            placeholderTextColor={"#456185"}
-            style={styles.feeling}
-            onChangeText={onChangeFeelingText}
-            value={feelingText}
-          ></TextInput>
+          <TouchableOpacity>
+            <Text style={styles.date}>
+              {date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
 
@@ -147,21 +216,6 @@ function WriteScreen({ navigation }) {
                   ㅎㅇ
                 </Text>
               </View>
-              <View style={{ height: 40, backgroundColor: 'blue' }}>
-                <Text>
-                  ㅎㅇ
-                </Text>
-              </View>
-              <View style={{ height: 40, backgroundColor: 'blue' }}>
-                <Text>
-                  ㅎㅇ
-                </Text>
-              </View>
-              <View style={{ height: 40, backgroundColor: 'blue' }}>
-                <Text>
-                  ㅎㅇ
-                </Text>
-              </View>
             </View>
 
             <RichEditor
@@ -176,7 +230,6 @@ function WriteScreen({ navigation }) {
               }}
               style={{ ...styles.richTextEditorStyle}}
               initialHeight={SCREEN_HEIGHT / 2}>
-
                 
               </RichEditor>
           </ScrollView>
@@ -238,6 +291,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#fff",
   },
+
   headerStyle: {
     fontSize: 15,
     fontWeight: "600",
@@ -252,7 +306,6 @@ const styles = StyleSheet.create({
 
   richTextToolbarStyle: {
     backgroundColor: "#152F5E",
-
   },
 
   container: {
@@ -262,6 +315,8 @@ const styles = StyleSheet.create({
 
   title: {
     color: "white",
+    fontSize: SCREEN_HEIGHT / 30,
+    height: SCREEN_HEIGHT / 16,
     padding: 10,
   },
 
@@ -270,28 +325,47 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT / 20,
   },
 
-  feeling: {
-    color: "white",
-    padding: 10,
-  },
-
   extendLayout: {
     flexDirection: 'row',
   },
 
   feelingLayout: {
+    marginTop: 10,
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
+    flexDirection:'row',
+  },
+
+  feeling: {
+    width: SCREEN_WIDTH / 3,
+    height: SCREEN_HEIGHT / 50,
+    backgroundColor:'red',
+    color: "#456185",
+    padding:10,
+  },
+
+  feelingBtnBox: {
+    flexDirection:'row',
+    width: SCREEN_WIDTH / 1.5,
+    height: SCREEN_HEIGHT / 14.5,
+    backgroundColor:'blue',
+    color: "#456185",
+    padding:10,
+    alignItems:'center',
+    justifyContent:'space-around',
   },
 
   date: {
-    color: "white",
+    width: SCREEN_WIDTH / 3,
+    color: "#456185",
     padding: 10,
+    backgroundColor:'red',
   },
 
   dateLayout: {
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
+    marginTop:SCREEN_HEIGHT / 40,
   },
 
   contents: {
