@@ -4,9 +4,11 @@ import { actions, RichEditor, RichToolbar, } from "react-native-pell-rich-editor
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { Chip } from 'react-native-paper';
+import { API } from '../config.js'
 import Modal from "react-native-modal";
 import AudioRecorder from './component/AudioRecorder';
 import AudioPlayer from './component/AudioPlayer';
+import axios from 'axios';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -14,20 +16,22 @@ function WriteScreen({ navigation }) {
   const voice = require("../assets/images/voice.png");
   const [titleText, onChangeTitleText] = useState("");
   const [feelingText, onChangeFeelingText] = useState("");
-  const [dateText, onChangeDateText] = useState("");
   const richText = React.useRef();
   const [descHTML, setDescHTML] = useState("");
   const [showDescError, setShowDescError] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [Emotions, setEmotions] = useState([]);
+  const [date, setDate] = useState(new Date());
+
+  //링크이동
+  const moveNavigate = (screen) => {
+    navigation.navigate(screen)
+  }
 
   //Modal
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-  //감정 Picker
-  const [Emotions, setEmotions] = useState([]);
 
   //감정 키워드 추가
   const addEmotion = (keyword) => {
@@ -52,9 +56,6 @@ function WriteScreen({ navigation }) {
     let temp = [...Emotions]
     setEmotions(temp.filter((i) => i !== keyword))
   }
-
-  //Date Time Picker
-  const [date, setDate] = useState(new Date());
 
   // 민제 형이 할 것. (사진 피커)
   function onPressAddImage() {
@@ -82,22 +83,66 @@ function WriteScreen({ navigation }) {
     }
   };
 
+  //서버 요청 로딩
+  const [loading, setLoading] = useState(false)
+
   //저장 버튼 
-  const submitContentHandle = () => {
+  const submitContentHandle = async () => {
     const replaceHTML = descHTML.replace(/<(.|\n)*?>/g, "").trim();
     const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, "").trim();
 
-    console.log("replaceHTML : ", replaceHTML)
-    console.log("replaceWhiteSpace", replaceWhiteSpace)
+    if (titleText.length<=0) {
+      setShowDescError(true);
+      Alert.alert("제목을 입력해 주세요.")
+      return
+    }
+
+    if (Emotions.length<=0) {
+      setShowDescError(true);
+      Alert.alert("감정 키워드를 선택해 주세요.")
+      return
+    }
 
     if (replaceWhiteSpace.length <= 0) {
       setShowDescError(true);
-    } else {
-      console.log("저장해욧")
-      console.log("titleText : " + titleText, "feelingText : " + feelingText, "dateText : " + dateText, "감정 :" +Emotions)
-      // send data to your server! 여기에 어싱크 스토리지
+      Alert.alert("내용을 입력해 주세요.")
+      return
     }
-  };
+
+    // 서버 데이터 전송
+    setLoading(true)
+
+    try {
+      await axios({
+        method: "post",
+        url: `${API.WRITE}`,
+        params: {
+          id: null, //****작성자 id
+          title: titleText,
+          content: descHTML,
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          day: date.getDate(),
+          img: null, //****이미지 추가
+          voice: audio?.file,
+          keyword: Emotions,
+        }
+      }, null)
+        .then(res => {
+          console.log("성공", res.data)
+          Alert.alert("일기가 저장되었어요.")
+          moveNavigate("Home")
+        })
+        .catch(function (error) {
+          console.log(error.response.data)
+          Alert.alert("❗error : bad response")
+        })
+    } catch (error) {
+      console.log(error.response.data)
+    }
+
+    setLoading(false)
+  }
 
   return (
     <View style={styles.container}>
@@ -214,12 +259,12 @@ function WriteScreen({ navigation }) {
 
       {/* Modal */}
       <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center'}}>
-          <AudioRecorder getAudio={getAudio}/>
+        <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
+          <AudioRecorder getAudio={getAudio} />
 
           <View style={{ marginTop: '6%' }}>
             {isRecording ?
-              <Text style={{color:'white'}}>녹음 중입니다.</Text>
+              <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
               :
               <Button title='닫기' onPress={toggleModal} ></Button>
             }
@@ -232,8 +277,8 @@ function WriteScreen({ navigation }) {
         <SafeAreaView>
           <ScrollView>
             {/* 음성 플레이어 영역 */}
-            { audio &&
-              <View style={{ justifyContent:'center', alignItems:'center'}}>
+            {audio &&
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <AudioPlayer audio={audio}></AudioPlayer>
               </View>
             }
@@ -250,7 +295,6 @@ function WriteScreen({ navigation }) {
               }}
               style={{ ...styles.richTextEditorStyle }}
               initialHeight={SCREEN_HEIGHT / 2}>
-
             </RichEditor>
           </ScrollView>
         </SafeAreaView>
@@ -258,7 +302,6 @@ function WriteScreen({ navigation }) {
 
       {/* 저장 버튼 */}
       <View style={styles.saveButtonView}>
-
         <TouchableOpacity
           style={styles.saveButtonStyle}
           onPress={submitContentHandle}>
@@ -392,10 +435,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
 
-  modalView:{
-    flex: 0.3, 
-    backgroundColor: '#456185', 
-    justifyContent:'center', 
-    alignItems:'center'
+  modalView: {
+    flex: 0.3,
+    backgroundColor: '#456185',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });

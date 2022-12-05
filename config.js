@@ -9,4 +9,6 @@ export const API = {
   LOGIN: `${BASE_URL}/login`,
   OVERLAP: `${BASE_URL}/overlap`,
   FACE: `${BASE_URL}/face`,
+  WRITE: `${BASE_URL}/write`,
+  
 };
