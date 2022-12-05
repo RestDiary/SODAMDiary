@@ -59,7 +59,7 @@ function HomeScreen({ navigation }) {
                             <View style={styles.smallWidgetContaner}>
                                 <TouchableOpacity onPress={(screen) => moveNavigate('MyPage')}>
                                     <View style={{...styles.smallWidget, backgroundColor:'#274180'}}>
-                                        <Text style={styles.textStyle}>MyPage</Text>
+                                        <Text style={styles.textStyle}>join</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -67,7 +67,7 @@ function HomeScreen({ navigation }) {
                                 <TouchableOpacity onPress={(screen) => moveNavigate('Write')}>
                                     <View style={{...styles.smallWidget, backgroundColor:'#152F5E'}}>
                                         <FontAwesome name="pencil-square-o" size={24} color="white" />  
-                                        <Text style={styles.textStyle}>Write</Text>
+                                        <Text style={styles.textStyle}>write</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -76,7 +76,7 @@ function HomeScreen({ navigation }) {
                             <View style={styles.smallWidgetContaner}>
                                 <TouchableOpacity onPress={(screen) => moveNavigate('Setting')}>
                                     <View style={{...styles.smallWidget, backgroundColor:'#ED7C58'}}>
-                                        <Text style={styles.textStyle}>Setting</Text>
+                                        <Text style={styles.textStyle}>login</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -84,7 +84,7 @@ function HomeScreen({ navigation }) {
                                 <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
                                     <View style={{...styles.smallWidget, backgroundColor:'#252958'}}>
                                         <MaterialIcons name="photo-album" size={24} color="white" />
-                                        <Text style={styles.textStyle}>Picture</Text>
+                                        <Text style={styles.textStyle}>picture</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -107,8 +107,6 @@ const styles = StyleSheet.create({
         backgroundColor:'black',
         flexDirection:'column',
         width:SCREEN_WIDTH,
-        
-        
     },
     imgBox:{
         height:SCREEN_HEIGHT/2,
