@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert } from 'react-native';
 import { actions, RichEditor, RichToolbar, } from "react-native-pell-rich-editor";
 import { MaterialIcons } from '@expo/vector-icons';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { Chip } from 'react-native-paper';
+import Modal from "react-native-modal";
+import AudioRecorder from './component/AudioRecorder';
+import AudioPlayer from './component/AudioPlayer';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -16,18 +19,24 @@ function WriteScreen({ navigation }) {
   const [descHTML, setDescHTML] = useState("");
   const [showDescError, setShowDescError] = useState(false);
 
+  //Modal
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   //감정 Picker
-  const [selectedEmotion, setSelectedEmotion] = useState();
   const [Emotions, setEmotions] = useState([]);
 
   //감정 키워드 추가
   const addEmotion = (keyword) => {
-    if(Emotions.length>=3){
+    if (Emotions.length >= 3) {
       Alert.alert("최대 3개까지만 선택할 수 있어요.")
       return
     }
 
-    if(Emotions.includes(keyword)){
+    if (Emotions.includes(keyword)) {
       Alert.alert("이미 선택한 감정이에요.")
       return
     }
@@ -37,25 +46,15 @@ function WriteScreen({ navigation }) {
     temp.push(keyword)
     setEmotions(temp)
   }
-  
+
   //키워드 제거
   const delEmotion = (keyword) => {
-    console.log("여기"+keyword)
     let temp = [...Emotions]
-    
-    setEmotions(temp.filter((i) => i !== keyword ))
+    setEmotions(temp.filter((i) => i !== keyword))
   }
 
   //Date Time Picker
   const [date, setDate] = useState(new Date());
-
-  // 음성녹음
-  function insertVoice() {
-    // you can easily add videos from your gallery
-    RichText.current?.insertVoice(
-      "https://mdn.github.io/learning-area/html/multimedia-and-embedding/video-and-audio-content/rabbit320.mp4"
-    );
-  }
 
   // 민제 형이 할 것. (사진 피커)
   function onPressAddImage() {
@@ -63,6 +62,14 @@ function WriteScreen({ navigation }) {
     RichText.current?.insertImage(
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png"
     );
+  }
+
+  //자식에서 부모에게 Audio 데이터 전달
+  const [audio, setAudio] = useState()
+  const [isRecording, setIsRecording] = useState(false)
+  const getAudio = (audio, isRecording) => {
+    setAudio(audio)
+    setIsRecording(isRecording)
   }
 
   const richTextHandle = (descriptionText) => {
@@ -87,11 +94,11 @@ function WriteScreen({ navigation }) {
       setShowDescError(true);
     } else {
       console.log("저장해욧")
-      console.log("titleText : "+titleText, "feelingText : "+feelingText, "dateText : "+dateText)
+      console.log("titleText : " + titleText, "feelingText : " + feelingText, "dateText : " + dateText, "감정 :" +Emotions)
       // send data to your server! 여기에 어싱크 스토리지
     }
   };
-  
+
   return (
     <View style={styles.container}>
       {/* 제목 */}
@@ -104,7 +111,7 @@ function WriteScreen({ navigation }) {
           onChangeText={onChangeTitleText}
           value={titleText}
           returnKeyType="next"
-          maxLength = {30}
+          maxLength={30}
         />
       </SafeAreaView>
 
@@ -114,7 +121,7 @@ function WriteScreen({ navigation }) {
         <View>
           <Picker
             style={styles.feeling}
-            onValueChange={(itemValue) =>addEmotion(itemValue)}>
+            onValueChange={(itemValue) => addEmotion(itemValue)}>
             <Picker.Item enabled={false} label="감정 선택" value="emo" />
             <Picker.Item label="추억" value="추억" />
             <Picker.Item label="추천" value="추천" />
@@ -141,9 +148,9 @@ function WriteScreen({ navigation }) {
           {Emotions &&
             Emotions.map((emo, index) => {
               return (
-              <Chip compact='true' onClose={(keyword) => delEmotion(emo)}>
-                {emo}
-              </Chip>
+                <Chip compact='true' onClose={(keyword) => delEmotion(emo)}>
+                  {emo}
+                </Chip>
               )
             })
           }
@@ -155,7 +162,7 @@ function WriteScreen({ navigation }) {
         <View style={styles.dateLayout}>
           <TouchableOpacity>
             <Text style={styles.date}>
-              {date.getFullYear()+'년 '+(date.getMonth()+1)+'월 '+date.getDate()+'일'}
+              {date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -184,7 +191,7 @@ function WriteScreen({ navigation }) {
         onPressAddImage={onPressAddImage}
 
         // 음성 녹음 기능
-        insertVoice={insertVoice}
+        insertVoice={toggleModal}
 
         selectedIconTint="#ED7C58"
         iconTint="#fff"
@@ -205,18 +212,31 @@ function WriteScreen({ navigation }) {
         style={styles.richTextToolbarStyle}
       />
 
+      {/* Modal */}
+      <Modal isVisible={isModalVisible}>
+        <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center'}}>
+          <AudioRecorder getAudio={getAudio}/>
+
+          <View style={{ marginTop: '6%' }}>
+            {isRecording ?
+              <Text style={{color:'white'}}>녹음 중입니다.</Text>
+              :
+              <Button title='닫기' onPress={toggleModal} ></Button>
+            }
+          </View>
+        </View>
+      </Modal>
+
       {/*--------------------- 에디터 --------------------- */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{flex:0.8}}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
         <SafeAreaView>
           <ScrollView>
             {/* 음성 플레이어 영역 */}
-            <View style={{ backgroundColor: 'red' }}>
-              <View style={{ height: 40, backgroundColor: 'blue' }}>
-                <Text>
-                  ㅎㅇ
-                </Text>
+            { audio &&
+              <View style={{ justifyContent:'center', alignItems:'center'}}>
+                <AudioPlayer audio={audio}></AudioPlayer>
               </View>
-            </View>
+            }
 
             <RichEditor
               ref={richText} // from useRef()
@@ -228,14 +248,14 @@ function WriteScreen({ navigation }) {
                 placeholderColor: "#456185",
                 color: "white",
               }}
-              style={{ ...styles.richTextEditorStyle}}
+              style={{ ...styles.richTextEditorStyle }}
               initialHeight={SCREEN_HEIGHT / 2}>
-                
-              </RichEditor>
+
+            </RichEditor>
           </ScrollView>
         </SafeAreaView>
       </KeyboardAvoidingView>
-      
+
       {/* 저장 버튼 */}
       <View style={styles.saveButtonView}>
 
@@ -280,6 +300,7 @@ const styles = StyleSheet.create({
       width: 2,
       height: 2,
     },
+
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
@@ -333,39 +354,36 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
-    flexDirection:'row',
+    flexDirection: 'row',
   },
 
   feeling: {
     width: SCREEN_WIDTH / 3,
     height: SCREEN_HEIGHT / 50,
-    backgroundColor:'red',
     color: "#456185",
-    padding:10,
+    padding: 10,
   },
 
   feelingBtnBox: {
-    flexDirection:'row',
+    flexDirection: 'row',
     width: SCREEN_WIDTH / 1.5,
     height: SCREEN_HEIGHT / 14.5,
-    backgroundColor:'blue',
     color: "#456185",
-    padding:10,
-    alignItems:'center',
-    justifyContent:'space-around',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 
   date: {
     width: SCREEN_WIDTH / 3,
     color: "#456185",
     padding: 10,
-    backgroundColor:'red',
   },
 
   dateLayout: {
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
-    marginTop:SCREEN_HEIGHT / 40,
+    marginTop: SCREEN_HEIGHT / 40,
   },
 
   contents: {
@@ -374,4 +392,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
 
+  modalView:{
+    flex: 0.3, 
+    backgroundColor: '#456185', 
+    justifyContent:'center', 
+    alignItems:'center'
+  },
 });
