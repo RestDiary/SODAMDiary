@@ -12,6 +12,8 @@ import MyPageScreen from './screens/MyPageScreen';
 import DiaryScreen from './screens/DiaryScreen';
 import ChartScreen from './screens/ChartScreen';
 import HomeScreen from './screens/Home';
+import FindPwScreen from './screens/FindPwScreen';
+import ChangePwScreen from './screens/ChangePwScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,8 @@ function MyStack() {
         <Stack.Screen name="MyPage" component={MyPageScreen} />
         <Stack.Screen name="Diary" component={DiaryScreen} />
         <Stack.Screen name="Chart" component={ChartScreen} />
+        <Stack.Screen name="FindPw" component={FindPwScreen} />
+        <Stack.Screen name="ChangePw" component={ChangePwScreen}/>
       </Stack.Navigator>
     </>
   );
