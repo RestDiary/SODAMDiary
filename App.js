@@ -14,6 +14,7 @@ import ChartScreen from './screens/ChartScreen';
 import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ function MyStack() {
   return (
     <>
       <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown:false }} name="Home" component={HomeScreen} />
         <Stack.Screen name="Calender" component={CalenderScreen} />
         <Stack.Screen name="Write" component={WriteScreen} />
