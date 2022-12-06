@@ -1,14 +1,38 @@
 import * as React from 'react';
-import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { greaterOrEq } from 'react-native-reanimated';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
 import {Image} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
 function HomeScreen({ navigation }) {
+
+    //로그인 여부 확인
+    React.useEffect(() => {
+        isLogin()
+    }, [])
+    
+    const isLogin = async() => {
+        const userId = await AsyncStorage.getItem('id')
+        if(!userId){
+            Alert.alert("로그인 후에 이용해 주세요.")
+            navigation.navigate("Login")
+        }
+    }
+
+    const logOut = async() => {
+        try {
+            await AsyncStorage.removeItem('id')
+            Alert.alert("로그아웃 되었습니다.")
+            navigation.navigate("Login")
+          } catch(e) {
+            console.log(e)
+        }
+    }
 
     //링크 이동
     const moveNavigate = (screen) => {
@@ -23,7 +47,8 @@ function HomeScreen({ navigation }) {
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
                         <Image source={require('../assets/images/nightStar.png')}></Image>
-                        
+                        <Button onPress={(screen)=>moveNavigate("Login")} title="로그인 페이지"></Button>
+                        <Button onPress={()=>logOut()} title="로그아웃"></Button>
                     </View>
                     <View style={styles.content}>
                         {/* 새로로 긴 위젯을 위한 위젯 나누기 View */}
@@ -57,9 +82,10 @@ function HomeScreen({ navigation }) {
                         </View>
                         <View style={styles.widgetContainer}>
                             <View style={styles.smallWidgetContaner}>
-                                <TouchableOpacity onPress={(screen) => moveNavigate('MyPage')}>
+                            <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
                                     <View style={{...styles.smallWidget, backgroundColor:'#274180'}}>
-                                        <Text style={styles.textStyle}>join</Text>
+                                        <MaterialIcons name="photo-album" size={24} color="white" />
+                                        <Text style={styles.textStyle}>picture</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -72,23 +98,6 @@ function HomeScreen({ navigation }) {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={styles.widgetContainer}>
-                            <View style={styles.smallWidgetContaner}>
-                                <TouchableOpacity onPress={(screen) => moveNavigate('Setting')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:'#ED7C58'}}>
-                                        <Text style={styles.textStyle}>login</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.smallWidgetContaner}>
-                                <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:'#252958'}}>
-                                        <MaterialIcons name="photo-album" size={24} color="white" />
-                                        <Text style={styles.textStyle}>picture</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -97,8 +106,6 @@ function HomeScreen({ navigation }) {
 }
 
 export default HomeScreen;
-
-
 
 // 반응형 css
 const styles = StyleSheet.create({

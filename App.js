@@ -6,9 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 //screen
 import CalenderScreen from './screens/CalenderScreen';
 import WriteScreen from './screens/WriteScreen';
-import SettingScreen from './screens/SettingScreen';
 import PictureScreen from './screens/PictureScreen';
-import MyPageScreen from './screens/MyPageScreen';
+import JoinScreen from './screens/JoinScreen';
 import DiaryScreen from './screens/DiaryScreen';
 import ChartScreen from './screens/ChartScreen';
 import HomeScreen from './screens/Home';
@@ -20,21 +19,22 @@ const Stack = createStackNavigator();
 
 function MyStack() {
   return (
-    <>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen options={{ headerShown:false }} name="Home" component={HomeScreen} />
-        <Stack.Screen name="Calender" component={CalenderScreen} />
-        <Stack.Screen name="Write" component={WriteScreen} />
-        <Stack.Screen name="Setting" component={SettingScreen} />
-        <Stack.Screen name="Picture" component={PictureScreen} />
-        <Stack.Screen name="MyPage" component={MyPageScreen} />
-        <Stack.Screen name="Diary" component={DiaryScreen} />
-        <Stack.Screen name="Chart" component={ChartScreen} />
-        <Stack.Screen name="FindPw" component={FindPwScreen} />
-        <Stack.Screen name="ChangePw" component={ChangePwScreen}/>
-      </Stack.Navigator>
-    </>
+    <Stack.Navigator>
+      <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+      <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+
+      {/* Home */}
+      <Stack.Screen name="Calender" component={CalenderScreen} />
+      <Stack.Screen name="Chart" component={ChartScreen} />
+      <Stack.Screen name="Write" component={WriteScreen} />
+      <Stack.Screen name="Diary" component={DiaryScreen} />
+      <Stack.Screen name="Picture" component={PictureScreen} />
+
+      {/* 기타 스크린 */}
+      <Stack.Screen name="Join" options={{ title:"회원가입" }} component={JoinScreen} />
+      <Stack.Screen name="FindPw" options={{ title:"비밀번호 찾기" }} component={FindPwScreen} />
+      <Stack.Screen name="ChangePw" component={ChangePwScreen} />
+    </Stack.Navigator>
   );
 }
 
