@@ -23,7 +23,6 @@ function HomeScreen({ navigation }) {
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
                         <Image source={require('../assets/images/nightStar.png')}></Image>
-                        
                     </View>
                     <View style={styles.content}>
                         {/* 새로로 긴 위젯을 위한 위젯 나누기 View */}
@@ -34,6 +33,7 @@ function HomeScreen({ navigation }) {
                                             <Entypo name="calendar" size={24} color="white" />
                                             <Text style={styles.textStyle}>calender</Text>
                                         </View>
+                                        
                                     </TouchableOpacity>
                                 </View>
                                 <View  style={styles.headWidgetDiv2}>

@@ -160,9 +160,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  cardContainer: {
-    height: SCREEN_HEIGHT / 3,
-  },
   notCard:{
     width: SCREEN_WIDTH / 3,
     height: SCREEN_HEIGHT / 3,
