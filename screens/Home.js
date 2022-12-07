@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Alert, ImageBackground, StatusBar } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { greaterOrEq } from 'react-native-reanimated';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
-import {Image} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 //사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
@@ -23,7 +23,7 @@ function HomeScreen({ navigation }) {
             navigation.navigate("Login")
         }
     }
-
+    
     const logOut = async() => {
         try {
             await AsyncStorage.removeItem('id')
@@ -42,14 +42,23 @@ function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <SafeAreaView>
+                <StatusBar barStyle="light-content"/>
                 <ScrollView>
                     {/* 테마 대표 이미지 넣기 */}
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
-                        <Image source={require('../assets/images/nightStar.png')}></Image>
-                        <Button onPress={(screen)=>moveNavigate("Login")} title="로그인 페이지"></Button>
-                        <Button onPress={()=>logOut()} title="로그아웃"></Button>
+                        <ImageBackground style={{height:'100%', width:'100%'}} source={require('../assets/images/nightStar.png')}>
+
+                            {/* <Button onPress={()=>logOut()} title="로그아웃"></Button> */}
+                            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                                <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
+                                    <SimpleLineIcons name="menu" size={24} color="white" />
+                                </View>
+                            </TouchableOpacity>
+
+                        </ImageBackground>
                     </View>
+
                     <View style={styles.content}>
                         {/* 새로로 긴 위젯을 위한 위젯 나누기 View */}
                         <View style={styles.headWidgetContainer}>
@@ -116,9 +125,8 @@ const styles = StyleSheet.create({
         width:SCREEN_WIDTH,
     },
     imgBox:{
-        height:SCREEN_HEIGHT/2,
+        height:SCREEN_HEIGHT/3,
         width:SCREEN_WIDTH,
-        backgroundColor:'black',
         justifyContent:'center',
         alignItems:'center',
     },
@@ -129,7 +137,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         width:SCREEN_WIDTH,
         height:SCREEN_HEIGHT/2.4,       
-
     },
     headWidgetDiv1:{
         flex:1,
@@ -167,7 +174,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderRadius: 20,
-        
     },
     textStyle:{
         color:'white',

@@ -1,7 +1,13 @@
 import * as React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 //screen
 import CalenderScreen from './screens/CalenderScreen';
@@ -15,13 +21,52 @@ import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
 
+const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+
+//Drawer
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      
+      <View style={{backgroundColor:"#f6f6f6", padding:15, height:350}}>
+        <Image source={require('./assets/images/logo.png')}
+        />
+      </View>
+
+      <DrawerItemList {...props} />
+
+      <DrawerItem
+        label="Close drawer"
+        onPress={() => props.navigation.closeDrawer()}
+      />
+
+      <DrawerItem
+        label="Toggle drawer"
+        onPress={() => props.navigation.toggleDrawer()}
+      />
+
+    </DrawerContentScrollView>
+  );
+}
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator
+      useLegacyImplementation
+      drawerStyle={{backgroundColor:'#C6CBEF'}}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
+      <Drawer.Screen name="drawerHome" options={{ headerShown: false }} component={HomeScreen} />
+    </Drawer.Navigator>
+  );
+}
 
 function MyStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
-      <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+      <Stack.Screen name="Home" options={{ headerShown: false }} component={MyDrawer} />
 
       {/* Home */}
       <Stack.Screen name="Calender" component={CalenderScreen} />
