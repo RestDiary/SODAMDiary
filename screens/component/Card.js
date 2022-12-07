@@ -122,7 +122,7 @@ function Card(props) {
             </View>
             {/* 제목  */}
             <View style={{...styles.frontTitle}}>
-              <Text style={{color: "white", fontWeight:"bold"}}>{prop.object.title}</Text>
+              <Text style={{color: "white", fontWeight:"bold", fontSize:SCREEN_WIDTH/20}}>{prop.object.title}</Text>
             </View>
         </Animated.View>
 
@@ -133,7 +133,6 @@ function Card(props) {
           {/* 대표 이미지 */}
           <View style={{...styles.backImageBox}}>
           <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQfvaxDliUnxIm0pwpprZSMszh_UVFNfjmtQ&usqp=CAU"}} style={styles.imageSize} resizeMode={'contain'}></Image>
-            <Text>sdf</Text>
           </View>
           {/* 내용 */}
           <View style={styles.backTextView}>
@@ -162,11 +161,12 @@ function Card(props) {
 
 const styles = StyleSheet.create({
   container: {
+    fontSize:'3%'
   },
   
   front: {
     width: SCREEN_WIDTH / 2,
-    height: SCREEN_HEIGHT /2.8,
+    height: (SCREEN_WIDTH/2)*1.6,
     backgroundColor: "#152F5E",
     marginRight: 16,
     position: "absolute",
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     //IOS
     shadowColor: "#ffffff", //그림자색
     shadowOpacity: 0.3,//그림자 투명도
-    shadowOffset: { width: 2, height: 2 }, //그림자 위치
+    // shadowOffset: { width: 2, height: 2 }, //그림자 위치
     // ANDROID
     elevation: 3,
   },
@@ -198,11 +198,12 @@ const styles = StyleSheet.create({
   frontTitle: {
     minHeight:"20%",
     alignItems: "center",
+    
   },
 
   back: {
     width: SCREEN_WIDTH / 2,
-    height: SCREEN_HEIGHT / 2.8,
+    height: (SCREEN_WIDTH/2)*1.6,
     backgroundColor: "#274180",
     marginRight: 30,
     alignItems: 'center',
