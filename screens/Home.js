@@ -23,16 +23,6 @@ function HomeScreen({ navigation }) {
             navigation.navigate("Login")
         }
     }
-    
-    const logOut = async() => {
-        try {
-            await AsyncStorage.removeItem('id')
-            Alert.alert("로그아웃 되었습니다.")
-            navigation.navigate("Login")
-          } catch(e) {
-            console.log(e)
-        }
-    }
 
     //링크 이동
     const moveNavigate = (screen) => {
