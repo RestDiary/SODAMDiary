@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useEffect ,useState} from 'react';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -15,28 +16,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 
 function Card(props) {
-
-
-  //더미 파일 예시
-  const prop ={
-    object:{
-      
-      id : "sodam",
-      title : "기분 좋은 하루",
-      content : "오늘 팀원들과 프로젝트를 진행했다. 이전에 했던 프로젝트에서 상을 받았다, 오늘만 같아라, 다음에는 더 높은상을 받을거다",
-      year : "2022",
-      month : "11",
-      day : "23",
-      img :'https://reactnative.dev/img/tiny_logo.png',
-      voice :"녹음파일 uri(file system)",
-      keyword :["기쁨","슬픔","바보"],
-      emotion  :"nagative",
-      positive : 32.6,
-      nagative: 67.8,
-      nature : 1.6
-    }
-}
-
+  const [newContent,setNewContent] = useState(""); 
 
 
   // 리렌더링 시 값이 초기화 되는 것을 막기 위해 ref 사용.
@@ -98,6 +78,16 @@ function Card(props) {
     }).start();
   };
 
+  //html 태그 지우는 공장 <><><><><>
+  useEffect(() =>{
+    var firstWork = props.data.content.replace(/<\/div>/g, '\n');
+    firstWork = firstWork.replace(/<div>/g, '\n');
+    firstWork = firstWork.replace(/<br>/g, '\n');
+    firstWork = firstWork.replace(/&nbsp/g, ' ');
+    setNewContent(firstWork);
+  })
+
+
   return (
     <View >
       <TouchableOpacity style={{...styles.container}} onPress={() => !!flipRotation ? flipToBack() : flipToFront()}>
@@ -106,15 +96,16 @@ function Card(props) {
           style={{ ...styles.front, ...flipToFrontStyle,  }}>
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
-            {
-              prop.object.keyword.map(function(id,index){
+            <Text>{props.data.keyword}</Text>
+            {/* {
+              props.data.keyword.map(function(id,index){
                 return(
                 <Text style={{color: "#ED7C58"}}>
-                {prop.object.keyword[index]}
+                {props.data.keyword[index]}
               </Text>
               )
               })
-            }
+            } */}
           </View>
           {/* 아이콘  (아이콘은 테마마다 사용하는 아이콘이 다르다)*/} 
           <View style={{ ...styles.frontIcon }}>
@@ -122,14 +113,13 @@ function Card(props) {
             </View>
             {/* 제목  */}
             <View style={{...styles.frontTitle}}>
-              <Text style={{color: "white", fontWeight:"bold", fontSize:SCREEN_WIDTH/20}}>{prop.object.title}</Text>
+              <Text style={{color: "white", fontWeight:"bold", fontSize:SCREEN_WIDTH/20}}>{props.data.title}</Text>
             </View>
         </Animated.View>
 
         {/* 뒷면 */}
         <Animated.View
           style={{ ...styles.back, ...flipToBackStyle }}>
-
           {/* 대표 이미지 */}
           <View style={{...styles.backImageBox}}>
             <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQfvaxDliUnxIm0pwpprZSMszh_UVFNfjmtQ&usqp=CAU"}} style={styles.imageSize} resizeMode={'contain'}></Image>
@@ -140,12 +130,13 @@ function Card(props) {
             numberOfLines={7}
             ellipsizeMode="tail"
             >
-              {prop.object.content}
+              {/* {props.data.content} */}
+              {newContent}
             </Text>
           </View>
           {/* 녹음 아이콘 */}
           {
-            prop.object.voice ===null ? 
+            props.data.voice ===null ? 
               null
             : 
             <View style={styles.backVoiceView}>
