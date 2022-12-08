@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function MyPageScreen({ navigation }) {
+function JoinScreen({ navigation }) {
   var mailRegExp = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{2,3}$/;
   var idRegExp = /^[a-zA-z0-9]{5,12}$/; //아이디 유효성 검사
   var pwRegExp = /^[a-zA-z0-9!@#$%^*+=-]{4,15}$/; //비밀번호 유효성 검사
@@ -18,8 +18,6 @@ function MyPageScreen({ navigation }) {
   const [changeId, setChangeId] = React.useState("아이디는 5~12글자 사이의 영문자와 숫자만 가능합니다.");
   const [changePW, setChangePW] = React.useState("비밀번호가 일치하지 않습니다.");
   const [changeEmail, setChangeEmail] = React.useState("");
-
-
 
   //회원가입
   const register = async() => {
@@ -208,7 +206,7 @@ function MyPageScreen({ navigation }) {
   );
 }
 
-export default MyPageScreen;
+export default JoinScreen;
 
 const styles = StyleSheet.create({
   container: {

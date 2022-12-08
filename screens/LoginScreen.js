@@ -1,56 +1,60 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, View, Image, TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, View, Image, TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API } from '../config'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function SettingScreen({ navigation }) {
+function LoginScreen({ navigation }) {
   const [id, setId] = React.useState("");
   const [pw, setPw] = React.useState("");
 
-   //링크 이동
-   const moveNavigate = (screen) => {
-    navigation.navigate(screen)
-}
+  //로그인 여부 확인
+  React.useEffect(() => {
+    isLogin()
+  }, [])
 
-  const login = () => {
-    console.log("로그인 하러 옴");
-    axios
-      .post("http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/login", null, {
+  const isLogin = async () => {
+    const userId = await AsyncStorage.getItem('id')
+    if (userId) {
+      Alert.alert(userId+"님 반갑습니다.")
+      navigation.navigate("Home")
+    }
+  }
+
+  //링크 이동
+  const moveNavigate = (screen) => {
+    navigation.navigate(screen)
+  }
+
+  const login = async () => {
+    await axios
+      .post(`${API.LOGIN}`, null, {
         params: {
           id: id,
           pw: pw,
         },
       })
       .then((res) => {
-        console.log(res);
         if (res.data === 0) {
-          // 받아온 값이 0이라면
-
-          // alert("로그인에 성공하셨습니다.");
-          AsyncStorage.setItem('id',id);
-          AsyncStorage.getItem('id', (err, result) => {
-            console.log(result); // User1 출력
-          });
+          AsyncStorage.setItem('id', id);
+          Alert.alert(id + "님 반갑습니다.")
           navigation.replace('Home')
         } else {
           // 1이라면 실패
           alert("로그인에 실패하셨습니다.");
         }
-
         return res;
       })
       .then((res) => {
-        if (email === "") {
-          alert("이메일을 입력해주세요.");
+        if (id === "") {
+          alert("아이디를 입력해주세요.");
           return;
         } else if (pw === "") {
           alert("비밀번호를 입력해주세요.");
           return;
         }
-
-        //console.log(res.data)
       })
       .catch(function (error) {
         console.log(error);
@@ -65,7 +69,7 @@ function SettingScreen({ navigation }) {
       </View>
 
       {/* 입력 레이아웃 */}
-      <KeyboardAvoidingView  behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={{ ...styles.inputLayout }}>
           {/* 아이디 박스 */}
           <TextInput style={{ ...styles.inputBox }}
@@ -107,13 +111,13 @@ function SettingScreen({ navigation }) {
           <View style={{ ...styles.loginMenu }}>
             <TouchableOpacity onPress={(screen) => moveNavigate('FindPw')}>
               <View>
-                <Text style={{ color: "#fff", fontSize:16 }}>비밀번호 찾기 | </Text>
+                <Text style={{ color: "#fff", fontSize: 16 }}>비밀번호 찾기 | </Text>
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => moveNavigate('MyPage')}>
+            <TouchableOpacity onPress={() => moveNavigate('Join')}>
               <View>
-                <Text style={{ color: "#fff", fontSize:16 }}>회원가입</Text>
+                <Text style={{ color: "#fff", fontSize: 16 }}>회원가입</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -123,7 +127,7 @@ function SettingScreen({ navigation }) {
   );
 }
 
-export default SettingScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {

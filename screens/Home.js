@@ -1,14 +1,28 @@
 import * as React from 'react';
-import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Alert, ImageBackground, StatusBar } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { greaterOrEq } from 'react-native-reanimated';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
-import {Image} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 //사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
 function HomeScreen({ navigation }) {
+
+    //로그인 여부 확인
+    React.useEffect(() => {
+        isLogin()
+    }, [])
+    
+    const isLogin = async() => {
+        const userId = await AsyncStorage.getItem('id')
+        if(!userId){
+            Alert.alert("로그인 후에 이용해 주세요.")
+            navigation.navigate("Login")
+        }
+    }
 
     //링크 이동
     const moveNavigate = (screen) => {
@@ -18,12 +32,23 @@ function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <SafeAreaView>
+                <StatusBar barStyle="light-content"/>
                 <ScrollView>
                     {/* 테마 대표 이미지 넣기 */}
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
-                        <Image source={require('../assets/images/nightStar.png')}></Image>
+                        <ImageBackground style={{height:'100%', width:'100%'}} source={require('../assets/images/nightStar.png')}>
+
+                            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                                <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
+                                    <SimpleLineIcons name="menu" size={24} color="white" />
+                                </View>
+                            </TouchableOpacity>
+
+                        </ImageBackground>
+
                     </View>
+
                     <View style={styles.content}>
                         {/* 새로로 긴 위젯을 위한 위젯 나누기 View */}
                         <View style={styles.headWidgetContainer}>
@@ -57,9 +82,10 @@ function HomeScreen({ navigation }) {
                         </View>
                         <View style={styles.widgetContainer}>
                             <View style={styles.smallWidgetContaner}>
-                                <TouchableOpacity onPress={(screen) => moveNavigate('MyPage')}>
+                            <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
                                     <View style={{...styles.smallWidget, backgroundColor:'#274180'}}>
-                                        <Text style={styles.textStyle}>join</Text>
+                                        <MaterialIcons name="photo-album" size={24} color="white" />
+                                        <Text style={styles.textStyle}>picture</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -68,23 +94,6 @@ function HomeScreen({ navigation }) {
                                     <View style={{...styles.smallWidget, backgroundColor:'#152F5E'}}>
                                         <FontAwesome name="pencil-square-o" size={24} color="white" />  
                                         <Text style={styles.textStyle}>write</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.widgetContainer}>
-                            <View style={styles.smallWidgetContaner}>
-                                <TouchableOpacity onPress={(screen) => moveNavigate('Setting')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:'#ED7C58'}}>
-                                        <Text style={styles.textStyle}>login</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.smallWidgetContaner}>
-                                <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:'#252958'}}>
-                                        <MaterialIcons name="photo-album" size={24} color="white" />
-                                        <Text style={styles.textStyle}>picture</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -98,8 +107,6 @@ function HomeScreen({ navigation }) {
 
 export default HomeScreen;
 
-
-
 // 반응형 css
 const styles = StyleSheet.create({
     container:{
@@ -109,9 +116,8 @@ const styles = StyleSheet.create({
         width:SCREEN_WIDTH,
     },
     imgBox:{
-        height:SCREEN_HEIGHT/2,
+        height:SCREEN_HEIGHT/3,
         width:SCREEN_WIDTH,
-        backgroundColor:'black',
         justifyContent:'center',
         alignItems:'center',
     },
@@ -122,7 +128,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         width:SCREEN_WIDTH,
         height:SCREEN_HEIGHT/2.4,       
-
     },
     headWidgetDiv1:{
         flex:1,
@@ -160,7 +165,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderRadius: 20,
-        
     },
     textStyle:{
         color:'white',
