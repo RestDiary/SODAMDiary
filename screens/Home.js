@@ -39,7 +39,6 @@ function HomeScreen({ navigation }) {
                         {/* 이미지 들어가는 자리 */}
                         <ImageBackground style={{height:'100%', width:'100%'}} source={require('../assets/images/nightStar.png')}>
 
-                            {/* <Button onPress={()=>logOut()} title="로그아웃"></Button> */}
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                                 <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
                                     <SimpleLineIcons name="menu" size={24} color="white" />
@@ -47,6 +46,7 @@ function HomeScreen({ navigation }) {
                             </TouchableOpacity>
 
                         </ImageBackground>
+
                     </View>
 
                     <View style={styles.content}>
@@ -58,6 +58,7 @@ function HomeScreen({ navigation }) {
                                             <Entypo name="calendar" size={24} color="white" />
                                             <Text style={styles.textStyle}>calender</Text>
                                         </View>
+                                        
                                     </TouchableOpacity>
                                 </View>
                                 <View  style={styles.headWidgetDiv2}>
