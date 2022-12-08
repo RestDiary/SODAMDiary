@@ -61,7 +61,7 @@ function JoinScreen({ navigation }) {
     })
       .then(res => {
         console.log(res.data);
-        navigation.replace('Setting') // 성공하면 이동
+        navigation.replace('Login') // 성공하면 이동
       })
       .catch(function(error){
        console.log(error);

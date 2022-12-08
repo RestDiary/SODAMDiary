@@ -8,6 +8,8 @@ import { getProfileData } from 'react-native-calendars/src/Profiler';
 import axios from 'axios';
 import { Button } from 'react-native-paper';
 import { API } from '../config.js'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -18,20 +20,20 @@ function DiaryScreen({ navigation }) {
 
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
-    isLogin()
     getDiaryData()
   }, [])
 
-  const isLogin = async () => {
-    const userId = await AsyncStorage.getItem('id')
-    if (userId) {
-      setUserId(userId)
-    }
-  }
+  // const isLogin = async () => {
+  //   const userId = await AsyncStorage.getItem('id')
+  //   if (userId) {
+  //     setUserId(userId)
+  //   }
+  // }
 
   //일기 data 요청
   const getDiaryData = async () => {
     setLoading(true)
+    const userId = await AsyncStorage.getItem("id");
     try {
       await axios({
         method: "post",
@@ -42,6 +44,7 @@ function DiaryScreen({ navigation }) {
       }, null)
         .then(res => {
           setDiaryData(res.data)
+          console.log("들어온",res.data)
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")

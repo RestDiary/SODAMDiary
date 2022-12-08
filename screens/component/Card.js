@@ -132,7 +132,7 @@ function Card(props) {
 
           {/* 대표 이미지 */}
           <View style={{...styles.backImageBox}}>
-          <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQfvaxDliUnxIm0pwpprZSMszh_UVFNfjmtQ&usqp=CAU"}} style={styles.imageSize} resizeMode={'contain'}></Image>
+            <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQfvaxDliUnxIm0pwpprZSMszh_UVFNfjmtQ&usqp=CAU"}} style={styles.imageSize} resizeMode={'contain'}></Image>
           </View>
           {/* 내용 */}
           <View style={styles.backTextView}>

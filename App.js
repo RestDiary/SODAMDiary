@@ -37,6 +37,8 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 function CustomDrawerContent({ props, navigation }) {
   const [id, setId] = React.useState("");
 
+
+  //로그아웃 버튼
   const logOut = async () => {
     try {
       await AsyncStorage.removeItem('id')
@@ -54,7 +56,7 @@ function CustomDrawerContent({ props, navigation }) {
   },[])
 
   return (
-    <DrawerContentScrollView style={styles.drawerBox} {...props}>
+    <DrawerContentScrollView style={styles.drawerBox} {...props} contentContainerStyle={{ flex: 1 }}>
       <View style={{ height: SCREEN_HEIGHT / 5, alignItems: 'center', justifyContent: "center", flexDirection: 'row' }}>
         <Image resizeMode='contain' style={{ height: SCREEN_HEIGHT / 5 }} source={require('./assets/images/logo.png')} />
       </View>
