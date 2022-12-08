@@ -92,18 +92,18 @@ function Card(props) {
       // Y축 변경 값
       toValue: 0,
       // 딜레이 ms값
-      duration: 300,
+      duration: 500,
       // 부드러운 움직임 향상 => (브릿지를 거치지 않고 네이티브에서 애니메이션을 수행)
       useNativeDriver: true,
     }).start();
   };
 
   return (
-    <>
-      <TouchableOpacity onPress={() => !!flipRotation ? flipToBack() : flipToFront()}>
+    <View >
+      <TouchableOpacity style={{...styles.container}} onPress={() => !!flipRotation ? flipToBack() : flipToFront()}>
         {/* 앞면 */}
         <Animated.View
-          style={{ ...styles.front, ...flipToFrontStyle }}>
+          style={{ ...styles.front, ...flipToFrontStyle,  }}>
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
             {
@@ -155,13 +155,17 @@ function Card(props) {
 
         </Animated.View>
       </TouchableOpacity>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    fontSize:'3%'
+    fontSize:'3%',
+    height:(SCREEN_WIDTH/2)*1.86,
+    alignItems: "center",
+    justifyContent:"center",
+    
   },
   
   front: {
@@ -174,9 +178,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#555",
     //IOS
-    shadowColor: "#ffffff", //그림자색
-    shadowOpacity: 0.3,//그림자 투명도
-    // shadowOffset: { width: 2, height: 2 }, //그림자 위치
+    shadowColor: "#000", //그림자색
+    // shadowOpacity: 0.3,//그림자 투명도
+    shadowOffset: { width: 2, height: 2 }, //그림자 위치
     // ANDROID
     elevation: 3,
   },
@@ -212,8 +216,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#555", 
     //IOS
-    shadowColor: "#ffffff", //그림자색
-    shadowOpacity: 0.3,//그림자 투명도
+    shadowColor: "#000", //그림자색
+    // shadowOpacity: 0.3,//그림자 투명도
     shadowOffset: { width: 2, height: 2 }, //그림자 위치
     // ANDROID
     elevation: 3,

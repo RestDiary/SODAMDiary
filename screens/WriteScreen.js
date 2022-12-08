@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert, Image } from 'react-native';
 import { actions, RichEditor, RichToolbar, } from "react-native-pell-rich-editor";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
@@ -7,8 +7,12 @@ import { Chip } from 'react-native-paper';
 import { API } from '../config.js'
 import Modal from "react-native-modal";
 import AudioRecorder from './component/AudioRecorder';
+import * as ImagePicker from 'expo-image-picker';
 import AudioPlayer from './component/AudioPlayer';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
+
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -22,6 +26,52 @@ function WriteScreen({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [Emotions, setEmotions] = useState([]);
   const [date, setDate] = useState(new Date());
+  const [id, setId] = useState("");
+
+  //이미지 업로드용
+  const [image,setImage] = useState("");
+  const [send,setSend] = useState("");
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const formData = new FormData();
+  let url = ""; //서버에서 받아올 aws이미지 경로
+
+  //내 갤러리에서 사진 선택
+  const pickImage = async () => {
+    
+    if(!status.granted){ // status로 권한이 있는지 확인
+      const permission = await requestPermission();
+      if(!permission.granted){
+        return null;
+      }
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes : ImagePicker.MediaTypeOptions.Images,
+      allowsEditing : false,
+      quality : 1,
+      aspect : [1,1]   
+    });
+
+    if(result.canceled){
+      return null;  
+    }
+
+    setImage(result.assets[0].uri);
+
+    const localUri = result.assets[0].uri;
+
+    const filename = localUri.split('/').pop();
+    const match = /\.(\w+)$/.exec(filename ?? '');
+    const type = match ? `image/${match[1]}` : `image`;
+    // const formData = new FormData();
+    formData.append('image' , {uri: localUri,name: filename, type});
+    setSend(formData);
+    console.log(formData);
+    console.log(localUri);
+    console.log(filename);  
+    console.log(type);
+      
+  };
 
   //링크이동
   const moveNavigate = (screen) => {
@@ -57,13 +107,49 @@ function WriteScreen({ navigation }) {
     setEmotions(temp.filter((i) => i !== keyword))
   }
 
-  // 민제 형이 할 것. (사진 피커)
-  function onPressAddImage() {
-    // you can easily add images from your gallery
-    RichText.current?.insertImage(
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png"
-    );
+   //이미지 제거
+   const delImg = () => {
+    Alert.alert(
+      "삭제",
+      "이미지를 삭제하시겠습니까?",
+      [                           
+        {
+          text: "네",                              
+          onPress: () => setImage(""),    
+          style: "cancel"
+        },
+        { text: "아니오", onPress: () => console.log("안한대") }, 
+      ],
+      { cancelable: false }
+    )
+    
   }
+
+  //녹음 제거
+  const delAudio = () => {
+    Alert.alert(
+      "삭제",
+      "오디오를 삭제하시겠습니까?",
+      [                           
+        {
+          text: "네",                              
+          onPress: () => setAudio(),    
+          style: "cancel"
+        },
+        { text: "아니오", onPress: () => console.log("안한대") }, 
+      ],
+      { cancelable: false }
+    )
+    
+  }
+
+  // 민제 형이 할 것. (사진 피커)
+  // function onPressAddImage() {
+  //   // you can easily add images from your gallery
+  //   RichText.current?.insertImage(
+  //     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png"
+  //   );
+  // }
 
   //자식에서 부모에게 Audio 데이터 전달
   const [audio, setAudio] = useState()
@@ -82,6 +168,13 @@ function WriteScreen({ navigation }) {
       setDescHTML("");
     }
   };
+
+   //id값 꺼내오기
+   React.useEffect(() => {
+    AsyncStorage.getItem('id', (err, result) => {
+      setId(result);
+    });
+  }, [])
 
   //서버 요청 로딩
   const [loading, setLoading] = useState(false)
@@ -109,6 +202,27 @@ function WriteScreen({ navigation }) {
       return
     }
 
+    if(image != "") {
+      // formData.append('multipartFileList' , {uri: localUri, name: filename, type});
+      await axios({
+        method : 'post',
+        url : 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/upload',
+        headers:{
+          'content-type' : 'multipart/form-data',
+        },
+        data : send
+      })
+      .then((res) => {
+          // richText.current.insertImage(res.data);
+          url = res.data;
+          console.log(url);
+          
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
     // 서버 데이터 전송
     setLoading(true)
 
@@ -117,13 +231,13 @@ function WriteScreen({ navigation }) {
         method: "post",
         url: `${API.WRITE}`,
         params: {
-          id: null, //****작성자 id
+          id: id, //****작성자 id
           title: titleText,
           content: descHTML,
           year: date.getFullYear(),
           month: date.getMonth() + 1,
           day: date.getDate(),
-          img: null, //****이미지 추가
+          img: url, //****이미지 추가
           voice: audio?.file,
           keyword: Emotions,
         }
@@ -233,7 +347,7 @@ function WriteScreen({ navigation }) {
         editor={richText}
 
         // 사진 picker 기능
-        onPressAddImage={onPressAddImage}
+        onPressAddImage={pickImage}
 
         // 음성 녹음 기능
         insertVoice={toggleModal}
@@ -276,10 +390,15 @@ function WriteScreen({ navigation }) {
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
         <SafeAreaView>
           <ScrollView>
+            {/* {이미지 보이는 곳} */}
+          <Pressable onLongPress={delImg}>
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        </Pressable>
             {/* 음성 플레이어 영역 */}
             {audio &&
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
                 <AudioPlayer audio={audio}></AudioPlayer>
+                <Button title='삭제'  onPress={delAudio}/>
               </View>
             }
 

@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    height: SCREEN_HEIGHT / 3,
+    height: (SCREEN_WIDTH/2)*2,
   },
 
   notCard:{
