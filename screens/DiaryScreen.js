@@ -153,10 +153,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
+<<<<<<< HEAD
   cardContainer: {
     height: SCREEN_HEIGHT / 3,
   },
   notCard: {
+=======
+  notCard:{
+>>>>>>> f4577f01910a081751b3b2e9a599a29d3f6fdbfa
     width: SCREEN_WIDTH / 3,
     height: SCREEN_HEIGHT / 3,
   }
