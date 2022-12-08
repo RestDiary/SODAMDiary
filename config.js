@@ -10,5 +10,5 @@ export const API = {
   OVERLAP: `${BASE_URL}/overlap`,
   FACE: `${BASE_URL}/face`,
   WRITE: `${BASE_URL}/write`,
-  
+  MYDIARY: `${BASE_URL}/myDiary`
 };

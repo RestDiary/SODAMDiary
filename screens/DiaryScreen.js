@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated, Alert, ActivityIndicator } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,16 +7,27 @@ import Card from './component/Card';
 import { getProfileData } from 'react-native-calendars/src/Profiler';
 import axios from 'axios';
 import { Button } from 'react-native-paper';
+import { API } from '../config.js'
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function DiaryScreen({ navigation }) {
   const [diaryData, setDiaryData] = useState([]);
   const [loading, setLoading] = useState(false)
+  const [userId, setUserId] = React.useState("");
 
+  //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
+    isLogin()
     getDiaryData()
   }, [])
+
+  const isLogin = async () => {
+    const userId = await AsyncStorage.getItem('id')
+    if (userId) {
+      setUserId(userId)
+    }
+  }
 
   //일기 data 요청
   const getDiaryData = async () => {
@@ -25,9 +35,9 @@ function DiaryScreen({ navigation }) {
     try {
       await axios({
         method: "post",
-        url: 'http://192.168.2.97:3001/myDiary',
+        url: `${API.MYDIARY}`,
         params: {
-          id: 'sodam', //****작성자 id
+          id: userId, //****작성자 id
         }
       }, null)
         .then(res => {
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     height: SCREEN_HEIGHT / 3,
   },
-  
+
   notCard:{
     width: SCREEN_WIDTH / 3,
     height: SCREEN_HEIGHT / 3,
