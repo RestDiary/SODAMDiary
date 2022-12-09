@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 //screen
 import CalenderScreen from './screens/CalenderScreen';
 import WriteScreen from './screens/WriteScreen';
@@ -23,9 +24,9 @@ import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
+import DetailScreen from './screens/DetailScreen';
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -34,9 +35,9 @@ const Stack = createStackNavigator();
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 //Drawer
-function CustomDrawerContent({ props, navigation }) {
+function CustomDrawerContent(props) {
   const [id, setId] = React.useState("");
-
+  const navigation = useNavigation(); 
 
   //로그아웃 버튼
   const logOut = async () => {
@@ -188,6 +189,7 @@ function MyStack() {
       <Stack.Screen name="Join" options={{ title: "회원가입" }} component={JoinScreen} />
       <Stack.Screen name="FindPw" options={{ title: "비밀번호 찾기" }} component={FindPwScreen} />
       <Stack.Screen name="ChangePw" component={ChangePwScreen} />
+      <Stack.Screen name="Detail" component={DetailScreen} />
     </Stack.Navigator>
   );
 }
