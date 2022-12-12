@@ -23,9 +23,9 @@ import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
+import ThemeScreen from './screens/ThemeScreen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
+import { useNavigation } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -34,9 +34,9 @@ const Stack = createStackNavigator();
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 //Drawer
-function CustomDrawerContent({ props, navigation }) {
+function CustomDrawerContent(props) {
   const [id, setId] = React.useState("");
-
+  const navigation = useNavigation(); 
 
   //로그아웃 버튼
   const logOut = async () => {
@@ -103,7 +103,7 @@ function CustomDrawerContent({ props, navigation }) {
         <View style={{marginTop:20}}>
           <TouchableOpacity style={styles.drawerItem}
             // label="Close drawer"
-            onPress={() => props.navigation.navigate("테마변경기능")}
+            onPress={() => props.navigation.navigate('Theme')}
           >
             <MaterialCommunityIcons name="theme-light-dark" size={24} color="white" />
             <Text style={styles.drawerItemText}>테마변경</Text>
@@ -188,6 +188,7 @@ function MyStack() {
       <Stack.Screen name="Join" options={{ title: "회원가입" }} component={JoinScreen} />
       <Stack.Screen name="FindPw" options={{ title: "비밀번호 찾기" }} component={FindPwScreen} />
       <Stack.Screen name="ChangePw" component={ChangePwScreen} />
+      <Stack.Screen name="Theme" component={ThemeScreen} />
     </Stack.Navigator>
   );
 }
