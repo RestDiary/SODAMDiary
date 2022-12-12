@@ -92,7 +92,7 @@ function Card({data}) {
         // 카드 뒤집기
         onPress={() => !!flipRotation ? flipToBack() : flipToFront()}
         // 상세화면
-        onLongPress={(screen) => moveNavigate('Detail')}>
+        onLongPress={() => navigation.navigate('Detail',  {card: data})}>
 
         {/* 앞면 */}
         <Animated.View

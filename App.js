@@ -25,6 +25,10 @@ import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
 import DetailScreen from './screens/DetailScreen';
+import ModifyScreen from './screens/ModifyScreen';
+import PictureDeailScreen from './screens/PictureDeailScreen';
+
+
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -190,6 +194,8 @@ function MyStack() {
       <Stack.Screen name="FindPw" options={{ title: "비밀번호 찾기" }} component={FindPwScreen} />
       <Stack.Screen name="ChangePw" component={ChangePwScreen} />
       <Stack.Screen name="Detail" component={DetailScreen} />
+      <Stack.Screen name="Modify" component={ModifyScreen} />
+      <Stack.Screen name="Album" component={PictureDeailScreen} />
     </Stack.Navigator>
   );
 }
