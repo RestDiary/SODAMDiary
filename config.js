@@ -7,9 +7,11 @@ export const API = {
   CHECKNUM: `${BASE_URL}/checkNum`,
   RESET: `${BASE_URL}/Reset`,
   REGISTER: `${BASE_URL}/register`,
-  LOGIN: `${BASE_URL}/login`,
   OVERLAP: `${BASE_URL}/overlap`,
   FACE: `${BASE_URL}/face`,
   WRITE: `${BASE_URL}/write`,
-  MYDIARY: `${BASE_URL}/myDiary`
+  MYDIARY: `${BASE_URL}/myDiary`,
+  DIARYINFO: `${BASE_URL}/diaryInfo`,
+  DELETE: `${BASE_URL}/diaryDelete`,
+  ALBUM: `${BASE_URL}/album`
 };

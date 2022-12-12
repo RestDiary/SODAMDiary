@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 //screen
 import CalenderScreen from './screens/CalenderScreen';
 import WriteScreen from './screens/WriteScreen';
@@ -23,9 +24,14 @@ import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
+
 import ThemeScreen from './screens/ThemeScreen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
+
+import DetailScreen from './screens/DetailScreen';
+import ModifyScreen from './screens/ModifyScreen';
+import PictureDeailScreen from './screens/PictureDeailScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -189,6 +195,10 @@ function MyStack() {
       <Stack.Screen name="FindPw" options={{ title: "비밀번호 찾기" }} component={FindPwScreen} />
       <Stack.Screen name="ChangePw" component={ChangePwScreen} />
       <Stack.Screen name="Theme" component={ThemeScreen} />
+      <Stack.Screen name="Detail" component={DetailScreen} />
+      <Stack.Screen name="Modify" component={ModifyScreen} />
+      <Stack.Screen name="Album" component={PictureDeailScreen} />
+
     </Stack.Navigator>
   );
 }

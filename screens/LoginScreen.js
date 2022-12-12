@@ -18,7 +18,7 @@ function LoginScreen({ navigation }) {
   const isLogin = async () => {
     const userId = await AsyncStorage.getItem('id')
     if (userId) {
-      Alert.alert(userId+"님 반갑습니다.")
+      // Alert.alert(userId+"님 반갑습니다.")
       navigation.navigate("Home")
     }
   }
