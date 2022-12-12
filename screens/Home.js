@@ -5,6 +5,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SimpleLineIcons } from '@expo/vector-icons';
+import {dark, botanical, town} from './css/globalStyles';
 
 //사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
@@ -37,7 +38,7 @@ function HomeScreen({ navigation }) {
                     {/* 테마 대표 이미지 넣기 */}
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
-                        <ImageBackground style={{height:'100%', width:'100%'}} source={require('../assets/images/nightStar.png')}>
+                        <ImageBackground style={{height:'100%', width:'100%'}} source={dark.image}>
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                                 <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
                                     <SimpleLineIcons name="menu" size={24} color="white" />
@@ -52,7 +53,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.headWidgetContainer}>
                                 <View style={styles.headWidgetDiv1} >
                                     <TouchableOpacity  onPress={(screen) => moveNavigate('Calender')}>
-                                        <View style={{...styles.longWidget, backgroundColor: '#262955'}}>
+                                        <View style={{...styles.longWidget, backgroundColor: dark.calender}}>
                                             <Entypo name="calendar" size={24} color="white" />
                                             <Text style={styles.textStyle}>calender</Text>
                                         </View>

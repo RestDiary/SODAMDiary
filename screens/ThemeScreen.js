@@ -24,9 +24,26 @@ function ThemeScreen({ navigation }) {
     require("../assets/images/magazineTheme.png"),
     require("../assets/images/winterTheme.png"),
   ]);
-  const [themeTitle, setThemeTitle] = useState(["Dark", "Votanical", "Town", "classic", "purle", "block", "pattern", "magazine", "winter"])
-  return (
+  const [themeTitle, setThemeTitle] = useState(["dark", "votanical", "town", "classic", "purle", "block", "pattern", "magazine", "winter"])
 
+  //현재 선택한 테마 가져오기
+  const [nowTheme, setNowTheme] = useState("");
+  useEffect(() => {
+    getTheme()
+  }, [])
+
+  const getTheme = async () => {
+    let temp = await AsyncStorage.getItem('theme');
+    setNowTheme(temp)
+  }
+
+  // 적용 눌렀을 때 테마 저장
+  const saveTheme = async (selected) => {
+    await AsyncStorage.setItem('theme', JSON.stringify(selected));
+    navigation.navigate("Home")
+  }
+
+  return (
     <>
       {themeData[0] &&
         <View style={styles.container}>
@@ -42,8 +59,7 @@ function ThemeScreen({ navigation }) {
                   // 테마카드 불러오기
                   themeData.map((my, index) => {
                     return (
-
-                      <View style={{ ...styles.card }}>
+                      <View key={index} style={{ ...styles.card }}>
                         {/* 테마 이미지 */}
                         <View style={{ ...styles.cardImageBox }}>
                           <Image source={themeData[index]} style={styles.imageSize} resizeMode={'stretch'}></Image>
@@ -54,18 +70,17 @@ function ThemeScreen({ navigation }) {
                             {themeTitle[index]}
                           </Text>
                           {/* 테마 적용유무 */}
-                          <TouchableOpacity>
-                            {/* 적용 후 */}
-                            {/* <Text style={{ ...styles.themeApply, backgroundColor: "#555" }}>적용중</Text> */}
-                            {/* 적용 전*/}
+                          <TouchableOpacity onPress={(selected)=>saveTheme(themeTitle[index])} >
+                            {nowTheme.includes(themeTitle[index]) ? 
+                            <Text style={{ ...styles.themeApply, backgroundColor: "#555" }}>적용중</Text>
+                            :
                             <Text style={{ ...styles.themeApply,  }}>적용하기</Text>
+                            }
                           </TouchableOpacity>
                         </View>
                       </View>
-
                     )
                   })
-                 
                 }
                 <View style={styles.notCard}></View>
               </ScrollView>
@@ -105,7 +120,6 @@ const styles = StyleSheet.create({
   },
 
   cardImageBox: {
-    margin: 2,
     borderWidth: 1,
     borderColor: "white",
   },
