@@ -26,8 +26,7 @@ import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
 
 import ThemeScreen from './screens/ThemeScreen';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
 import DetailScreen from './screens/DetailScreen';
 import ModifyScreen from './screens/ModifyScreen';

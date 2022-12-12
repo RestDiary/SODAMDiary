@@ -307,7 +307,7 @@ function WriteScreen({ navigation }) {
           {Emotions &&
             Emotions.map((emo, index) => {
               return (
-                <Chip compact='true' onClose={(keyword) => delEmotion(emo)}>
+                <Chip key={index} compact='true' onClose={(keyword) => delEmotion(emo)}>
                   {emo}
                 </Chip>
               )
