@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { View, Text, Button, Image, Dimensions, TouchableOpacity, StyleSheet, Alert, useState, useEffect } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Button, Image, Dimensions, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
@@ -8,11 +8,12 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import {dark, votanical, town} from './screens/css/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 //screen
 import CalenderScreen from './screens/CalenderScreen';
 import WriteScreen from './screens/WriteScreen';
@@ -32,6 +33,7 @@ import DetailScreen from './screens/DetailScreen';
 import ModifyScreen from './screens/ModifyScreen';
 import PictureDeailScreen from './screens/PictureDeailScreen';
 
+
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
@@ -40,7 +42,29 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 //Drawer
 function CustomDrawerContent(props) {
-  const [id, setId] = React.useState("");
+  //스크린 이동할 때 lifecycle 실행
+  const isFocused = useIsFocused();
+  //테마
+  const [nowTheme, setNowTheme] = useState({});
+  
+  useEffect(() => {
+    getTheme()
+  }, [isFocused])
+  
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+  
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+  }    
+
+  const [id, setId] = useState("");
   const navigation = useNavigation(); 
 
   //로그아웃 버튼
@@ -54,14 +78,14 @@ function CustomDrawerContent(props) {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     AsyncStorage.getItem('id', (err, result) => {
       setId(result)
     });
   },[])
 
   return (
-    <DrawerContentScrollView style={styles.drawerBox} {...props} contentContainerStyle={{ flex: 1 }}>
+    <DrawerContentScrollView style={{...styles.drawerBox, backgroundColor: nowTheme.drawer}} {...props} contentContainerStyle={{ flex: 1 }}>
       <View style={{ height: SCREEN_HEIGHT / 5, alignItems: 'center', justifyContent: "center", flexDirection: 'row' }}>
         <Image resizeMode='contain' style={{ height: SCREEN_HEIGHT / 5 }} source={require('./assets/images/logo.png')} />
       </View>
@@ -177,26 +201,48 @@ function MyDrawer() {
 }
 
 function MyStack() {
+  //스크린 이동할 때 lifecycle 실행
+  const isFocused = useIsFocused();
+  //테마
+  const [nowTheme, setNowTheme] = useState({});
+  
+  useEffect(() => {
+    getTheme()
+  }, [isFocused])
+  
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+  
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+  }    
+
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
-      <Stack.Screen name="Home" options={{ headerShown: false }} component={MyDrawer} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, headerTintColor: "black" }} />
+      <Stack.Screen name="Home" component={MyDrawer} options={{ headerShown: false, headerTintColor: "black" }} />
 
       {/* Home */}
-      <Stack.Screen name="Calender" component={CalenderScreen} />
-      <Stack.Screen name="Chart" component={ChartScreen} />
-      <Stack.Screen name="Write" component={WriteScreen} />
-      <Stack.Screen name="Diary" component={DiaryScreen} />
-      <Stack.Screen name="Picture" component={PictureScreen} />
+      <Stack.Screen name="Calender" component={CalenderScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Chart" component={ChartScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Write" component={WriteScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Diary" component={DiaryScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Picture" component={PictureScreen} options={{headerTintColor: "black"}}/>
 
       {/* 기타 스크린 */}
-      <Stack.Screen name="Join" options={{ title: "회원가입" }} component={JoinScreen} />
-      <Stack.Screen name="FindPw" options={{ title: "비밀번호 찾기" }} component={FindPwScreen} />
-      <Stack.Screen name="ChangePw" component={ChangePwScreen} />
-      <Stack.Screen name="Theme" component={ThemeScreen} />
-      <Stack.Screen name="Detail" component={DetailScreen} />
-      <Stack.Screen name="Modify" component={ModifyScreen} />
-      <Stack.Screen name="Album" component={PictureDeailScreen} />
+      <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black" }} />
+      <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black" }} />
+      <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Theme" component={ThemeScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Detail" component={DetailScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Modify" component={ModifyScreen} options={{headerTintColor: "black"}}/>
+      <Stack.Screen name="Album" component={PictureDeailScreen} options={{headerTintColor: "black"}}/>
 
     </Stack.Navigator>
   );

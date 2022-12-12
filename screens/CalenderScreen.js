@@ -7,10 +7,30 @@ import Card from './component/Card'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { API } from '../config.js'
+import {dark, votanical, town} from './css/globalStyles';
 
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
 function CalenderScreen({ navigation }) {
+   //테마
+   useEffect(() => {
+    getTheme()
+  }, [])
+
+const [nowTheme, setNowTheme] = useState({});
+
+const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+}    
   const [diaryData, setDiaryData] = useState([]); //db에서 받아온 데이터 저장하는곳
   const [selectDay, setSelectDay] = useState([]); //선택한 캘린더
   const [loading, setLoading] = useState(false); //데이터 불러오는동안 로딩 표시
@@ -77,7 +97,7 @@ function CalenderScreen({ navigation }) {
 
   return (<>
     {markingDate &&
-  <View style={styles.container}>
+  <View style={{...styles.container,backgroundColor:nowTheme.bg}}>
     <View >
       <Calendar
 

@@ -27,14 +27,14 @@ function ThemeScreen({ navigation }) {
   const [themeTitle, setThemeTitle] = useState(["dark", "votanical", "town", "classic", "purle", "block", "pattern", "magazine", "winter"])
 
   //현재 선택한 테마 가져오기
-  const [nowTheme, setNowTheme] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState("");
   useEffect(() => {
     getTheme()
   }, [])
 
   const getTheme = async () => {
     let temp = await AsyncStorage.getItem('theme');
-    setNowTheme(temp)
+    setSelectedTheme(temp)
   }
 
   // 적용 눌렀을 때 테마 저장
@@ -71,7 +71,7 @@ function ThemeScreen({ navigation }) {
                           </Text>
                           {/* 테마 적용유무 */}
                           <TouchableOpacity onPress={(selected)=>saveTheme(themeTitle[index])} >
-                            {nowTheme.includes(themeTitle[index]) ? 
+                            {selectedTheme.includes(themeTitle[index]) ? 
                             <Text style={{ ...styles.themeApply, backgroundColor: "#555" }}>적용중</Text>
                             :
                             <Text style={{ ...styles.themeApply,  }}>적용하기</Text>

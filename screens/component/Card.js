@@ -1,14 +1,35 @@
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useEffect ,useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
+import {dark, votanical, town} from './../css/globalStyles';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Card({data}) {
+
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [])
+
+const [nowTheme, setNowTheme] = useState({});
+
+const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+}    
   const [newContent,setNewContent] = useState(""); 
   const navigation = useNavigation(); 
 
@@ -18,7 +39,7 @@ function Card({data}) {
   }
 
   // 리렌더링 시 값이 초기화 되는 것을 막기 위해 ref 사용.
-  const flipAnimation = React.useRef(new Animated.Value(0)).current;
+  const flipAnimation = useRef(new Animated.Value(0)).current;
   // 초깃 값 초기화
   let flipRotation = 0;
   // 뒤에서 앞으로 다시 뒤집기위해 값 초기화
@@ -96,10 +117,11 @@ function Card({data}) {
 
         {/* 앞면 */}
         <Animated.View
-          style={{ ...styles.front, ...flipToFrontStyle,  }}>
+          style={{ ...styles.front,backgroundColor:nowTheme.front,borderColor:nowTheme.cardBorder, ...flipToFrontStyle,  }}>
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
-            <Text>{data.keyword}</Text>
+            <Text style={{color:"white"}}>{data.day}일</Text>
+            <Text style={{color:"white"}}>#{data.keyword}</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -112,7 +134,7 @@ function Card({data}) {
           </View>
           {/* 아이콘  (아이콘은 테마마다 사용하는 아이콘이 다르다)*/} 
           <View style={{ ...styles.frontIcon }}>
-            <Entypo name="moon" size={36} color="white" />
+            {nowTheme.icon}
             </View>
             {/* 제목  */}
             <View style={{...styles.frontTitle}}>
@@ -122,10 +144,13 @@ function Card({data}) {
 
         {/* 뒷면 */}
         <Animated.View
-          style={{ ...styles.back, ...flipToBackStyle }}>
+          style={{ ...styles.back,backgroundColor:nowTheme.back, ...flipToBackStyle }}>
           {/* 대표 이미지 */}
           <View style={{...styles.backImageBox}}>
+            {(data.img !== null && data.img !== "") ? 
+            <Image source={{uri : data.img}} style={styles.imageSize} resizeMode={'stretch'}></Image> :
             <Image source={{uri : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQfvaxDliUnxIm0pwpprZSMszh_UVFNfjmtQ&usqp=CAU"}} style={styles.imageSize} resizeMode={'contain'}></Image>
+          }
           </View>
           {/* 내용 */}
           <View style={styles.backTextView}>
@@ -169,7 +194,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
     position: "absolute",
     backfaceVisibility: "hidden",
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#555",
     //IOS
     shadowColor: "#000", //그림자색
@@ -180,11 +205,12 @@ const styles = StyleSheet.create({
   },
 
   frontKeyWordBox: {
-    alignItems: "flex-end",
-    justifyContent:"flex-start",
+    // 
+    justifyContent:"space-between",
     marginTop:5,
     marginRight:5,
     minHeight:"20%",
+    flexDirection:"row"
   },
 
   frontIcon: {

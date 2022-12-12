@@ -9,14 +9,36 @@ import axios from 'axios';
 import { Button } from 'react-native-paper';
 import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {dark, votanical, town} from './css/globalStyles';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function DiaryScreen({ navigation }) {
+
+  //테마
+  useEffect(() => {
+    getTheme()
+}, [])
+
+const [nowTheme, setNowTheme] = useState({});
+
+const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+}    
+
   const [diaryData, setDiaryData] = useState([]);
   const [loading, setLoading] = useState(false)
-  const [userId, setUserId] = React.useState("");
+  const [userId, setUserId] = useState("");
 
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
@@ -44,7 +66,6 @@ function DiaryScreen({ navigation }) {
       }, null)
         .then(res => {
           setDiaryData(res.data)
-          console.log("들어온",res.data)
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")
@@ -70,7 +91,7 @@ function DiaryScreen({ navigation }) {
       <>
         {temp[0] &&
           <View style={styles.moon}>
-            <Text style={styles.moonText}>{temp[0].month}월</Text>
+            <Text style={{...styles.moonText,color:nowTheme.font}}>{temp[0].month}월</Text>
             <View style={styles.cardContainer}>
               <SafeAreaView>
                 {/* 가로 스크롤 뷰 */}
@@ -96,7 +117,7 @@ function DiaryScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container,backgroundColor:nowTheme.cardBg}}>
       <SafeAreaView>
         {/* 세로 스크롤 뷰 */}
         <ScrollView>
@@ -104,7 +125,7 @@ function DiaryScreen({ navigation }) {
           <View style={styles.year}>
             {/*----------------------------<year>------------------------------  */}
             {/* 년 선택하는 것으로 변경예정 */}
-            <Text style={styles.yearText}>2022</Text>
+            <Text style={{...styles.yearText,color:nowTheme.font}}>2022</Text>
           </View>
 
           {loading && <ActivityIndicator size="large" color="white" />}

@@ -1,11 +1,31 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, View, Image,TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView } from 'react-native';
 import axios from 'axios';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {dark, votanical, town} from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function JoinScreen({ navigation }) {
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [])
+
+const [nowTheme, setNowTheme] = useState({});
+
+const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+}    
   var mailRegExp = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{2,3}$/;
   var idRegExp = /^[a-zA-z0-9]{5,12}$/; //아이디 유효성 검사
   var pwRegExp = /^[a-zA-z0-9!@#$%^*+=-]{4,15}$/; //비밀번호 유효성 검사
@@ -133,7 +153,7 @@ function JoinScreen({ navigation }) {
 
 
   return (
-    <View style={{ ...styles.container, backgroundColor:"#071D3A" }}>
+    <View style={{ ...styles.container, backgroundColor:nowTheme.cardBg }}>
       {/* 로고 박스 */}
       <View style={{...styles.logoBox}}>
         <Image resizeMode="contain" style={{width:SCREEN_WIDTH/2}}source={require('../assets/images/logo.png')} ></Image>
@@ -195,7 +215,7 @@ function JoinScreen({ navigation }) {
         underlayColor="#DDDDDD"
         onPress={register}>
         
-          <View style={{...styles.joinBtn,backgroundColor:"#32CD99"}}>
+          <View style={{...styles.joinBtn,backgroundColor:nowTheme.btn, shadowColor:nowTheme.btn}}>
             <Text style={{...styles.joinText,color:"white"}}>회원가입</Text>
           </View>
         </TouchableHighlight>

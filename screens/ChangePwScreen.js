@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import {dark, votanical, town} from './css/globalStyles';
 import { StyleSheet, Dimensions, View, Image, TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
@@ -6,6 +7,25 @@ import axios from 'axios';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function ChangePwScreen({ navigation }) {
+     //테마
+     useEffect(() => {
+      getTheme()
+    }, [])
+  
+  const [nowTheme, setNowTheme] = useState({});
+  
+  const getTheme = async () => {
+      let selectedTheme = await AsyncStorage.getItem('theme');
+      
+      if (selectedTheme.includes("dark")) setNowTheme(dark);
+      else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+      else if (selectedTheme.includes("town")) setNowTheme(town);
+      // else if (selectedTheme === "votanical") setNowTheme(votanical);
+      // else if (selectedTheme === "votanical") setNowTheme(votanical);
+      // else if (selectedTheme === "votanical") setNowTheme(votanical);
+      // else if (selectedTheme === "votanical") setNowTheme(votanical);
+      // else if (selectedTheme === "votanical") setNowTheme(votanical);
+  }    
   const [id, setId] = React.useState(""); //아이디
   var pwRegExp = /^[a-zA-z0-9!@#$%^*+=-]{4,15}$/; //비밀번호 유효성 검사
   const [pw,setPw] = React.useState(""); //비밀번호
@@ -76,7 +96,7 @@ function ChangePwScreen({ navigation }) {
     
 
   return (
-    <View style={{ ...styles.container, backgroundColor: "#071D3A" }}>
+    <View style={{ ...styles.container, backgroundColor: nowTheme.bg }}>
       {/* 로고 박스 */}
       <View style={{ ...styles.logoBox }}>
         <Image resizeMode="contain" style={{ width: SCREEN_WIDTH / 2 }} source={require('../assets/images/logo.png')} ></Image>
@@ -116,7 +136,7 @@ function ChangePwScreen({ navigation }) {
             underlayColor="#DDDDDD"
             onPress={pwChange}>
 
-            <View style={{ ...styles.loginBtn, backgroundColor: "#32CD99" }}>
+            <View style={{ ...styles.loginBtn, backgroundColor: nowTheme.btn, shadowColor:nowTheme.btn }}>
               <Text style={{ ...styles.loginText, color: "white" }}>비밀번호 변경</Text>
             </View>
           </TouchableHighlight>

@@ -1,23 +1,42 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, View, Image, TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {dark, votanical, town} from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function FindPwScreen({ navigation }) {
+       //테마
+       useEffect(() => {
+        getTheme()
+      }, [])
+    
+    const [nowTheme, setNowTheme] = useState({});
+    
+    const getTheme = async () => {
+        let selectedTheme = await AsyncStorage.getItem('theme');
+        
+        if (selectedTheme.includes("dark")) setNowTheme(dark);
+        else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+        else if (selectedTheme.includes("town")) setNowTheme(town);
+        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    }    
 
-    const [id, setId] = React.useState(""); //아이디
-    const [email,setEmail] = React.useState(""); //이메일
-    const [certified, setCertified] = React.useState("") //사용자가 친 인증번호
-    const [sendNum, setSendNum] = React.useState(""); // 받아온 인증번호
-    const [red, setRed] = React.useState(""); //인증번호 틀리면 경고문구
-    const [time, setTime] = React.useState(180) // 3분 시간제한
-    const [time2, setTime2] = React.useState(false) //타이머 돌릴지 말지 결정
-    const [minute, setMinute] = React.useState(); // 분 저장
-    const [second, setSecond] = React.useState();// 초 저장
-    const [div, setDiv] = React.useState(""); // : 생성 유무
+    const [id, setId] = useState(""); //아이디
+    const [email,setEmail] = useState(""); //이메일
+    const [certified, setCertified] = useState("") //사용자가 친 인증번호
+    const [sendNum, setSendNum] = useState(""); // 받아온 인증번호
+    const [red, setRed] = useState(""); //인증번호 틀리면 경고문구
+    const [time, setTime] = useState(180) // 3분 시간제한
+    const [time2, setTime2] = useState(false) //타이머 돌릴지 말지 결정
+    const [minute, setMinute] = useState(); // 분 저장
+    const [second, setSecond] = useState();// 초 저장
+    const [div, setDiv] = useState(""); // : 생성 유무
 
     //이메일 인증번호 발송
   const checkNum = () => {
@@ -69,7 +88,7 @@ function FindPwScreen({ navigation }) {
 
 
   //타이머
-  React.useEffect(() => {
+  useEffect(() => {
     if(time2) {
         let timer = setTimeout(() => {
             setTime(time-1);
@@ -93,7 +112,7 @@ function FindPwScreen({ navigation }) {
 
     
     return (
-        <View style={{ ...styles.container, backgroundColor:"#071D3A" }}>
+        <View style={{ ...styles.container, backgroundColor:nowTheme.bg }}>
           {/* 로고 박스 */}
           <View style={{...styles.logoBox}}>
             <Image resizeMode="contain" style={{width:SCREEN_WIDTH/2}}source={require('../assets/images/logo.png')} ></Image>
@@ -125,7 +144,7 @@ function FindPwScreen({ navigation }) {
             underlayColor="#DDDDDD"
             onPress={checkNum}>
             
-              <View style={{...styles.joinBtn,backgroundColor:"#32CD99"}}>
+              <View style={{...styles.joinBtn,backgroundColor:nowTheme.btn, shadowColor:nowTheme.btn}}>
                 <Text style={{...styles.joinText,color:"white"}}>인증번호 발급</Text>
               </View>
             </TouchableHighlight>
@@ -155,7 +174,7 @@ function FindPwScreen({ navigation }) {
             underlayColor="#DDDDDD"
             onPress={same}>
             
-              <View style={{...styles.joinBtn,backgroundColor:"#32CD99"}}>
+              <View style={{...styles.joinBtn,backgroundColor:nowTheme.btn, shadowColor:nowTheme.btn}}>
                 <Text style={{...styles.joinText,color:"white"}}>새로운 비밀번호로 변경</Text>
               </View>
             </TouchableHighlight>

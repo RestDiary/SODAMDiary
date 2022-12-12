@@ -12,12 +12,57 @@ import AudioPlayer from './component/AudioPlayer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import {dark, votanical, town} from './css/globalStyles';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function DetailScreen( Album ) {
+  //스크린 이동할 때 lifecycle 실행
+  const isFocused = useIsFocused();
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [isFocused])
+
+  const [nowTheme, setNowTheme] = useState({});
+  const [editorColor, setEditorColor] = useState({})
+
+  //테마, 에디터 컬러 가져오기
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    let editorOption = {}
+
+    if (selectedTheme.includes("dark")) {
+      setNowTheme(dark);
+      editorOption = {
+        backgroundColor: dark.cardBg,
+        placeholderColor: "#456185",
+        color: dark.font,
+      }
+    } 
+
+    else if (selectedTheme.includes("votanical")){
+      setNowTheme(votanical);
+      editorOption = {
+        backgroundColor: votanical.cardBg,
+        placeholderColor: "#456185",
+        color: votanical.font,
+      }
+    } 
+
+    else if (selectedTheme.includes("town")){
+      setNowTheme(town);
+      editorOption = {
+        backgroundColor: town.cardBg,
+        placeholderColor: "#456185",
+        color: town.font,
+      }
+    }
+
+    setEditorColor(editorOption)
+  }
   console.log("Album: ",Album.route.params.album);
 
   const navigation = useNavigation(); 
@@ -100,13 +145,13 @@ function DetailScreen( Album ) {
 
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container,backgroundColor:nowTheme.cardBg}}>
       {/* 제목 */}
       <SafeAreaView style={styles.titleLayout}>
         <Text
           placeholder="제목:"
           placeholderTextColor={"#456185"}
-          style={styles.title}
+          style={{...styles.title, color:nowTheme.font, fontWeight: "bold"}}
           value={"title"}
           returnKeyType="next"
           maxLength={30}
@@ -118,11 +163,11 @@ function DetailScreen( Album ) {
       <SafeAreaView style={styles.feelingLayout}>
         {/* 오늘의 기분 키워드 피커 */}
         <View>
-          <Text style={{color:"white", margin:10}}>키워드: {keyword}</Text>
+          <Text style={{color:nowTheme.font, margin:10}}>키워드: {keyword}</Text>
         </View>
 
         {/* 선택한 감정 보이는 곳 */}
-        <View style={styles.feelingBtnBox}>
+        <View style={{...styles.feelingBtnBox,color:nowTheme.font}}>
           {Emotions &&
             Emotions.map((emo, index) => {
               return (
@@ -139,7 +184,7 @@ function DetailScreen( Album ) {
       <SafeAreaView style={styles.extendLayout}>
         <View style={styles.dateLayout}>
           <TouchableOpacity>
-            <Text style={styles.date}>
+          <Text style={{...styles.date,color:nowTheme.font}}>
             날짜: {year}년 {month}월 {day}일
             </Text>
           </TouchableOpacity>
@@ -151,6 +196,8 @@ function DetailScreen( Album ) {
       
 
       {/*--------------------- 에디터 --------------------- */}
+      {editorColor.backgroundColor &&
+      <>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
         <SafeAreaView>
           <ScrollView>
@@ -171,11 +218,7 @@ function DetailScreen( Album ) {
               placeholder={content}
               placeholderColor={"white"}
               androidHardwareAccelerationDisabled={true}
-              editorStyle={{
-                backgroundColor: "#071D3A",
-                placeholderColor: "#456185",
-                color: "white",
-              }}
+              editorStyle={editorColor}
               style={{ ...styles.richTextEditorStyle }}
               initialHeight={SCREEN_HEIGHT / 2}
               disabled={true} // 수정누른 경우 true로 state 바꿔야 텍스트 편집가능 함.
@@ -186,7 +229,7 @@ function DetailScreen( Album ) {
         </SafeAreaView>
       </KeyboardAvoidingView>
 
-     
+      </>}
     </View>
   );
 }
@@ -298,7 +341,7 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    width: SCREEN_WIDTH / 3,
+    width: SCREEN_WIDTH,
     color: "white",
     padding: 10,
   },
