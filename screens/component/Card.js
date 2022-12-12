@@ -1,23 +1,21 @@
 import * as React from 'react';
-import { StyleSheet, Button, View, Text, Dimensions, Animated, Image } from 'react-native';
+import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useEffect ,useState} from 'react';
-
+import { useNavigation } from '@react-navigation/native';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-
-//할일 ))))))))
-// 이미지 처리
-// 일기 길면 ... 표시
-// 크기처리
-
-
-function Card(props) {
+function Card({data}) {
   const [newContent,setNewContent] = useState(""); 
+  const navigation = useNavigation(); 
 
+  //링크 이동
+  const moveNavigate = (screen) => {
+    navigation.navigate(screen)
+  }
 
   // 리렌더링 시 값이 초기화 되는 것을 막기 위해 ref 사용.
   const flipAnimation = React.useRef(new Animated.Value(0)).current;
@@ -80,7 +78,7 @@ function Card(props) {
 
   //html 태그 지우는 공장 <><><><><>
   useEffect(() =>{
-    var firstWork = props.data.content.replace(/<\/div>/g, '\n');
+    var firstWork = data.content.replace(/<\/div>/g, '\n');
     firstWork = firstWork.replace(/<div>/g, '\n');
     firstWork = firstWork.replace(/<br>/g, '\n');
     firstWork = firstWork.replace(/&nbsp/g, ' ');
@@ -90,13 +88,18 @@ function Card(props) {
 
   return (
     <View >
-      <TouchableOpacity style={{...styles.container}} onPress={() => !!flipRotation ? flipToBack() : flipToFront()}>
+      <Pressable style={{...styles.container}} 
+        // 카드 뒤집기
+        onPress={() => !!flipRotation ? flipToBack() : flipToFront()}
+        // 상세화면
+        onLongPress={() => navigation.navigate('Detail',  {card: data})}>
+
         {/* 앞면 */}
         <Animated.View
           style={{ ...styles.front, ...flipToFrontStyle,  }}>
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
-            <Text>{props.data.keyword}</Text>
+            <Text>{data.keyword}</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -113,7 +116,7 @@ function Card(props) {
             </View>
             {/* 제목  */}
             <View style={{...styles.frontTitle}}>
-              <Text style={{color: "white", fontWeight:"bold", fontSize:SCREEN_WIDTH/20}}>{props.data.title}</Text>
+              <Text style={{color: "white", fontWeight:"bold", fontSize:SCREEN_WIDTH/20}}>{data.title}</Text>
             </View>
         </Animated.View>
 
@@ -136,7 +139,7 @@ function Card(props) {
           </View>
           {/* 녹음 아이콘 */}
           {
-            props.data.voice ===null ? 
+            data.voice ===null ? 
               null
             : 
             <View style={styles.backVoiceView}>
@@ -145,7 +148,7 @@ function Card(props) {
           }
 
         </Animated.View>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   )
 }
