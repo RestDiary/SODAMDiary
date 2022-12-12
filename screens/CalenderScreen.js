@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {StyleSheet, Button, View, Text, Dimensions, ScrollView } from 'react-native';
 import { Calendar ,LocaleConfig} from "react-native-calendars";
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from './component/Card'
@@ -11,17 +10,18 @@ import { API } from '../config.js'
 
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
-
 function CalenderScreen({ navigation }) {
-
-  const [diaryData, setDiaryData] = useState([]);
+  const [diaryData, setDiaryData] = useState([]); //db에서 받아온 데이터 저장하는곳
   const [selectDay, setSelectDay] = useState([]); //선택한 캘린더
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); //데이터 불러오는동안 로딩 표시
   const [reObjDiary, setReObjDiary] = useState([]); //선택한 다이어리 객체 재 리스트화 (사용)
+  const [markingDate, setMarkingDate] = useState([]); // 날짜에 마킹한 객체를 집어넣는곳
+  const [mergeObj, setMergeObj] = useState({});
 
    //일기 data 요청
    const getDiaryData = async () => {
     setLoading(true)
+
     const userId = await AsyncStorage.getItem("id");
     try {
       await axios({
@@ -43,8 +43,6 @@ function CalenderScreen({ navigation }) {
     setLoading(false)
   }
 
-
-
     //로그인 여부 확인 및 일기 불러오기
     useEffect(() => {
       getDiaryData()
@@ -52,25 +50,41 @@ function CalenderScreen({ navigation }) {
       console.log(JSON.stringify(diaryData[0], null, 4))
       }, [])
 
-      // 선택한 날짜에 해당하는 일기 객체만 집어넣기
-    function reObj(day){
+      
 
-    }
-
+      //데이터 불러오고 난후 캘린더에 쓴날 표시 → 객체 state에 집넣기
+      useEffect(() => {
+      
+        let result =  {}
+  
+        setMarkingDate([])
+  
+        //마킹객체 생성
+        for(var i=0 ;i<diaryData.length;i++ ){
+          const year = diaryData[i].year;
+          const month = ('0' + (diaryData[i].month)).slice(-2);
+          const days = ('0' + diaryData[i].day).slice(-2);
+          const reDiaryDate = year + '-' + month + '-' + days;
+          // console.log(reDiaryDate); 잘뜸
+          const temp = {[reDiaryDate] : {marked:true, disableTouchEvent:false}};
+          Object.assign(result, temp)
+        }
+        setMarkingDate(result)
+      }, [diaryData])
 
 
     //===================================================================================
+
   return (<>
-    {diaryData[0] &&
+    {markingDate &&
   <View style={styles.container}>
     <View >
       <Calendar
-        // 선택할 수 있는 최소 날짜, 이전 날짜는 회색으로 표시 기본= 표시 안됨
-        minDate={'2022-10-10'}
-        // 선택할 수 있는 최대 날짜 , 이후 날짜는 회색을 표시 기본 = 표시안됨
-        // 오늘 날짜를 최대로 선정
-        maxDate={'2022-12-31'}
 
+        //데이터 마킹 (일기 쓴 날만 색 주기)
+        markedDates={
+          markingDate
+        }
 
         //day press에서 실행되는 핸들러 기본값 = 정의되지 않음
         onDayPress={day => {
@@ -84,17 +98,12 @@ function CalenderScreen({ navigation }) {
             const month = ('0' + (diaryData[i].month)).slice(-2);
             const days = ('0' + diaryData[i].day).slice(-2);
             const reDiaryDate = year + '-' + month + '-' + days;
-            
-
-            
-            console.log(reDiaryDate,"   양옆 같은건가?   ",day.dateString)
+            // console.log(reDiaryDate,"   양옆 같은건가?   ",day.dateString)
             if(reDiaryDate===day.dateString){
               setReObjDiary(oldArray=>[...oldArray, diaryData[i]]);
             } 
-            
           }
-          console.log("들어간 데이터는 = ", reObjDiary)
-
+          // console.log("들어간 데이터는 = ", reObjDiary)
         }}
 
 
@@ -127,6 +136,8 @@ function CalenderScreen({ navigation }) {
         // 월간 스와이프 옵션을 활성화합니다. 기본값 = 거짓       
         enableSwipeMonths={true}
 
+
+          
         
         />
         
