@@ -5,7 +5,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SimpleLineIcons } from '@expo/vector-icons';
-import {dark, votanical, town} from './css/globalStyles';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import {useIsFocused} from '@react-navigation/native';
 
 //사용 디바이스 크기 값 받아오기
@@ -27,13 +27,14 @@ function HomeScreen({ navigation }) {
         let selectedTheme = await AsyncStorage.getItem('theme');
         
         if (selectedTheme.includes("dark")) setNowTheme(dark);
-        else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
-        else if (selectedTheme.includes("town")) setNowTheme(town);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
     }    
 
     //로그인 여부 확인

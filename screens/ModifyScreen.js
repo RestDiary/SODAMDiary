@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { dark, votanical, town } from './css/globalStyles';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -40,23 +40,77 @@ function DetailScreen(card) {
         placeholderColor: "#456185",
         color: dark.font,
       }
-    }
+    } 
 
-    else if (selectedTheme.includes("votanical")) {
+    else if (selectedTheme.includes("votanical")){
       setNowTheme(votanical);
       editorOption = {
         backgroundColor: votanical.cardBg,
         placeholderColor: "#456185",
         color: votanical.font,
       }
-    }
+    } 
 
-    else if (selectedTheme.includes("town")) {
+    else if (selectedTheme.includes("town")){
       setNowTheme(town);
       editorOption = {
         backgroundColor: town.cardBg,
         placeholderColor: "#456185",
         color: town.font,
+      }
+    }
+
+    else if (selectedTheme.includes("classic")){
+      setNowTheme(classic);
+      editorOption = {
+        backgroundColor: classic.cardBg,
+        placeholderColor: "#456185",
+        color: classic.font,
+      }
+    }
+
+    else if (selectedTheme.includes("purple")){
+      setNowTheme(purple);
+      editorOption = {
+        backgroundColor: purple.cardBg,
+        placeholderColor: "#456185",
+        color: purple.font,
+      }
+    }
+
+    else if (selectedTheme.includes("block")){
+      setNowTheme(block);
+      editorOption = {
+        backgroundColor: block.cardBg,
+        placeholderColor: "#456185",
+        color: block.font,
+      }
+    }
+
+    else if (selectedTheme.includes("pattern")){
+      setNowTheme(pattern);
+      editorOption = {
+        backgroundColor: pattern.cardBg,
+        placeholderColor: "#456185",
+        color: pattern.font,
+      }
+    }
+
+    else if (selectedTheme.includes("magazine")){
+      setNowTheme(magazine);
+      editorOption = {
+        backgroundColor: magazine.cardBg,
+        placeholderColor: "#456185",
+        color: magazine.font,
+      }
+    }
+
+    else if (selectedTheme.includes("winter")){
+      setNowTheme(winter);
+      editorOption = {
+        backgroundColor: winter.cardBg,
+        placeholderColor: "#456185",
+        color: winter.font,
       }
     }
 

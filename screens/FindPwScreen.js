@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, View, Image, TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {dark, votanical, town} from './css/globalStyles';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function FindPwScreen({ navigation }) {
        //테마
-       useEffect(() => {
+  useEffect(() => {
         getTheme()
       }, [])
     
@@ -18,13 +18,14 @@ function FindPwScreen({ navigation }) {
         let selectedTheme = await AsyncStorage.getItem('theme');
         
         if (selectedTheme.includes("dark")) setNowTheme(dark);
-        else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
-        else if (selectedTheme.includes("town")) setNowTheme(town);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
-        // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
     }    
 
     const [id, setId] = useState(""); //아이디
@@ -115,7 +116,7 @@ function FindPwScreen({ navigation }) {
         <View style={{ ...styles.container, backgroundColor:nowTheme.bg }}>
           {/* 로고 박스 */}
           <View style={{...styles.logoBox}}>
-            <Image resizeMode="contain" style={{width:SCREEN_WIDTH/2}}source={require('../assets/images/logo.png')} ></Image>
+            <Image resizeMode="contain" style={{width:SCREEN_WIDTH/2}}source={nowTheme.logo} ></Image>
           </View>
     
           {/* 입력 레이아웃 */} 

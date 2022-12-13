@@ -12,7 +12,7 @@ import AudioPlayer from './component/AudioPlayer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
-import { dark, votanical, town } from './css/globalStyles';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -57,6 +57,60 @@ function WriteScreen({ navigation }) {
         backgroundColor: town.cardBg,
         placeholderColor: "#456185",
         color: town.font,
+      }
+    }
+
+    else if (selectedTheme.includes("classic")){
+      setNowTheme(classic);
+      editorOption = {
+        backgroundColor: classic.cardBg,
+        placeholderColor: "#456185",
+        color: classic.font,
+      }
+    }
+
+    else if (selectedTheme.includes("purple")){
+      setNowTheme(purple);
+      editorOption = {
+        backgroundColor: purple.cardBg,
+        placeholderColor: "#456185",
+        color: purple.font,
+      }
+    }
+
+    else if (selectedTheme.includes("block")){
+      setNowTheme(block);
+      editorOption = {
+        backgroundColor: block.cardBg,
+        placeholderColor: "#456185",
+        color: block.font,
+      }
+    }
+
+    else if (selectedTheme.includes("pattern")){
+      setNowTheme(pattern);
+      editorOption = {
+        backgroundColor: pattern.cardBg,
+        placeholderColor: "#456185",
+        color: pattern.font,
+      }
+    }
+
+    else if (selectedTheme.includes("magazine")){
+      setNowTheme(magazine);
+      editorOption = {
+        backgroundColor: magazine.cardBg,
+        placeholderColor: "#456185",
+        color: magazine.font,
+      }
+    }
+
+    else if (selectedTheme.includes("winter")){
+      setNowTheme(winter);
+      editorOption = {
+        backgroundColor: winter.cardBg,
+        placeholderColor: "#456185",
+        color: winter.font,
       }
     }
 
@@ -377,98 +431,98 @@ function WriteScreen({ navigation }) {
       {/* --------------------- 에디터 툴 --------------------- */}
 
       {editorColor.backgroundColor &&
-      <>
-        <RichToolbar
-          // 커스텀 액션
-          iconMap={{
-            // 음성 녹음 버튼
-            ["insertVoice"]: voice,
-          }}
+        <>
+          <RichToolbar
+            // 커스텀 액션
+            iconMap={{
+              // 음성 녹음 버튼
+              ["insertVoice"]: voice,
+            }}
 
-          editor={richText}
+            editor={richText}
 
-          // 사진 picker 기능
-          onPressAddImage={pickImage}
+            // 사진 picker 기능
+            onPressAddImage={pickImage}
 
-          // 음성 녹음 기능
-          insertVoice={toggleModal}
+            // 음성 녹음 기능
+            insertVoice={toggleModal}
 
-          selectedIconTint="#ED7C58"
-          iconTint="#fff"
+            selectedIconTint="#ED7C58"
+            iconTint="#fff"
 
-          // 액션 툴 추가
-          actions={[
-            actions.setBold,
-            actions.setItalic,
-            actions.setStrikethrough,
-            actions.setUnderline,
-            actions.insertBulletsList,
-            actions.insertOrderedList,
-            actions.insertImage,
-            "insertVoice",
-            actions.undo,
-            actions.redo,
-          ]}
-          style={{ ...styles.richTextToolbarStyle, backgroundColor: nowTheme.btn }}
-        />
+            // 액션 툴 추가
+            actions={[
+              actions.setBold,
+              actions.setItalic,
+              actions.setStrikethrough,
+              actions.setUnderline,
+              actions.insertBulletsList,
+              actions.insertOrderedList,
+              actions.insertImage,
+              "insertVoice",
+              actions.undo,
+              actions.redo,
+            ]}
+            style={{ ...styles.richTextToolbarStyle, backgroundColor: nowTheme.btn }}
+          />
 
-      {/* Modal */}
-      <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
-          <AudioRecorder getAudio={getAudio} />
+          {/* Modal */}
+          <Modal isVisible={isModalVisible}>
+            <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
+              <AudioRecorder getAudio={getAudio} />
 
-          <View style={{ marginTop: '6%' }}>
-            {isRecording ?
-              <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
-              :
-              <Button title='닫기' onPress={toggleModal} ></Button>
-            }
-          </View>
-        </View>
-      </Modal>
-
-      {/*--------------------- 에디터 --------------------- */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
-        <SafeAreaView>
-          <ScrollView>
-            {/* {이미지 보이는 곳} */}
-            <Pressable onLongPress={delImg}>
-              {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-            </Pressable>
-            {/* 음성 플레이어 영역 */}
-            {audio &&
-              <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                <AudioPlayer audio={audio}></AudioPlayer>
-                <Button title='삭제' onPress={delAudio} />
+              <View style={{ marginTop: '6%' }}>
+                {isRecording ?
+                  <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
+                  :
+                  <Button title='닫기' onPress={toggleModal} ></Button>
+                }
               </View>
-            }
+            </View>
+          </Modal>
 
-            <RichEditor
-              ref={richText} // from useRef()
-              onChange={richTextHandle}
-              placeholder="소중한 마음을 담아서 일기를 작성해보세요."
-              androidHardwareAccelerationDisabled={true}
+          {/*--------------------- 에디터 --------------------- */}
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
+            <SafeAreaView>
+              <ScrollView>
+                {/* {이미지 보이는 곳} */}
+                <Pressable onLongPress={delImg}>
+                  {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                </Pressable>
+                {/* 음성 플레이어 영역 */}
+                {audio &&
+                  <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <AudioPlayer audio={audio}></AudioPlayer>
+                    <Button title='삭제' onPress={delAudio} />
+                  </View>
+                }
 
-              editorStyle={editorColor}
+                <RichEditor
+                  ref={richText} // from useRef()
+                  onChange={richTextHandle}
+                  placeholder="소중한 마음을 담아서 일기를 작성해보세요."
+                  androidHardwareAccelerationDisabled={true}
 
-              style={{ ...styles.richTextEditorStyle }}
-              initialHeight={SCREEN_HEIGHT / 2}>
-            </RichEditor>
+                  editorStyle={editorColor}
 
-          </ScrollView>
-        </SafeAreaView>
-      </KeyboardAvoidingView>
+                  style={{ ...styles.richTextEditorStyle }}
+                  initialHeight={SCREEN_HEIGHT / 2}>
+                </RichEditor>
 
-      {/* 저장 버튼 */}
-      <View style={styles.saveButtonView}>
-        <TouchableOpacity
-          style={{ ...styles.saveButtonStyle, backgroundColor: nowTheme.btn }}
-          onPress={submitContentHandle}>
-          <Text style={styles.textButtonStyle}>저장</Text>
-        </TouchableOpacity>
-      </View>
+              </ScrollView>
+            </SafeAreaView>
+          </KeyboardAvoidingView>
 
-      </>}
+          {/* 저장 버튼 */}
+          <View style={styles.saveButtonView}>
+            <TouchableOpacity
+              style={{ ...styles.saveButtonStyle, backgroundColor: nowTheme.btn }}
+              onPress={submitContentHandle}>
+              <Text style={styles.textButtonStyle}>저장</Text>
+            </TouchableOpacity>
+          </View>
+
+        </>}
 
     </View>
   );
@@ -543,7 +597,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: SCREEN_HEIGHT / 32,
     height: SCREEN_HEIGHT / 16,
-    marginLeft:10,
+    marginLeft: 10,
   },
 
   titleLayout: {

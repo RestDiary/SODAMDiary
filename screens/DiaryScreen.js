@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Button } from 'react-native-paper';
 import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {dark, votanical, town} from './css/globalStyles';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -29,11 +29,12 @@ const getTheme = async () => {
     if (selectedTheme.includes("dark")) setNowTheme(dark);
     else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
     else if (selectedTheme.includes("town")) setNowTheme(town);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
 }    
 
   const [diaryData, setDiaryData] = useState([]);

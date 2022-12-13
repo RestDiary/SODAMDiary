@@ -24,7 +24,7 @@ function ThemeScreen({ navigation }) {
     require("../assets/images/magazineTheme.png"),
     require("../assets/images/winterTheme.png"),
   ]);
-  const [themeTitle, setThemeTitle] = useState(["dark", "votanical", "town", "classic", "purle", "block", "pattern", "magazine", "winter"])
+  const [themeTitle, setThemeTitle] = useState(["dark", "votanical", "town", "classic", "purple", "block", "pattern", "magazine", "winter"])
 
   //현재 선택한 테마 가져오기
   const [selectedTheme, setSelectedTheme] = useState("");
@@ -85,7 +85,6 @@ function ThemeScreen({ navigation }) {
                 <View style={styles.notCard}></View>
               </ScrollView>
             </SafeAreaView>
-
           </View>
         </View>
       }

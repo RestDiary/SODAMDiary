@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, Button, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import { Audio } from 'expo-av';
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -8,27 +8,27 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 //녹음 설정
 const recordingOptions = {
-    android: {
-        extension: '.m4a',
-        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-        sampleRate: 44100,
-        numberOfChannels: 2,
-        bitRate: 128000,
-    },
-    ios: {
-        extension: '.wav',
-        audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-        sampleRate: 44100,
-        numberOfChannels: 1,
-        bitRate: 128000,
-        linearPCMBitDepth: 16,
-        linearPCMIsBigEndian: false,
-        linearPCMIsFloat: false,
-    },
+  android: {
+    extension: '.m4a',
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+    extension: '.wav',
+    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
 };
 
-export default function AudioRecorder( {getAudio} ) {
+export default function AudioRecorder({ getAudio }) {
   const [recording, setRecording] = React.useState();
 
   //녹음 시작
@@ -59,15 +59,15 @@ export default function AudioRecorder( {getAudio} ) {
   async function stopRecording() {
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
-  
+
     //녹음파일 객체 생성
-    const {sound, status} = await recording.createNewLoadedSoundAsync();
-    
+    const { sound, status } = await recording.createNewLoadedSoundAsync();
+
     const audio = {
-      sound : sound,
-      file : recording.getURI(),
+      sound: sound,
+      file: recording.getURI(),
       duration: getDurationFormatted(status.durationMillis),
-      status : status
+      status: status
     }
 
     //부모에게 전달
@@ -85,14 +85,14 @@ export default function AudioRecorder( {getAudio} ) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{justifyContent:'center', alignItems:'center'}} onPress={recording ? stopRecording : startRecording}>
+      <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }} onPress={recording ? stopRecording : startRecording}>
         {recording ?
           <>
-          <MaterialCommunityIcons name="stop" size={60} color="red" />
+            <MaterialCommunityIcons name="stop" size={60} color="red" />
           </>
           :
           <>
-          <SimpleLineIcons name="microphone" size={40} color="black" />
+            <SimpleLineIcons name="microphone" size={40} color="black" />
           </>
         }
       </TouchableOpacity>
@@ -102,20 +102,20 @@ export default function AudioRecorder( {getAudio} ) {
 
 const styles = StyleSheet.create({
   container: {
-    width:SCREEN_WIDTH/3,
-    height:SCREEN_HEIGHT/8,
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:'white',
-    borderRadius:20,
+    width: SCREEN_WIDTH / 3,
+    height: SCREEN_HEIGHT / 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 20,
   },
 
-  noteText:{
-    fontSize:12,
-    marginTop:5,
+  noteText: {
+    fontSize: 12,
+    marginTop: 5,
   },
   button: {
-    width:50,
+    width: 50,
     margin: 16
   }
 });

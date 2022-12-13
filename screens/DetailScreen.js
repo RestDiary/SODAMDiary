@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import {dark, votanical, town} from './css/globalStyles';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 

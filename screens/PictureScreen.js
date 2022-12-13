@@ -4,9 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { API } from '../config.js'
-import {dark, votanical, town} from './css/globalStyles';
-
-
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 function PictureScreen({ navigation }) {
   //테마
@@ -22,11 +20,12 @@ const getTheme = async () => {
     if (selectedTheme.includes("dark")) setNowTheme(dark);
     else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
     else if (selectedTheme.includes("town")) setNowTheme(town);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
-    // else if (selectedTheme === "votanical") setNowTheme(votanical);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
 }    
   const [albumData, setAlbumData] = useState([]);
   const [loading, setLoading] = useState(false)
