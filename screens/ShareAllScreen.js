@@ -40,7 +40,7 @@ function DiaryScreen( share ) {
     try {
       await axios({
         method: "post",
-        url: 'http://192.168.2.64:3001/shareList',
+        url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/shareList',
         params: {
           diarykey: share.route.params.share.diarykey,
         }
@@ -54,7 +54,7 @@ function DiaryScreen( share ) {
 
           await axios({
             method: "post",
-            url: 'http://192.168.2.64:3001/shareList2',
+            url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/shareList2',
             params: {
               id: userId,
               emotion: share.route.params.share.emotion, 

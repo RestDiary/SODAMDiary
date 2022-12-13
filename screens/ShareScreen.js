@@ -37,7 +37,7 @@ function DiaryScreen({ navigation }) {
     try {
       await axios({
         method: "post",
-        url: 'http://192.168.2.64:3001/myShare',
+        url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/myShare',
         params: {
           id: userId, //****작성자 id
         }

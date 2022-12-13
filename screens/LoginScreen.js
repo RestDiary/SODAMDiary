@@ -27,13 +27,22 @@ const getTheme = async () => {
     else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
     else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
     else if (selectedTheme.includes("winter")) setNowTheme(winter);
-}    
+    else if(selectedTheme.includes(null)){
+      setNowTheme(dark)
+      AsyncStorage.setItem('theme',("dark"))
+}
+} 
+
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  
+
+  
 
   //로그인 여부 확인
   useEffect(() => {
     isLogin()
+    getTheme()
   }, [])
 
   const isLogin = async () => {
