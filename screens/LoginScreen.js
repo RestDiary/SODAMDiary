@@ -16,6 +16,7 @@ function LoginScreen({ navigation }) {
 const [nowTheme, setNowTheme] = useState({});
 
 const getTheme = async () => {
+  await AsyncStorage.setItem('theme', "dark");
     let selectedTheme = await AsyncStorage.getItem('theme');
     
     if (selectedTheme.includes("dark")) setNowTheme(dark);
@@ -27,9 +28,9 @@ const getTheme = async () => {
     else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
     else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
     else if (selectedTheme.includes("winter")) setNowTheme(winter);
-    else if(selectedTheme.includes(null)){
+    else {
       setNowTheme(dark)
-      AsyncStorage.setItem('theme',("dark"))
+      await AsyncStorage.setItem('theme',("dark"))
 }
 } 
 
