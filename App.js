@@ -204,29 +204,6 @@ function MyDrawer() {
 }
 
 function MyStack() {
-  //스크린 이동할 때 lifecycle 실행
-  const isFocused = useIsFocused();
-  //테마
-  const [nowTheme, setNowTheme] = useState({});
-
-  useEffect(() => {
-    getTheme()
-  }, [isFocused])
-
-  const getTheme = async () => {
-    let selectedTheme = await AsyncStorage.getItem('theme');
-
-    if (selectedTheme.includes("dark")) setNowTheme(dark);
-    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
-    else if (selectedTheme.includes("town")) setNowTheme(town);
-    else if (selectedTheme.includes("classic")) setNowTheme(classic);
-    else if (selectedTheme.includes("purple")) setNowTheme(purple);
-    else if (selectedTheme.includes("block")) setNowTheme(block);
-    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
-    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
-    else if (selectedTheme.includes("winter")) setNowTheme(winter);
-  }
-
   return (
     <Stack.Navigator>
       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, headerTintColor: "black" }} />
@@ -255,6 +232,20 @@ function MyStack() {
 }
 
 export default function App() {
+  useEffect (()=>{
+    defaultTheme()
+  },[])
+
+  const defaultTheme = async() => {
+    let theme = await AsyncStorage.getItem('theme');
+    if(!theme){
+      await AsyncStorage.setItem('theme', "dark");
+      console.log("없어서 설정")
+    } else{
+      console.log("있ㅇ", theme)
+    }
+  }
+
   return (
     <NavigationContainer>
       <MyStack />
