@@ -25,6 +25,8 @@ import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
 import LoginScreen from './screens/LoginScreen';
+import ShareScreen from './screens/ShareScreen'; 
+import ShareAllScreen from './screens/ShareAllScreen';
 
 import ThemeScreen from './screens/ThemeScreen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -236,6 +238,7 @@ function MyStack() {
       <Stack.Screen name="Write" component={WriteScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Diary" component={DiaryScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Picture" component={PictureScreen} options={{ headerTintColor: "black" }} />
+      <Stack.Screen name="Share" component={ShareScreen} />
 
       {/* 기타 스크린 */}
       <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black" }} />
@@ -245,6 +248,7 @@ function MyStack() {
       <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Modify" component={ModifyScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Album" component={PictureDeailScreen} options={{ headerTintColor: "black" }} />
+      <Stack.Screen name="ShareAll" component={ShareAllScreen} />
 
     </Stack.Navigator>
   );
