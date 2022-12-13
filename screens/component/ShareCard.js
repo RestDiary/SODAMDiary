@@ -1,18 +1,20 @@
 import * as React from 'react';
-import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable } from 'react-native';
+import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useEffect ,useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function Card({data}) {
   const [newContent,setNewContent] = useState(""); 
   const navigation = useNavigation(); 
 
-  console.log("data",data.img);
+  // console.log("data",data.diarykey, data.keyword);
 
   //링크 이동
   const moveNavigate = (screen) => {
@@ -26,6 +28,45 @@ function Card({data}) {
   // 뒤에서 앞으로 다시 뒤집기위해 값 초기화
   flipAnimation.addListener(({ value }) => flipRotation = value);
 
+
+    //일기 공유 선택
+    const shareDiary = () => {
+      Alert.alert(
+        "일기를 공유하시겠습니까?",
+        "다른 사람들의 일기를 하나 볼 수 있게 됩니다.",
+        [                           
+          {
+            text: "네",                              
+            onPress: () => shareDiary2(),    
+            style: "cancel"
+          },
+          { text: "아니오", onPress: () => console.log("안한대") }, 
+        ],
+        { cancelable: false }
+      )
+      
+    }
+
+    const shareDiary2 = async() => {
+      AsyncStorage.setItem("one", 'one');
+      console.log("ssssss",data.diarykey);
+      await axios({
+        method: "post",
+        url: 'http://192.168.2.64:3001/sharePush',
+        params: {
+          diarykey: data.diarykey,
+        }
+      }, null)
+        .then(res => {
+          // console.log(res)
+          navigation.navigate('ShareAll',  {share: data})
+        })
+        .catch(function (error) {
+          console.log(err);
+        })
+  
+    }
+    
   // 앞면 초깃값
   const flipToFrontStyle = {
     transform: [
@@ -94,7 +135,7 @@ function Card({data}) {
         // 카드 뒤집기
         onPress={() => !!flipRotation ? flipToBack() : flipToFront()}
         // 상세화면
-        onLongPress={() => navigation.navigate('Detail',  {card: data})}>
+        onLongPress={shareDiary}>
 
         {/* 앞면 */}
         <Animated.View
@@ -102,7 +143,7 @@ function Card({data}) {
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
             <Text style={{color:"white"}}>{data.day}일</Text>
-            <Text style={{color:"#ED7C58"}}>#{data.keyword}</Text>
+            <Text style={{color:"#ED7C58"}}># {data.emotion}</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -142,7 +183,7 @@ function Card({data}) {
               {/* {props.data.content} */}
               {newContent}
             </Text>
-          </View>
+          </View> 
           {/* 녹음 아이콘 */}
           {
             data.voice ===null ? 

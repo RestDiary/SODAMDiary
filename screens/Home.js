@@ -6,6 +6,7 @@ import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-ic
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SimpleLineIcons } from '@expo/vector-icons';
 
+
 //사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
@@ -38,11 +39,13 @@ function HomeScreen({ navigation }) {
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
                         <ImageBackground style={{height:'100%', width:'100%'}} source={require('../assets/images/nightStar.png')}>
+
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                                 <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
                                     <SimpleLineIcons name="menu" size={24} color="white" />
                                 </View>
                             </TouchableOpacity>
+
                         </ImageBackground>
 
                     </View>
@@ -92,6 +95,16 @@ function HomeScreen({ navigation }) {
                                     <View style={{...styles.smallWidget, backgroundColor:'#152F5E'}}>
                                         <FontAwesome name="pencil-square-o" size={24} color="white" />  
                                         <Text style={styles.textStyle}>write</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={styles.widgetContainer}>
+                            <View style={styles.smallWidgetContaner}>
+                            <TouchableOpacity onPress={(screen) => moveNavigate('Share')}>
+                                    <View style={{...styles.smallWidget2, backgroundColor:'#456185'}}>
+                                        <Entypo name="shareable" size={24} color="white" />
+                                        <Text style={styles.textStyle}>Share</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -159,6 +172,14 @@ const styles = StyleSheet.create({
     smallWidget:{
         height:SCREEN_HEIGHT/5.8,
         width:SCREEN_WIDTH/2.4,
+        backgroundColor:'#de8260',
+        alignItems:'center',
+        justifyContent:'center',
+        borderRadius: 20,
+    },
+    smallWidget2:{
+        height:SCREEN_HEIGHT/5.8,
+        width:SCREEN_WIDTH/1.1,
         backgroundColor:'#de8260',
         alignItems:'center',
         justifyContent:'center',
