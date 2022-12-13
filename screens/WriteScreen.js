@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert, Image } from 'react-native';
 import { actions, RichEditor, RichToolbar, } from "react-native-pell-rich-editor";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -12,15 +12,115 @@ import AudioPlayer from './component/AudioPlayer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
-
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function WriteScreen({ navigation }) {
+  //스크린 이동할 때 lifecycle 실행
+  const isFocused = useIsFocused();
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [isFocused])
+
+  const [nowTheme, setNowTheme] = useState({});
+  const [editorColor, setEditorColor] = useState({})
+
+  //테마, 에디터 컬러 가져오기
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    let editorOption = {}
+
+    if (selectedTheme.includes("dark")) {
+      setNowTheme(dark);
+      editorOption = {
+        backgroundColor: dark.cardBg,
+        placeholderColor: "#456185",
+        color: dark.font,
+      }
+    } 
+
+    else if (selectedTheme.includes("votanical")){
+      setNowTheme(votanical);
+      editorOption = {
+        backgroundColor: votanical.cardBg,
+        placeholderColor: "#456185",
+        color: votanical.font,
+      }
+    } 
+
+    else if (selectedTheme.includes("town")){
+      setNowTheme(town);
+      editorOption = {
+        backgroundColor: town.cardBg,
+        placeholderColor: "#456185",
+        color: town.font,
+      }
+    }
+
+    else if (selectedTheme.includes("classic")){
+      setNowTheme(classic);
+      editorOption = {
+        backgroundColor: classic.cardBg,
+        placeholderColor: "#456185",
+        color: classic.font,
+      }
+    }
+
+    else if (selectedTheme.includes("purple")){
+      setNowTheme(purple);
+      editorOption = {
+        backgroundColor: purple.cardBg,
+        placeholderColor: "#456185",
+        color: purple.font,
+      }
+    }
+
+    else if (selectedTheme.includes("block")){
+      setNowTheme(block);
+      editorOption = {
+        backgroundColor: block.cardBg,
+        placeholderColor: "#456185",
+        color: block.font,
+      }
+    }
+
+    else if (selectedTheme.includes("pattern")){
+      setNowTheme(pattern);
+      editorOption = {
+        backgroundColor: pattern.cardBg,
+        placeholderColor: "#456185",
+        color: pattern.font,
+      }
+    }
+
+    else if (selectedTheme.includes("magazine")){
+      setNowTheme(magazine);
+      editorOption = {
+        backgroundColor: magazine.cardBg,
+        placeholderColor: "#456185",
+        color: magazine.font,
+      }
+    }
+
+    else if (selectedTheme.includes("winter")){
+      setNowTheme(winter);
+      editorOption = {
+        backgroundColor: winter.cardBg,
+        placeholderColor: "#456185",
+        color: winter.font,
+      }
+    }
+
+    setEditorColor(editorOption)
+  }
+
   const voice = require("../assets/images/voice.png");
   const [titleText, onChangeTitleText] = useState("");
   const [feelingText, onChangeFeelingText] = useState("");
-  const richText = React.useRef();
+  const richText = useRef();
   const [descHTML, setDescHTML] = useState("");
   const [showDescError, setShowDescError] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -29,31 +129,31 @@ function WriteScreen({ navigation }) {
   const [id, setId] = useState("");
 
   //이미지 업로드용
-  const [image,setImage] = useState("");
-  const [send,setSend] = useState("");
+  const [image, setImage] = useState("");
+  const [send, setSend] = useState("");
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const formData = new FormData();
   let url = ""; //서버에서 받아올 aws이미지 경로
 
   //내 갤러리에서 사진 선택
   const pickImage = async () => {
-    
-    if(!status.granted){ // status로 권한이 있는지 확인
+
+    if (!status.granted) { // status로 권한이 있는지 확인
       const permission = await requestPermission();
-      if(!permission.granted){
+      if (!permission.granted) {
         return null;
       }
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes : ImagePicker.MediaTypeOptions.Images,
-      allowsEditing : false,
-      quality : 1,
-      aspect : [1,1]   
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+      aspect: [1, 1]
     });
 
-    if(result.canceled){
-      return null;  
+    if (result.canceled) {
+      return null;
     }
 
     setImage(result.assets[0].uri);
@@ -64,13 +164,13 @@ function WriteScreen({ navigation }) {
     const match = /\.(\w+)$/.exec(filename ?? '');
     const type = match ? `image/${match[1]}` : `image`;
     // const formData = new FormData();
-    formData.append('image' , {uri: localUri,name: filename, type});
+    formData.append('image', { uri: localUri, name: filename, type });
     setSend(formData);
     console.log(formData);
     console.log(localUri);
-    console.log(filename);  
+    console.log(filename);
     console.log(type);
-      
+
   };
 
   //링크이동
@@ -107,22 +207,22 @@ function WriteScreen({ navigation }) {
     setEmotions(temp.filter((i) => i !== keyword))
   }
 
-   //이미지 제거
-   const delImg = () => {
+  //이미지 제거
+  const delImg = () => {
     Alert.alert(
       "삭제",
       "이미지를 삭제하시겠습니까?",
-      [                           
+      [
         {
-          text: "네",                              
-          onPress: () => setImage(""),    
+          text: "네",
+          onPress: () => setImage(""),
           style: "cancel"
         },
-        { text: "아니오", onPress: () => console.log("안한대") }, 
+        { text: "아니오", onPress: () => console.log("안한대") },
       ],
       { cancelable: false }
     )
-    
+
   }
 
   //녹음 제거
@@ -130,26 +230,19 @@ function WriteScreen({ navigation }) {
     Alert.alert(
       "삭제",
       "오디오를 삭제하시겠습니까?",
-      [                           
+      [
         {
-          text: "네",                              
-          onPress: () => setAudio(),    
+          text: "네",
+          onPress: () => setAudio(),
           style: "cancel"
         },
-        { text: "아니오", onPress: () => console.log("안한대") }, 
+        { text: "아니오", onPress: () => console.log("안한대") },
       ],
       { cancelable: false }
     )
-    
+
   }
 
-  // 민제 형이 할 것. (사진 피커)
-  // function onPressAddImage() {
-  //   // you can easily add images from your gallery
-  //   RichText.current?.insertImage(
-  //     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png"
-  //   );
-  // }
 
   //자식에서 부모에게 Audio 데이터 전달
   const [audio, setAudio] = useState()
@@ -169,8 +262,8 @@ function WriteScreen({ navigation }) {
     }
   };
 
-   //id값 꺼내오기
-   React.useEffect(() => {
+  //id값 꺼내오기
+  useEffect(() => {
     AsyncStorage.getItem('id', (err, result) => {
       setId(result);
     });
@@ -184,13 +277,13 @@ function WriteScreen({ navigation }) {
     const replaceHTML = descHTML.replace(/<(.|\n)*?>/g, "").trim();
     const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, "").trim();
 
-    if (titleText.length<=0) {
+    if (titleText.length <= 0) {
       setShowDescError(true);
       Alert.alert("제목을 입력해 주세요.")
       return
     }
 
-    if (Emotions.length<=0) {
+    if (Emotions.length <= 0) {
       setShowDescError(true);
       Alert.alert("감정 키워드를 선택해 주세요.")
       return
@@ -202,26 +295,26 @@ function WriteScreen({ navigation }) {
       return
     }
 
-    if(image != "") {
+    if (image != "") {
       // formData.append('multipartFileList' , {uri: localUri, name: filename, type});
       await axios({
-        method : 'post',
-        url : 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/upload',
-        headers:{
-          'content-type' : 'multipart/form-data',
+        method: 'post',
+        url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/upload',
+        headers: {
+          'content-type': 'multipart/form-data',
         },
-        data : send
+        data: send
       })
-      .then((res) => {
+        .then((res) => {
           // richText.current.insertImage(res.data);
           url = res.data;
           console.log(url);
-          
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }
+
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
 
     // 서버 데이터 전송
     setLoading(true)
@@ -259,14 +352,14 @@ function WriteScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
       {/* 제목 */}
       <SafeAreaView style={styles.titleLayout}>
         <TextInput
           autoFocus
           placeholder="제목:"
           placeholderTextColor={"#456185"}
-          style={styles.title}
+          style={{ ...styles.title, color: nowTheme.font, fontWeight: "bold" }}
           onChangeText={onChangeTitleText}
           value={titleText}
           returnKeyType="next"
@@ -279,7 +372,7 @@ function WriteScreen({ navigation }) {
         {/* 오늘의 기분 키워드 피커 */}
         <View>
           <Picker
-            style={styles.feeling}
+            style={{ ...styles.feeling, backgroundColor: nowTheme.cardBg, color: nowTheme.font }}
             onValueChange={(itemValue) => addEmotion(itemValue)}>
             <Picker.Item enabled={false} label="감정 선택" value="emo" />
             <Picker.Item label="추억" value="추억" />
@@ -303,7 +396,7 @@ function WriteScreen({ navigation }) {
         </View>
 
         {/* 선택한 감정 보이는 곳 */}
-        <View style={styles.feelingBtnBox}>
+        <View style={{ ...styles.feelingBtnBox, color: nowTheme.font }}>
           {Emotions &&
             Emotions.map((emo, index) => {
               return (
@@ -320,7 +413,7 @@ function WriteScreen({ navigation }) {
       <SafeAreaView style={styles.extendLayout}>
         <View style={styles.dateLayout}>
           <TouchableOpacity>
-            <Text style={styles.date}>
+            <Text style={{ ...styles.date, color: nowTheme.font }}>
               {date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일'}
             </Text>
           </TouchableOpacity>
@@ -336,97 +429,101 @@ function WriteScreen({ navigation }) {
       </View>
 
       {/* --------------------- 에디터 툴 --------------------- */}
-      <RichToolbar
 
-        // 커스텀 액션
-        iconMap={{
-          // 음성 녹음 버튼
-          ["insertVoice"]: voice,
-        }}
+      {editorColor.backgroundColor &&
+        <>
+          <RichToolbar
+            // 커스텀 액션
+            iconMap={{
+              // 음성 녹음 버튼
+              ["insertVoice"]: voice,
+            }}
 
-        editor={richText}
+            editor={richText}
 
-        // 사진 picker 기능
-        onPressAddImage={pickImage}
+            // 사진 picker 기능
+            onPressAddImage={pickImage}
 
-        // 음성 녹음 기능
-        insertVoice={toggleModal}
+            // 음성 녹음 기능
+            insertVoice={toggleModal}
 
-        selectedIconTint="#ED7C58"
-        iconTint="#fff"
+            selectedIconTint="#ED7C58"
+            iconTint="#fff"
 
-        // 액션 툴 추가
-        actions={[
-          actions.setBold,
-          actions.setItalic,
-          actions.setStrikethrough,
-          actions.setUnderline,
-          actions.insertBulletsList,
-          actions.insertOrderedList,
-          actions.insertImage,
-          "insertVoice",
-          actions.undo,
-          actions.redo,
-        ]}
-        style={styles.richTextToolbarStyle}
-      />
+            // 액션 툴 추가
+            actions={[
+              actions.setBold,
+              actions.setItalic,
+              actions.setStrikethrough,
+              actions.setUnderline,
+              actions.insertBulletsList,
+              actions.insertOrderedList,
+              actions.insertImage,
+              "insertVoice",
+              actions.undo,
+              actions.redo,
+            ]}
+            style={{ ...styles.richTextToolbarStyle, backgroundColor: nowTheme.btn }}
+          />
 
-      {/* Modal */}
-      <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
-          <AudioRecorder getAudio={getAudio} />
+          {/* Modal */}
+          <Modal isVisible={isModalVisible}>
+            <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
+              <AudioRecorder getAudio={getAudio} />
 
-          <View style={{ marginTop: '6%' }}>
-            {isRecording ?
-              <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
-              :
-              <Button title='닫기' onPress={toggleModal} ></Button>
-            }
-          </View>
-        </View>
-      </Modal>
-
-      {/*--------------------- 에디터 --------------------- */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
-        <SafeAreaView>
-          <ScrollView>
-            {/* {이미지 보이는 곳} */}
-          <Pressable onLongPress={delImg}>
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </Pressable>
-            {/* 음성 플레이어 영역 */}
-            {audio &&
-              <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-                <AudioPlayer audio={audio}></AudioPlayer>
-                <Button title='삭제'  onPress={delAudio}/>
+              <View style={{ marginTop: '6%' }}>
+                {isRecording ?
+                  <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
+                  :
+                  <Button title='닫기' onPress={toggleModal} ></Button>
+                }
               </View>
-            }
+            </View>
+          </Modal>
 
-            <RichEditor
-              ref={richText} // from useRef()
-              onChange={richTextHandle}
-              placeholder="소중한 마음을 담아서 일기를 작성해보세요."
-              androidHardwareAccelerationDisabled={true}
-              editorStyle={{
-                backgroundColor: "#071D3A",
-                placeholderColor: "#456185",
-                color: "white",
-              }}
-              style={{ ...styles.richTextEditorStyle }}
-              initialHeight={SCREEN_HEIGHT / 2}>
-            </RichEditor>
-          </ScrollView>
-        </SafeAreaView>
-      </KeyboardAvoidingView>
+          {/*--------------------- 에디터 --------------------- */}
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
+            <SafeAreaView>
+              <ScrollView>
+                {/* {이미지 보이는 곳} */}
+                <Pressable onLongPress={delImg}>
+                  {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                </Pressable>
+                {/* 음성 플레이어 영역 */}
+                {audio &&
+                  <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <AudioPlayer audio={audio}></AudioPlayer>
+                    <Button title='삭제' onPress={delAudio} />
+                  </View>
+                }
 
-      {/* 저장 버튼 */}
-      <View style={styles.saveButtonView}>
-        <TouchableOpacity
-          style={styles.saveButtonStyle}
-          onPress={submitContentHandle}>
-          <Text style={styles.textButtonStyle}>저장</Text>
-        </TouchableOpacity>
-      </View>
+                <RichEditor
+                  ref={richText} // from useRef()
+                  onChange={richTextHandle}
+                  placeholder="소중한 마음을 담아서 일기를 작성해보세요."
+                  androidHardwareAccelerationDisabled={true}
+
+                  editorStyle={editorColor}
+
+                  style={{ ...styles.richTextEditorStyle }}
+                  initialHeight={SCREEN_HEIGHT / 2}>
+                </RichEditor>
+
+              </ScrollView>
+            </SafeAreaView>
+          </KeyboardAvoidingView>
+
+          {/* 저장 버튼 */}
+          <View style={styles.saveButtonView}>
+            <TouchableOpacity
+              style={{ ...styles.saveButtonStyle, backgroundColor: nowTheme.btn }}
+              onPress={submitContentHandle}>
+              <Text style={styles.textButtonStyle}>저장</Text>
+            </TouchableOpacity>
+          </View>
+
+        </>}
+
     </View>
   );
 }
@@ -498,9 +595,9 @@ const styles = StyleSheet.create({
 
   title: {
     color: "white",
-    fontSize: SCREEN_HEIGHT / 30,
+    fontSize: SCREEN_HEIGHT / 32,
     height: SCREEN_HEIGHT / 16,
-    padding: 10,
+    marginLeft: 10,
   },
 
   titleLayout: {

@@ -21,15 +21,15 @@ export default function AudioPlayer(props) {
 
 const styles = StyleSheet.create({
     container: {
-        width: SCREEN_WIDTH/1.5,
-        backgroundColor:'blue',
-        justifyContent:'center',
-        alignItems:'center',
+        width: SCREEN_WIDTH / 1.5,
+        backgroundColor: 'blue',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     noteText: {
         fontSize: 12,
         marginTop: 5,
-        color:'white'
+        color: 'white'
     },
     button: {
         width: 50,

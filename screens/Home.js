@@ -1,16 +1,42 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, View, Text, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, Alert, ImageBackground, StatusBar } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { greaterOrEq } from 'react-native-reanimated';
 import { Entypo, AntDesign ,FontAwesome, MaterialIcons   } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+import {useIsFocused} from '@react-navigation/native';
 
 
 //사용 디바이스 크기 값 받아오기
 const { width: SCREEN_WIDTH ,height:SCREEN_HEIGHT} = Dimensions.get('window');
 
 function HomeScreen({ navigation }) {
+    //스크린 이동할 때 lifecycle 실행
+    const isFocused = useIsFocused();
+
+    
+    //테마
+    useEffect(() => {
+        getTheme()
+    }, [isFocused])
+    
+    const [nowTheme, setNowTheme] = useState({});
+
+    const getTheme = async () => {
+        let selectedTheme = await AsyncStorage.getItem('theme');
+        
+        if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
+    }    
 
     //로그인 여부 확인
     React.useEffect(() => {
@@ -31,15 +57,14 @@ function HomeScreen({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={{...styles.container, backgroundColor:nowTheme.bg}}>
             <SafeAreaView>
                 <StatusBar barStyle="light-content"/>
                 <ScrollView>
                     {/* 테마 대표 이미지 넣기 */}
                     <View style={styles.imgBox}>
                         {/* 이미지 들어가는 자리 */}
-                        <ImageBackground style={{height:'100%', width:'100%'}} source={require('../assets/images/nightStar.png')}>
-
+                        <ImageBackground style={{height:'100%', width:'100%'}} source={nowTheme.image}>
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                                 <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
                                     <SimpleLineIcons name="menu" size={24} color="white" />
@@ -55,7 +80,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.headWidgetContainer}>
                                 <View style={styles.headWidgetDiv1} >
                                     <TouchableOpacity  onPress={(screen) => moveNavigate('Calender')}>
-                                        <View style={{...styles.longWidget, backgroundColor: '#262955'}}>
+                                        <View style={{...styles.longWidget, backgroundColor: nowTheme.calender}}>
                                             <Entypo name="calendar" size={24} color="white" />
                                             <Text style={styles.textStyle}>calender</Text>
                                         </View>
@@ -65,7 +90,7 @@ function HomeScreen({ navigation }) {
                                 <View  style={styles.headWidgetDiv2}>
                                     <View style={styles.smallWidgetContaner}>
                                         <TouchableOpacity onPress={(screen) => moveNavigate('Chart')}>
-                                            <View style={{...styles.smallWidget, backgroundColor:'#BF2311'}}>
+                                            <View style={{...styles.smallWidget, backgroundColor:nowTheme.chart}}>
                                                 <AntDesign name="piechart" size={24} color="white" />
                                                 <Text style={styles.textStyle}>chart</Text>
                                             </View>
@@ -73,7 +98,7 @@ function HomeScreen({ navigation }) {
                                     </View>
                                     <View style={styles.smallWidgetContaner}>
                                         <TouchableOpacity onPress={(screen) => moveNavigate('Diary')}>
-                                            <View style={{...styles.smallWidget, backgroundColor:'#456185'}}>
+                                            <View style={{...styles.smallWidget, backgroundColor:nowTheme.diary}}>
                                                 <Entypo name="list" size={24} color="white" />
                                                 <Text style={styles.textStyle}>diary</Text>
                                             </View>
@@ -84,7 +109,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.widgetContainer}>
                             <View style={styles.smallWidgetContaner}>
                             <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:'#274180'}}>
+                                    <View style={{...styles.smallWidget, backgroundColor:nowTheme.picture}}>
                                         <MaterialIcons name="photo-album" size={24} color="white" />
                                         <Text style={styles.textStyle}>picture</Text>
                                     </View>
@@ -92,7 +117,7 @@ function HomeScreen({ navigation }) {
                             </View>
                             <View style={styles.smallWidgetContaner}>
                                 <TouchableOpacity onPress={(screen) => moveNavigate('Write')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:'#152F5E'}}>
+                                    <View style={{...styles.smallWidget, backgroundColor:nowTheme.write}}>
                                         <FontAwesome name="pencil-square-o" size={24} color="white" />  
                                         <Text style={styles.textStyle}>write</Text>
                                     </View>
@@ -122,7 +147,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'black',
+        backgroundColor:"black",
         flexDirection:'column',
         width:SCREEN_WIDTH,
     },

@@ -1,17 +1,38 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, View, Image, TextInput, SafeAreaView, Text, TouchableHighlight, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API } from '../config'
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function LoginScreen({ navigation }) {
-  const [id, setId] = React.useState("");
-  const [pw, setPw] = React.useState("");
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [])
+
+const [nowTheme, setNowTheme] = useState({});
+
+const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
+}    
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
 
   //로그인 여부 확인
-  React.useEffect(() => {
+  useEffect(() => {
     isLogin()
   }, [])
 
@@ -62,10 +83,10 @@ function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={{ ...styles.container, backgroundColor: "#071D3A" }}>
+    <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
       {/* 로고 박스 */}
       <View style={{ ...styles.logoBox }}>
-        <Image resizeMode="contain" style={{ width: SCREEN_WIDTH / 2 }} source={require('../assets/images/logo.png')} ></Image>
+        <Image resizeMode="contain" style={{ width: SCREEN_WIDTH / 2 }} source={nowTheme.logo} ></Image>
       </View>
 
       {/* 입력 레이아웃 */}
@@ -103,7 +124,7 @@ function LoginScreen({ navigation }) {
             underlayColor="#DDDDDD"
             onPress={login}>
 
-            <View style={{ ...styles.loginBtn, backgroundColor: "#32CD99" }}>
+            <View style={{ ...styles.loginBtn, backgroundColor: nowTheme.btn, shadowColor: nowTheme.btn }}>
               <Text style={{ ...styles.loginText, color: "white" }}>로그인</Text>
             </View>
           </TouchableHighlight>
@@ -111,13 +132,13 @@ function LoginScreen({ navigation }) {
           <View style={{ ...styles.loginMenu }}>
             <TouchableOpacity onPress={(screen) => moveNavigate('FindPw')}>
               <View>
-                <Text style={{ color: "#fff", fontSize: 16 }}>비밀번호 찾기 | </Text>
+                <Text style={{ color: nowTheme.font, fontSize: 16 }}>비밀번호 찾기 | </Text>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => moveNavigate('Join')}>
               <View>
-                <Text style={{ color: "#fff", fontSize: 16 }}>회원가입</Text>
+                <Text style={{ color: nowTheme.font, fontSize: 16, }}>회원가입</Text>
               </View>
             </TouchableOpacity>
           </View>

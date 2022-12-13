@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView, SafeAreaView, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, RichText, Alert, Image } from 'react-native';
 import { actions, RichEditor, RichToolbar, } from "react-native-pell-rich-editor";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -12,45 +12,143 @@ import AudioPlayer from './component/AudioPlayer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function DetailScreen( card ) {
-  console.log("card: ",card.route.params.card.route.params.card);
-  console.log("diarykey",card.route.params.card.route.params.card.diarykey);
+function DetailScreen(card) {
+  //스크린 이동할 때 lifecycle 실행
+  const isFocused = useIsFocused();
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [isFocused])
+
+  const [nowTheme, setNowTheme] = useState({});
+  const [editorColor, setEditorColor] = useState({})
+
+  //테마, 에디터 컬러 가져오기
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+    let editorOption = {}
+
+    if (selectedTheme.includes("dark")) {
+      setNowTheme(dark);
+      editorOption = {
+        backgroundColor: dark.cardBg,
+        placeholderColor: "#456185",
+        color: dark.font,
+      }
+    } 
+
+    else if (selectedTheme.includes("votanical")){
+      setNowTheme(votanical);
+      editorOption = {
+        backgroundColor: votanical.cardBg,
+        placeholderColor: "#456185",
+        color: votanical.font,
+      }
+    } 
+
+    else if (selectedTheme.includes("town")){
+      setNowTheme(town);
+      editorOption = {
+        backgroundColor: town.cardBg,
+        placeholderColor: "#456185",
+        color: town.font,
+      }
+    }
+
+    else if (selectedTheme.includes("classic")){
+      setNowTheme(classic);
+      editorOption = {
+        backgroundColor: classic.cardBg,
+        placeholderColor: "#456185",
+        color: classic.font,
+      }
+    }
+
+    else if (selectedTheme.includes("purple")){
+      setNowTheme(purple);
+      editorOption = {
+        backgroundColor: purple.cardBg,
+        placeholderColor: "#456185",
+        color: purple.font,
+      }
+    }
+
+    else if (selectedTheme.includes("block")){
+      setNowTheme(block);
+      editorOption = {
+        backgroundColor: block.cardBg,
+        placeholderColor: "#456185",
+        color: block.font,
+      }
+    }
+
+    else if (selectedTheme.includes("pattern")){
+      setNowTheme(pattern);
+      editorOption = {
+        backgroundColor: pattern.cardBg,
+        placeholderColor: "#456185",
+        color: pattern.font,
+      }
+    }
+
+    else if (selectedTheme.includes("magazine")){
+      setNowTheme(magazine);
+      editorOption = {
+        backgroundColor: magazine.cardBg,
+        placeholderColor: "#456185",
+        color: magazine.font,
+      }
+    }
+
+    else if (selectedTheme.includes("winter")){
+      setNowTheme(winter);
+      editorOption = {
+        backgroundColor: winter.cardBg,
+        placeholderColor: "#456185",
+        color: winter.font,
+      }
+    }
+
+    setEditorColor(editorOption)
+  }
+  console.log("card: ", card.route.params.card.route.params.card);
+  console.log("diarykey", card.route.params.card.route.params.card.diarykey);
 
   const [data, setData] = useState([]); // 기존 데이터 넣을 곳
 
-  
+
   const voice = require("../assets/images/voice.png");
   const [titleText, onChangeTitleText] = useState(card.route.params.card.route.params.card.title);
   const [feelingText, onChangeFeelingText] = useState("");
-  const richText = React.useRef();
+  const richText = useRef();
   const [descHTML, setDescHTML] = useState(card.route.params.card.route.params.card.content);
   const [showDescError, setShowDescError] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [Emotions, setEmotions] = useState([]);
   const [date, setDate] = useState(new Date());
   const [id, setId] = useState("");
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
 
   //이미지 업로드용
-  const [image,setImage]  = useState(card.route.params.card.route.params.card.img);
-  const [send,setSend] = useState("");
+  const [image, setImage] = useState(card.route.params.card.route.params.card.img);
+  const [send, setSend] = useState("");
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const formData = new FormData();
   let url = card.route.params.card.route.params.card.img; //서버에서 받아올 aws이미지 경로
   let showImage = true;
-  
+
   useEffect(() => {
-     getDiaryData()
+    getDiaryData()
   }, [])
 
-   //일기 data 요청
-   const getDiaryData = async () => {
+  //일기 data 요청
+  const getDiaryData = async () => {
     setLoading(true)
     try {
       await axios({
@@ -61,8 +159,8 @@ function DetailScreen( card ) {
         }
       }, null)
         .then(res => {
-           setData(res.data)
-          console.log("들어온",res.data)
+          setData(res.data)
+          console.log("들어온", res.data)
         })
         .catch(function (error) {
           console.log(error);
@@ -77,23 +175,23 @@ function DetailScreen( card ) {
 
   //내 갤러리에서 사진 선택
   const pickImage = async () => {
-    
-    if(!status.granted){ // status로 권한이 있는지 확인
+
+    if (!status.granted) { // status로 권한이 있는지 확인
       const permission = await requestPermission();
-      if(!permission.granted){
+      if (!permission.granted) {
         return null;
       }
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes : ImagePicker.MediaTypeOptions.Images,
-      allowsEditing : false,
-      quality : 1,
-      aspect : [1,1]   
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+      aspect: [1, 1]
     });
 
-    if(result.canceled){
-      return null;  
+    if (result.canceled) {
+      return null;
     }
 
     setImage(result.assets[0].uri);
@@ -104,13 +202,13 @@ function DetailScreen( card ) {
     const match = /\.(\w+)$/.exec(filename ?? '');
     const type = match ? `image/${match[1]}` : `image`;
     // const formData = new FormData();
-    formData.append('image' , {uri: localUri,name: filename, type});
+    formData.append('image', { uri: localUri, name: filename, type });
     setSend(formData);
     console.log(formData);
     console.log(localUri);
-    console.log(filename);  
+    console.log(filename);
     console.log(type);
-      
+
   };
 
   //링크이동
@@ -147,22 +245,22 @@ function DetailScreen( card ) {
     setEmotions(temp.filter((i) => i !== keyword))
   }
 
-   //이미지 제거
+  //이미지 제거
   const delImg = () => {
     Alert.alert(
       "삭제",
       "이미지를 삭제하시겠습니까?",
-      [                           
+      [
         {
-          text: "네",                              
-          onPress: () => delImg2(),    
+          text: "네",
+          onPress: () => delImg2(),
           style: "cancel"
         },
-        { text: "아니오", onPress: () => console.log("안한대") }, 
+        { text: "아니오", onPress: () => console.log("안한대") },
       ],
       { cancelable: false }
     )
-    
+
   }
 
   const delImg2 = () => {
@@ -177,17 +275,17 @@ function DetailScreen( card ) {
     Alert.alert(
       "삭제",
       "오디오를 삭제하시겠습니까?",
-      [                           
+      [
         {
-          text: "네",                              
-          onPress: () => setAudio(),    
+          text: "네",
+          onPress: () => setAudio(),
           style: "cancel"
         },
-        { text: "아니오", onPress: () => console.log("안한대") }, 
+        { text: "아니오", onPress: () => console.log("안한대") },
       ],
       { cancelable: false }
     )
-    
+
   }
 
   //자식에서 부모에게 Audio 데이터 전달
@@ -208,8 +306,8 @@ function DetailScreen( card ) {
     }
   };
 
-   //id값 꺼내오기
-   React.useEffect(() => {
+  //id값 꺼내오기
+  useEffect(() => {
     AsyncStorage.getItem('id', (err, result) => {
       setId(result);
     });
@@ -223,13 +321,13 @@ function DetailScreen( card ) {
     const replaceHTML = descHTML.replace(/<(.|\n)*?>/g, "").trim();
     const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, "").trim();
 
-    if (titleText.length<=0) {
+    if (titleText.length <= 0) {
       setShowDescError(true);
       Alert.alert("제목을 입력해 주세요.")
       return
     }
 
-    if (Emotions.length<=0) {
+    if (Emotions.length <= 0) {
       setShowDescError(true);
       Alert.alert("감정 키워드를 선택해 주세요.")
       return
@@ -241,26 +339,26 @@ function DetailScreen( card ) {
       return
     }
 
-    if((!card.route.params.card.route.params.card.img && image) != "") {
+    if ((!card.route.params.card.route.params.card.img && image) != "") {
       // formData.append('multipartFileList' , {uri: localUri, name: filename, type});
       await axios({
-        method : 'post',
-        url : 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/upload',
-        headers:{
-          'content-type' : 'multipart/form-data',
+        method: 'post',
+        url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/upload',
+        headers: {
+          'content-type': 'multipart/form-data',
         },
-        data : send
+        data: send
       })
-      .then((res) => {
+        .then((res) => {
           // richText.current.insertImage(res.data);
           url = res.data;
           console.log(url);
-          
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }
+
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
 
     // 서버 데이터 전송
     setLoading(true)
@@ -298,13 +396,13 @@ function DetailScreen( card ) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
       {/* 제목 */}
       <SafeAreaView style={styles.titleLayout}>
         <TextInput
           placeholder="제목:"
           placeholderTextColor={"#456185"}
-          style={styles.title}
+          style={{ ...styles.title, color: nowTheme.font, fontWeight: "bold" }}
           onChangeText={onChangeTitleText}
           value={titleText}
           returnKeyType="next"
@@ -313,12 +411,12 @@ function DetailScreen( card ) {
         />
       </SafeAreaView>
 
-       {/* 감정선택 */}
-       <SafeAreaView style={styles.feelingLayout}>
+      {/* 감정선택 */}
+      <SafeAreaView style={styles.feelingLayout}>
         {/* 오늘의 기분 키워드 피커 */}
         <View>
           <Picker
-            style={styles.feeling}
+            style={{ ...styles.feeling, backgroundColor: nowTheme.cardBg, color: nowTheme.font }}
             onValueChange={(itemValue) => addEmotion(itemValue)}>
             <Picker.Item enabled={false} label="감정 선택" value="emo" />
             <Picker.Item label="추억" value="추억" />
@@ -342,7 +440,7 @@ function DetailScreen( card ) {
         </View>
 
         {/* 선택한 감정 보이는 곳 */}
-        <View style={styles.feelingBtnBox}>
+        <View style={{ ...styles.feelingBtnBox, color: nowTheme.font }}>
           {Emotions &&
             Emotions.map((emo, index) => {
               return (
@@ -359,8 +457,8 @@ function DetailScreen( card ) {
       <SafeAreaView style={styles.extendLayout}>
         <View style={styles.dateLayout}>
           <TouchableOpacity>
-            <Text style={styles.date}>
-            {card.route.params.card.route.params.card.year}년 {card.route.params.card.route.params.card.month}월 {card.route.params.card.route.params.card.day}일
+            <Text style={{ ...styles.date, color: nowTheme.font }}>
+              {card.route.params.card.route.params.card.year}년 {card.route.params.card.route.params.card.month}월 {card.route.params.card.route.params.card.day}일
             </Text>
           </TouchableOpacity>
         </View>
@@ -375,104 +473,104 @@ function DetailScreen( card ) {
       </View>
 
       {/* --------------------- 에디터 툴 --------------------- */}
-      <RichToolbar
-        disabled = {false} // 수정누른 경우 true로 state 바꿔야 텍스트 편집가능 함.
-        disabledIconTint='white'
-        
-        // 커스텀 액션
-        iconMap={{
-          // 음성 녹음 버튼
-          ["insertVoice"]: voice,
-        }}
+      {editorColor.backgroundColor &&
+        <>
+          <RichToolbar
+            disabled={false} // 수정누른 경우 true로 state 바꿔야 텍스트 편집가능 함.
+            disabledIconTint='white'
 
-        editor={richText}
+            // 커스텀 액션
+            iconMap={{
+              // 음성 녹음 버튼
+              ["insertVoice"]: voice,
+            }}
 
-        // 사진 picker 기능
-        onPressAddImage={pickImage}
+            editor={richText}
 
-        // 음성 녹음 기능
-        insertVoice={toggleModal}
+            // 사진 picker 기능
+            onPressAddImage={pickImage}
 
-        selectedIconTint="#ED7C58"
-        iconTint="#fff"
+            // 음성 녹음 기능
+            insertVoice={toggleModal}
 
-        // 액션 툴 추가
-        actions={[
-          actions.setBold,
-          actions.setItalic,
-          actions.setStrikethrough,
-          actions.setUnderline,
-          actions.insertBulletsList,
-          actions.insertOrderedList,
-          actions.insertImage,
-          "insertVoice",
-          actions.undo,
-          actions.redo,
-        ]}
-        style={styles.richTextToolbarStyle}
-      />
+            selectedIconTint="#ED7C58"
+            iconTint="#fff"
 
-      {/* Modal */}
-      <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
-          <AudioRecorder getAudio={getAudio} />
+            // 액션 툴 추가
+            actions={[
+              actions.setBold,
+              actions.setItalic,
+              actions.setStrikethrough,
+              actions.setUnderline,
+              actions.insertBulletsList,
+              actions.insertOrderedList,
+              actions.insertImage,
+              "insertVoice",
+              actions.undo,
+              actions.redo,
+            ]}
+            style={{ ...styles.richTextToolbarStyle, backgroundColor: nowTheme.btn }}
+          />
 
-          <View style={{ marginTop: '6%' }}>
-            {isRecording ?
-              <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
-              :
-              <Button title='닫기' onPress={toggleModal} ></Button>
-            }
-          </View>
-        </View>
-      </Modal>
+          {/* Modal */}
+          <Modal isVisible={isModalVisible}>
+            <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
+              <AudioRecorder getAudio={getAudio} />
 
-      {/*--------------------- 에디터 --------------------- */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
-        <SafeAreaView>
-          <ScrollView>
-            {/* {이미지 보이는 곳} */}
-          <Pressable onLongPress={delImg}>
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </Pressable>
-            {/* 음성 플레이어 영역 */}
-            {audio &&
-              <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-                <AudioPlayer audio={audio}></AudioPlayer>
-                <Button title='삭제'  onPress={delAudio}/>
+              <View style={{ marginTop: '6%' }}>
+                {isRecording ?
+                  <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
+                  :
+                  <Button title='닫기' onPress={toggleModal} ></Button>
+                }
               </View>
-            }
+            </View>
+          </Modal>
 
-<RichEditor
-              ref={richText} // from useRef()
-              onChange={richTextHandle}
-              placeholder={card.route.params.card.route.params.card.content}
-              placeholderColor={"white"}
-              androidHardwareAccelerationDisabled={true}
-              editorStyle={{
-                backgroundColor: "#071D3A",
-                placeholderColor: "#456185",
-                color: "white",
-              }}
-              style={{ ...styles.richTextEditorStyle }}
-              initialHeight={SCREEN_HEIGHT / 2}
-              disabled={false} // 수정누른 경우 true로 state 바꿔야 텍스트 편집가능 함.
-              initialContentHTML={card.route.params.card.route.params.card.content}
-              >
-            </RichEditor>
-          </ScrollView>
-        </SafeAreaView>
-      </KeyboardAvoidingView>
+          {/*--------------------- 에디터 --------------------- */}
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
+            <SafeAreaView>
+              <ScrollView>
+                {/* {이미지 보이는 곳} */}
+                <Pressable onLongPress={delImg}>
+                  {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                </Pressable>
+                {/* 음성 플레이어 영역 */}
+                {audio &&
+                  <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <AudioPlayer audio={audio}></AudioPlayer>
+                    <Button title='삭제' onPress={delAudio} />
+                  </View>
+                }
 
-      {/* 수정 버튼 */}
-      <View style={styles.saveButtonView}>
-        <TouchableOpacity
-          style={styles.saveButtonStyle}
-          onPress={submitContentHandle}>
-          <Text style={styles.textButtonStyle}>저장</Text>
-        </TouchableOpacity>
-       
-      </View>
+                <RichEditor
+                  ref={richText} // from useRef()
+                  onChange={richTextHandle}
+                  placeholder={card.route.params.card.route.params.card.content}
+                  placeholderColor={"white"}
+                  androidHardwareAccelerationDisabled={true}
+                  editorStyle={editorColor}
+
+                  style={{ ...styles.richTextEditorStyle }}
+                  initialHeight={SCREEN_HEIGHT / 2}
+                  disabled={false} // 수정누른 경우 true로 state 바꿔야 텍스트 편집가능 함.
+                  initialContentHTML={card.route.params.card.route.params.card.content}
+                >
+                </RichEditor>
+              </ScrollView>
+            </SafeAreaView>
+          </KeyboardAvoidingView>
+
+          {/* 수정 버튼 */}
+          <View style={styles.saveButtonView}>
+            <TouchableOpacity
+              style={{ ...styles.saveButtonStyle, backgroundColor: nowTheme.btn }}
+              onPress={submitContentHandle}>
+              <Text style={styles.textButtonStyle}>저장</Text>
+            </TouchableOpacity>
+
+          </View>
+        </>}
     </View>
   );
 }
@@ -494,7 +592,7 @@ const styles = StyleSheet.create({
   saveButtonView: {
     alignItems: "center",
     justifyContent: "space-evenly",
-    flexDirection:"row",
+    flexDirection: "row",
   },
 
   saveButtonStyle: {
