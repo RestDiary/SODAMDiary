@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, View, Text, Alert, Image,SafeAreaView,ScrollView } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { API } from '../config.js'
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 
