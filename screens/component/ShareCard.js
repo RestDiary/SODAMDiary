@@ -52,7 +52,7 @@ function Card({data}) {
       console.log("ssssss",data.diarykey);
       await axios({
         method: "post",
-        url: 'http://192.168.2.64:3001/sharePush',
+        url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/sharePush',
         params: {
           diarykey: data.diarykey,
         }

@@ -127,7 +127,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.widgetContainer}>
                             <View style={styles.smallWidgetContaner}>
                             <TouchableOpacity onPress={(screen) => moveNavigate('Share')}>
-                                    <View style={{...styles.smallWidget2, backgroundColor:'#456185'}}>
+                                    <View style={{...styles.smallWidget2, backgroundColor:nowTheme.share}}>
                                         <Entypo name="shareable" size={24} color="white" />
                                         <Text style={styles.textStyle}>Share</Text>
                                     </View>

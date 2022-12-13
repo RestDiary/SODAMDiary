@@ -61,6 +61,69 @@ function DetailScreen( card ) {
       }
     }
 
+    else if (selectedTheme.includes("classic")){
+      setNowTheme(classic);
+      editorOption = {
+        backgroundColor: classic.cardBg,
+        placeholderColor: "#456185",
+        color: classic.font,
+      }
+    }
+
+    else if (selectedTheme.includes("purple")){
+      setNowTheme(purple);
+      editorOption = {
+        backgroundColor: purple.cardBg,
+        placeholderColor: "#456185",
+        color: purple.font,
+      }
+    }
+
+    else if (selectedTheme.includes("block")){
+      setNowTheme(block);
+      editorOption = {
+        backgroundColor: block.cardBg,
+        placeholderColor: "#456185",
+        color: block.font,
+      }
+    }
+
+    else if (selectedTheme.includes("pattern")){
+      setNowTheme(pattern);
+      editorOption = {
+        backgroundColor: pattern.cardBg,
+        placeholderColor: "#456185",
+        color: pattern.font,
+      }
+    }
+
+    else if (selectedTheme.includes("magazine")){
+      setNowTheme(magazine);
+      editorOption = {
+        backgroundColor: magazine.cardBg,
+        placeholderColor: "#456185",
+        color: magazine.font,
+      }
+    }
+
+    else if (selectedTheme.includes("winter")){
+      setNowTheme(winter);
+      editorOption = {
+        backgroundColor: winter.cardBg,
+        placeholderColor: "#456185",
+        color: winter.font,
+      }
+    }
+
+    else {
+      setNowTheme(dark);
+      editorOption = {
+        backgroundColor: dark.cardBg,
+        placeholderColor: "#456185",
+        color: dark.font,
+      }
+    }
+
     setEditorColor(editorOption)
   }
 
