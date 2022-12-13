@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated, Alert, ActivityIndicator ,TextInput} from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,12 +9,15 @@ import axios from 'axios';
 import { Button } from 'react-native-paper';
 import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SearchBar } from 'react-native-elements';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function DiaryScreen({ navigation }) {
   const [diaryData, setDiaryData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [dataTmp, setDataTmp] = useState([]);
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = React.useState("");
 
@@ -44,7 +47,8 @@ function DiaryScreen({ navigation }) {
       }, null)
         .then(res => {
           setDiaryData(res.data)
-          console.log("들어온",res.data)
+          setDataTmp(res.data)
+          console.log("들어온",res.data[0])
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")
@@ -54,6 +58,30 @@ function DiaryScreen({ navigation }) {
     }
     setLoading(false)
   }
+
+
+  //검색 기능
+  const updateSearch = (search)=>{
+    setSearch(search)
+    
+    let temp =[...dataTmp]; //temp를 원본 객체를 계속 지원해준다. 출력은 diaryData에서 하기때문에
+
+
+    // console.log(temp[0].content);
+    
+    // const filterTitle = diaryData.filter((p)=>{
+    //   return p.content.replace(" ","").toLocaleLowerCase().includes(search.toLocaleLowerCase().replace(" ",""))
+    // })
+    console.log(search);
+
+    const filterTitle = temp.filter((p)=>{
+      return p.content.includes(search)
+    })
+    console.log(filterTitle);
+    setDiaryData(filterTitle);
+  }
+
+
 
   //일기 map 돌리기
   function getDiary(month) {
@@ -67,7 +95,7 @@ function DiaryScreen({ navigation }) {
     }
 
     return (
-      <>
+      <>      
         {temp[0] &&
           <View style={styles.moon}>
             <Text style={styles.moonText}>{temp[0].month}월</Text>
@@ -96,6 +124,10 @@ function DiaryScreen({ navigation }) {
   }
 
   return (
+    <>
+    <View>
+      <SearchBar value={search} onChangeText={(search) => updateSearch(search)} placeholder=" 내용을 검색해보세요 "></SearchBar>
+    </View>
     <View style={styles.container}>
       <SafeAreaView>
         {/* 세로 스크롤 뷰 */}
@@ -127,7 +159,7 @@ function DiaryScreen({ navigation }) {
         </ScrollView>
       </SafeAreaView>
     </View>
-
+    </>
   );
 }
 
@@ -138,6 +170,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#071D3A',
     flex: 1,
+  },
+
+  searchBar : {
+    backgroundColor:"#fff"
   },
 
   year: {

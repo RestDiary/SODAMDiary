@@ -26,6 +26,7 @@
     "react": "18.1.0",
     "react-native": "0.70.5",
     "react-native-calendars": "^1.1291.1",
+    "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-hr-plus": "^1.0.6",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
