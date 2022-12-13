@@ -115,6 +115,15 @@ function DetailScreen(Album) {
       }
     }
 
+    else {
+      setNowTheme(dark);
+      editorOption = {
+        backgroundColor: dark.cardBg,
+        placeholderColor: "#456185",
+        color: dark.font,
+      }
+    }
+
     setEditorColor(editorOption)
   }
   console.log("Album: ", Album.route.params.album);

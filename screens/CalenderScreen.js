@@ -163,7 +163,7 @@ function CalenderScreen({ navigation }) {
           />
 
         </View>
-        <Text style={styles.textStyle}>{selectDay.dateString}</Text>
+        <Text style={{...styles.textStyle, color:nowTheme.font}}>{selectDay.dateString}</Text>
         {/* 카드 가로 뷰 */}
         <View style={styles.cardContainer}>
           <SafeAreaView>

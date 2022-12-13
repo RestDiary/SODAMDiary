@@ -114,6 +114,15 @@ function DetailScreen(card) {
       }
     }
 
+    else {
+      setNowTheme(dark);
+      editorOption = {
+        backgroundColor: dark.cardBg,
+        placeholderColor: "#456185",
+        color: dark.font,
+      }
+    }
+
     setEditorColor(editorOption)
   }
   console.log("card: ", card.route.params.card.route.params.card);

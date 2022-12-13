@@ -172,7 +172,7 @@ export const magazine={
 
 export const winter={
     logo:require('../../assets/images/logoWinter.png'),
-    logoColor:"#8651a6",
+    logoColor:"#727370",
     icon:<Ionicons name="snow" size={36} color="white" />,
     image:require('../../assets/images/winter.png'),
     bg:"#F2F3ED",
