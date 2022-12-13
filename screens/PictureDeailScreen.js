@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    width: SCREEN_WIDTH / 3,
+    width: SCREEN_WIDTH,
     color: "white",
     padding: 10,
   },

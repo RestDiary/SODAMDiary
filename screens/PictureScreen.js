@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, Text, Alert, Image } from 'react-native';
+import { Button, View, Text, Alert, Image, SafeAreaView } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { API } from '../config.js'
 
 
@@ -49,13 +49,17 @@ function PictureScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
+          <SafeAreaView>
+          <ScrollView>
       {albumData.map((al) => {
         return (
           <TouchableOpacity onLongPress={() => navigation.navigate('Album',  {album: al.diarykey})}>
            {(al.img !== null && al.img !== "") && <Image source={{ uri: al.img }} style={{ width: 200, height: 200}} />}
         </TouchableOpacity>
           );
-      })}
+        })}
+        </ScrollView>
+        </SafeAreaView>
 
     </View>
 

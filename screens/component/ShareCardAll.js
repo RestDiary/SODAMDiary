@@ -1,18 +1,31 @@
 import * as React from 'react';
-import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable } from 'react-native';
+import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useEffect ,useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function Card({data}) {
   const [newContent,setNewContent] = useState(""); 
+
+
+  const one = async() => {
+    const onlyOne = await AsyncStorage.getItem("one");
+    if(onlyOne === 'one') {
+      AsyncStorage.setItem("one", 'two');
+      navigation.navigate('Album',  {album: data.diarykey})
+    }else {
+      Alert.alert("하나의 일기를 이미 확인하셨습니다.")
+    }
+  }
+
   const navigation = useNavigation(); 
 
-  console.log("data",data.img);
+  console.log("data",data.diarykey);
 
   //링크 이동
   const moveNavigate = (screen) => {
@@ -94,7 +107,7 @@ function Card({data}) {
         // 카드 뒤집기
         onPress={() => !!flipRotation ? flipToBack() : flipToFront()}
         // 상세화면
-        onLongPress={() => navigation.navigate('Detail',  {card: data})}>
+        onLongPress={one}>
 
         {/* 앞면 */}
         <Animated.View
@@ -102,7 +115,7 @@ function Card({data}) {
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
             <Text style={{color:"white"}}>{data.day}일</Text>
-            <Text style={{color:"#ED7C58"}}>#{data.keyword}</Text>
+            <Text style={{color:"#ED7C58"}}>#{data.emotion}</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
