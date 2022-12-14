@@ -59,6 +59,8 @@ function ThemeScreen({ navigation }) {
                   // 테마카드 불러오기
                   themeData.map((my, index) => {
                     return (
+                      <TouchableOpacity onPress={(selected)=>saveTheme(themeTitle[index])} >
+                            
                       <View key={index} style={{ ...styles.card }}>
                         {/* 테마 이미지 */}
                         <View style={{ ...styles.cardImageBox }}>
@@ -79,6 +81,7 @@ function ThemeScreen({ navigation }) {
                           </TouchableOpacity>
                         </View>
                       </View>
+                      </TouchableOpacity>
                     )
                   })
                 }
@@ -114,18 +117,18 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginRight: 10,
     marginLeft: 10,
-    marginBottom: 130,
-    borderWidth: 1,
-  },
-
-  cardImageBox: {
-    borderWidth: 1,
-    borderColor: "white",
+    marginBottom: 180,
+    borderWidth: 3,
+    borderRadius: 20,
   },
 
   imageSize: {
     width: '100%',
     height: "100%",
+    borderWidth:3,
+    borderColor: "#f1f1f1",
+    borderRadius:20,
+
   },
 
   themeTitle: {

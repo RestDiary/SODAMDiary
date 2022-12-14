@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated, Alert, ActivityIndicator ,TextInput} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated, Alert, ActivityIndicator, TextInput, ImageBackground } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,7 +12,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import { SearchBar } from 'react-native-elements';
 
-
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function DiaryScreen({ navigation }) {
@@ -20,13 +19,13 @@ function DiaryScreen({ navigation }) {
   //테마
   useEffect(() => {
     getTheme()
-}, [])
+  }, [])
 
-const [nowTheme, setNowTheme] = useState({});
+  const [nowTheme, setNowTheme] = useState({});
 
-const getTheme = async () => {
+  const getTheme = async () => {
     let selectedTheme = await AsyncStorage.getItem('theme');
-    
+
     if (selectedTheme.includes("dark")) setNowTheme(dark);
     else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
     else if (selectedTheme.includes("town")) setNowTheme(town);
@@ -36,7 +35,7 @@ const getTheme = async () => {
     else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
     else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
     else if (selectedTheme.includes("winter")) setNowTheme(winter);
-}    
+  }
 
   const [diaryData, setDiaryData] = useState([]);
   const [search, setSearch] = useState("");
@@ -66,12 +65,13 @@ const getTheme = async () => {
         url: `${API.MYDIARY}`,
         params: {
           id: userId, //****작성자 id
+          year: 2022,
         }
       }, null)
         .then(res => {
           setDiaryData(res.data)
           setDataTmp(res.data)
-          console.log("들어온",res.data[0])
+          console.log("들어온", res.data[0])
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")
@@ -82,29 +82,24 @@ const getTheme = async () => {
     setLoading(false)
   }
 
-
   //검색 기능
-  const updateSearch = (search)=>{
+  const updateSearch = (search) => {
     setSearch(search)
-    
-    let temp =[...dataTmp]; //temp를 원본 객체를 계속 지원해준다. 출력은 diaryData에서 하기때문에
 
+    let temp = [...dataTmp]; //temp를 원본 객체를 계속 지원해준다. 출력은 diaryData에서 하기때문에
 
     // console.log(temp[0].content);
-    
     // const filterTitle = diaryData.filter((p)=>{
     //   return p.content.replace(" ","").toLocaleLowerCase().includes(search.toLocaleLowerCase().replace(" ",""))
     // })
     console.log(search);
 
-    const filterTitle = temp.filter((p)=>{
+    const filterTitle = temp.filter((p) => {
       return p.content.includes(search)
     })
     console.log(filterTitle);
     setDiaryData(filterTitle);
   }
-
-
 
   //일기 map 돌리기
   function getDiary(month) {
@@ -118,10 +113,13 @@ const getTheme = async () => {
     }
 
     return (
-      <>      
+
+      <>
         {temp[0] &&
           <View style={styles.moon}>
-            <Text style={{...styles.moonText,color:nowTheme.font}}>{temp[0].month}월</Text>
+            <View style={{ borderBottomWidth: 1, borderColor: nowTheme.cardBorder, marginLeft: 8, width: "30%" }}>
+              <Text style={{ ...styles.moonText, color: nowTheme.font }}>{temp[0].month}월</Text>
+            </View>
             <View style={styles.cardContainer}>
               <SafeAreaView>
                 {/* 가로 스크롤 뷰 */}
@@ -148,40 +146,40 @@ const getTheme = async () => {
 
   return (
     <>
-    <View>
-      <SearchBar value={search} onChangeText={(search) => updateSearch(search)} placeholder=" 내용을 검색해보세요 "></SearchBar>
-    </View>
-    <View style={{...styles.container,backgroundColor:nowTheme.cardBg}}>
-      <SafeAreaView>
-        {/* 세로 스크롤 뷰 */}
-        <ScrollView>
-          {/* 년도 */}
-          <View style={styles.year}>
-            {/*----------------------------<year>------------------------------  */}
-            {/* 년 선택하는 것으로 변경예정 */}
-            <Text style={{...styles.yearText,color:nowTheme.font}}>2022</Text>
-          </View>
+      <View>
+        <SearchBar value={search} onChangeText={(search) => updateSearch(search)} placeholder=" 내용을 검색해보세요 "></SearchBar>
+      </View>
+      {/* <ImageBackground style={{ ...styles.container, backgroundColor: nowTheme.cardBg, width:SCREEN_WIDTH, height:SCREEN_HEIGHT }} source={nowTheme.image} resizeMode={'cover'}> */}
+        <SafeAreaView style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
+          <ScrollView >
+            <View >
+              {/* 세로 스크롤 뷰 */}
+              {loading && <ActivityIndicator size="large" color="white" />}
+              {/* 년도 */}
+              <View style={{ ...styles.year, }}>
+                {/*----------------------------<year>------------------------------  */}
+                {/* 년 선택하는 것으로 변경예정 */}
+                <Text style={{ ...styles.yearText, color: nowTheme.font }}>( 2022년 )</Text>
+              </View>
+              <View>
+                {getDiary(12)}
+                {getDiary(11)}
+                {getDiary(10)}
+                {getDiary(9)}
+                {getDiary(8)}
+                {getDiary(7)}
+                {getDiary(6)}
+                {getDiary(5)}
+                {getDiary(4)}
+                {getDiary(3)}
+                {getDiary(2)}
+                {getDiary(1)}
+              </View>
 
-          {loading && <ActivityIndicator size="large" color="white" />}
-
-          <View>
-            {getDiary(12)}
-            {getDiary(11)}
-            {getDiary(10)}
-            {getDiary(9)}
-            {getDiary(8)}
-            {getDiary(7)}
-            {getDiary(6)}
-            {getDiary(5)}
-            {getDiary(4)}
-            {getDiary(3)}
-            {getDiary(2)}
-            {getDiary(1)}
-          </View>
-
-        </ScrollView>
-      </SafeAreaView>
-    </View>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      {/* </ImageBackground> */}
     </>
   );
 }
@@ -195,8 +193,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  searchBar : {
-    backgroundColor:"#fff"
+  searchBar: {
+    backgroundColor: "#fff"
   },
 
   year: {
@@ -206,19 +204,19 @@ const styles = StyleSheet.create({
   },
 
   yearText: {
-    color: "#fff"
+    color: "#fff",
+    fontSize: SCREEN_WIDTH / 14,
+    fontWeight: 'bold',
   },
 
   moon: {
-    marginTop: 8,
+
   },
 
   moonText: {
-    marginBottom: 16,
-    marginLeft: 24,
-    marginRight: 24,
+    margin: 16,
     color: "#fff",
-    fontSize: 24,
+    fontSize: SCREEN_WIDTH / 16,
   },
 
   scrollView: {
@@ -226,11 +224,11 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    height: (SCREEN_WIDTH/2)*2,
+    height: (SCREEN_WIDTH / 1.8) * 2,
   },
 
-  notCard:{
-    width: SCREEN_WIDTH / 3,
-    height: SCREEN_HEIGHT / 3,
+  notCard: {
+    width: SCREEN_WIDTH / 5.4,
+    height: SCREEN_HEIGHT / 5.4,
   }
 });
