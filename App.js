@@ -8,6 +8,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import axios from 'axios';
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './screens/css/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,6 +27,7 @@ import ChartScreen from './screens/ChartScreen';
 import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
+import NewPwScreen from './screens/NewPwScreen';
 import ChangeEmailScreen from './screens/ChangeEmailScreen';
 import UserInfoScreen from './screens/UserInfoScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -84,6 +86,79 @@ function CustomDrawerContent(props) {
       console.log(e)
     }
   }
+
+  //초기화 버튼 클릭 시
+  const deleteAll = () => {
+    Alert.alert(
+      "일기를 모두 지우시겠어요?",
+      "한 번 초기화하면 돌이킬 수 없어요!",
+      [                           
+        {
+          text: "네",                              
+          onPress: () => deleteAll2(),    
+          style: "cancel"
+        },
+        { text: "아니오", onPress: () => console.log("안한대") }, 
+      ],
+      { cancelable: false }
+    )
+    
+  }
+
+  const deleteAll2 = async() => {
+    await axios({
+      method: "post",
+      url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/deleteAll',
+      params: {
+        id: id, 
+      }
+    }, null)
+      .then(res => {
+        alert("일기가 초기화 되었습니다.")
+      })
+      .catch(function (error) {
+        Alert.alert("❗error : bad response")
+      })
+  }
+
+   // 계정 탈퇴 버튼 클릭 시
+   const withdrawal = () => {
+    Alert.alert(
+      "정말 탈퇴하시겠어요?",
+      "모든 추억이 다 사라져요!",
+      [                           
+        {
+          text: "네",                              
+          onPress: () => withdrawal2(),    
+          style: "cancel"
+        },
+        { text: "아니오", onPress: () => console.log("안한대") }, 
+      ],
+      { cancelable: false }
+    )
+    
+  }
+
+
+  const withdrawal2 = async() => {
+    await axios({
+      method: "post",
+      url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/withdrawal',
+      params: {
+        id: id, 
+      }
+    }, null)
+      .then(async res => {
+        await AsyncStorage.removeItem('id');
+        alert("탈퇴되었습니다.");
+        navigation.navigate("Login");
+
+      })
+      .catch(function (error) {
+        Alert.alert("❗error : bad response")
+      })
+  }
+
 
   useEffect(() => {
     AsyncStorage.getItem('id', (err, result) => {
@@ -161,7 +236,7 @@ function CustomDrawerContent(props) {
         <View>
           <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
             // label="Close drawer"
-            onPress={() => props.navigation.navigate("초기화기능")}
+            onPress={() => deleteAll()}
           >
             <Ionicons name="refresh" size={24} color="red" />
             <Text style={styles.drawerItemText}>초기화</Text>
@@ -184,7 +259,7 @@ function CustomDrawerContent(props) {
         <View>
           <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
             // label="Close drawer"
-            onPress={() => props.navigation.navigate("계정탈퇴기능")}
+            onPress={() => withdrawal()}
           >
             <AntDesign name="deleteuser" size={24} color="red" />
             <Text style={styles.drawerItemText}>계정탈퇴</Text>
@@ -249,6 +324,7 @@ function MyStack() {
       <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black" }} />
       <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black" }} />
       <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{ headerTintColor: "black" }} />
+      <Stack.Screen name="NewPw" component={NewPwScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="UserInfo" component={UserInfoScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Theme" component={ThemeScreen} options={{ headerTintColor: "black" }} />

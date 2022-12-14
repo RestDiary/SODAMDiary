@@ -28,11 +28,9 @@ function ChangeEmailScreen({ navigation }) {
     else if (selectedTheme.includes("winter")) setNowTheme(winter);
   }
   const [id, setId] = React.useState(""); //아이디
-  var pwRegExp = /^[a-zA-z0-9!@#$%^*+=-]{4,15}$/; //비밀번호 유효성 검사
-  const [pw, setPw] = React.useState(""); //비밀번호
-  const [pw2, setPw2] = React.useState(""); //비밀번호 재확인
-  const [checkPw, setCheckPw] = React.useState(false); //비밀번호 동일 여부 체크
-  const [changePW, setChangePW] = React.useState("비밀번호가 일치하지 않습니다.");
+  var mailRegExp = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{2,3}$/;
+  const [email, setEmail] = React.useState(""); //비밀번호
+  const [changeEmail, setChangeEmail] = React.useState("");
 
 
   //링크 이동
@@ -40,31 +38,33 @@ function ChangeEmailScreen({ navigation }) {
     navigation.navigate(screen)
   }
 
+    //아이디 저장
+    React.useEffect(() => {
+      AsyncStorage.getItem('tempId', (err, result) => {
+        console.log(result); // User1 출력
+        setId(result);
+      });
+    }, [])
+
+
   //이메일 변경
   const pwChange = () => {
-    if (!pwRegExp.test(pw)) {
+    if(email === "") {
+      alert("이메일을 입력해주세요.");
+    }else if (!mailRegExp.test(email)) {
       alert("이메일 형식이 올바르지 않습니다.");
-      return;
-    } else if (pw === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    } else if (pw2 === "") {
-      alert("비밀번호 재입력을 해주세요.");
-      return;
-    } else if (!checkPw) {
-      alert("비밀번호가 일치하지 않습니다.");
       return;
     }
     console.log("비밀번호 바꾸러 옴");
-    axios.post('http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/Reset', null, {
+    axios.post('http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/changeEmail', null, {
       params: {
         id: id,
-        pw: pw
+        email: email
       }
     })
       .then(res => {
         console.log(res.data);
-        navigation.replace('Setting');
+        navigation.replace('UserInfo');
 
       })
       .catch(function (error) {
@@ -72,13 +72,19 @@ function ChangeEmailScreen({ navigation }) {
       })
   }
 
-  //아이디 저장
+
   React.useEffect(() => {
-    AsyncStorage.getItem('tempId', (err, result) => {
-      console.log(result); // User1 출력
-      setId(result);
-    });
-  }, [])
+    if (email === "") {
+      setChangeEmail("");
+    } else if (!mailRegExp.test(email)) {
+      setChangeEmail("이메일 형식이 올바르지 않습니다.");
+    } else {
+      setChangeEmail("사용할 수 있는 이메일입니다.");
+    }
+
+  }, [email])
+
+
 
   return (
     <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
@@ -94,13 +100,12 @@ function ChangeEmailScreen({ navigation }) {
           <TextInput style={{ ...styles.inputBox }}
             placeholder="새로운 이메일 입력"
             placeholderTextColor={"#999999"}
-            secureTextEntry
-            onChangeText={text => setPw(text)}
+            onChangeText={text => setEmail(text)}
           />
 
           {/* 이메일 유효성 검사 */}
           <View style={{ ...styles.inputCheck }}>
-            <Text style={!checkPw ? { color: "#ff0000" } : { color: "#32CD99" }}>{changePW}</Text>
+            <Text style={mailRegExp.test(email) ? { color: "#32CD99" } : { color: "#ff0000" }}>{changeEmail}</Text>
           </View>
 
           {/* 이메일 변경 버튼 */}

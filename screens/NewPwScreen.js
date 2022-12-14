@@ -6,14 +6,14 @@ import axios from 'axios';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function ChangePwScreen({ navigation }) {
+function NewPwScreen({ navigation }) {
   //테마
   useEffect(() => {
     getTheme()
   }, [])
 
   const [nowTheme, setNowTheme] = useState({});
-
+console.log("newPw")
   const getTheme = async () => {
     let selectedTheme = await AsyncStorage.getItem('theme');
 
@@ -30,7 +30,47 @@ function ChangePwScreen({ navigation }) {
   const [id, setId] = React.useState(""); //아이디
   var pwRegExp = /^[a-zA-z0-9!@#$%^*+=-]{4,15}$/; //비밀번호 유효성 검사
   const [pw, setPw] = React.useState(""); //비밀번호
+  const [pw2, setPw2] = React.useState(""); //비밀번호 재확인
+  const [checkPw, setCheckPw] = React.useState(false); //비밀번호 동일 여부 체크
   const [changePW, setChangePW] = React.useState("비밀번호가 일치하지 않습니다.");
+
+
+  //링크 이동
+  const moveNavigate = (screen) => {
+    navigation.navigate(screen)
+  }
+
+  //비밀번호 변경
+  const pwChange = () => {
+    if (!pwRegExp.test(pw)) {
+      alert("비밀번호 형식이 올바르지 않습니다.");
+      return;
+    } else if (pw === "") {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    } else if (pw2 === "") {
+      alert("비밀번호 재입력을 해주세요.");
+      return;
+    } else if (!checkPw) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    console.log("비밀번호 바꾸러 옴");
+    axios.post('http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/Reset', null, {
+      params: {
+        id: id,
+        pw: pw
+      }
+    })
+      .then(res => {
+        console.log(res.data);
+        navigation.replace('UserInfo');
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
 
   //아이디 저장
   React.useEffect(() => {
@@ -40,73 +80,20 @@ function ChangePwScreen({ navigation }) {
     });
   }, [])
 
-  //링크 이동
-  const moveNavigate = (screen) => {
-    navigation.navigate(screen)
-  }
+  //비밀번호 재확인
+  React.useEffect(() => {
+    if (pw2 === "") {
+      setChangePW("");
+    }
+    else if (pw === pw2) {
+      setCheckPw(true);
+      setChangePW("비밀번호가 일치합니다.");
+    } else {
+      setCheckPw(false);
+      setChangePW("비밀번호가 일치하지 않습니다.");
 
-  //이메일 변경
-  const emailChange = () => {
-    if (pw === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }else if (!pwRegExp.test(pw)) {
-      alert("비밀번호 형식이 올바르지 않습니다.");
-      return;
-    }  
-    console.log("비밀번호 바꾸러 옴");
-    axios.post('http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/pwCheck', null, {
-      params: {
-        id: id,
-        pw: pw
-      }
-    })
-      .then(res => {
-        if(res.data === 0) {
-          console.log("비밀번호 일치 확인");
-          navigation.replace('ChangeEmail');
-        }else {
-          alert("비밀번호가 일치하지 않습니다.")
-        }
-
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-  }
-
-  //비밀번호 변경
-  const pwChange = () => {
-    if (pw === "") {
-      alert("비밀번호를 입력해주세요.");
-      return;
-    }else if (!pwRegExp.test(pw)) {
-      alert("비밀번호 형식이 올바르지 않습니다.");
-      return;
-    }  
-    console.log("비밀번호 바꾸러 옴");
-    axios.post('http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/pwCheck', null, {
-      params: {
-        id: id,
-        pw: pw
-      }
-    })
-      .then(res => {
-        if(res.data === 0) {
-          console.log("비밀번호 일치 확인");
-          navigation.replace('NewPw');
-        }else {
-          alert("비밀번호가 일치하지 않습니다.")
-        }
-
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-  }
-
-
-
+    }
+  }), [pw2];
 
 
   return (
@@ -117,29 +104,30 @@ function ChangePwScreen({ navigation }) {
       </View>
 
       {/* 입력 레이아웃 */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : "height"}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={{ ...styles.inputLayout }}>
           {/* 비밀번호 박스 */}
           <TextInput style={{ ...styles.inputBox }}
-            placeholder="현재 비밀번호 입력"
+            placeholder="새로운 비밀번호 입력"
             placeholderTextColor={"#999999"}
             secureTextEntry
             onChangeText={text => setPw(text)}
           />
 
+          {/* margin */}
+          <View style={{ ...styles.inputCheck }}></View>
 
-          {/* 이메일 변경 버튼 */}
-          <TouchableHighlight
-            style={{ marginTop: 24 }}
-
-            activeOpacity={0.6}
-            underlayColor="#DDDDDD"
-            onPress={emailChange}>
-
-            <View style={{ ...styles.loginBtn, backgroundColor: nowTheme.btn, shadowColor: nowTheme.btn }}>
-              <Text style={{ ...styles.loginText, color: "white" }}>이메일 변경</Text>
-            </View>
-          </TouchableHighlight>
+          {/* 비밀번호 재학인 박스 */}
+          <TextInput style={{ ...styles.inputBox }}
+            placeholder="새로운 비밀번호 재입력"
+            placeholderTextColor={"#999999"}
+            secureTextEntry
+            onChangeText={text => setPw2(text)}
+          />
+          {/* 비밀번호 유효성 검사 */}
+          <View style={{ ...styles.inputCheck }}>
+            <Text style={!checkPw ? { color: "#ff0000" } : { color: "#32CD99" }}>{changePW}</Text>
+          </View>
 
           {/* 비밀번호 변경 버튼 */}
           <TouchableHighlight
@@ -160,7 +148,7 @@ function ChangePwScreen({ navigation }) {
   );
 }
 
-export default ChangePwScreen;
+export default NewPwScreen;
 
 const styles = StyleSheet.create({
   container: {
