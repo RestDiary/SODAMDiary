@@ -34,7 +34,7 @@ function Card({ data }) {
   const [newContent, setNewContent] = useState("");
   const navigation = useNavigation();
 
-  console.log("data",data.img);
+  // console.log("data",data.img);
 
   //링크 이동
   const moveNavigate = (screen) => {
