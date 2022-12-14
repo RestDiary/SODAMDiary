@@ -255,6 +255,20 @@ function MyStack() {
 }
 
 export default function App() {
+  useEffect (()=>{
+    defaultTheme()
+  },[])
+
+  const defaultTheme = async() => {
+    let theme = await AsyncStorage.getItem('theme');
+    if(!theme){
+      await AsyncStorage.setItem('theme', "dark");
+      console.log("없어서 설정")
+    } else{
+      console.log("있ㅇ", theme)
+    }
+  }
+  
   return (
     <NavigationContainer>
       <MyStack />
