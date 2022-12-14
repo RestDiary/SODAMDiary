@@ -16,7 +16,6 @@ function HomeScreen({ navigation }) {
     //스크린 이동할 때 lifecycle 실행
     const isFocused = useIsFocused();
 
-    
     //테마
     useEffect(() => {
         getTheme()

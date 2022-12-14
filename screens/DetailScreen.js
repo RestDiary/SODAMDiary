@@ -206,8 +206,8 @@ function DetailScreen( card ) {
     }, null)
       .then(res => {
         console.log("삭제함");
-        Alert.alert("삭제되었습니다.")
-        navigation.replace('Diary')
+        Alert.alert("삭제되었습니다.");
+        navigation.pop();
       })
       .catch(function (error) {
         console.log(error);

@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Button } from 'react-native-paper';
 import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -17,11 +18,13 @@ function DiaryScreen({ navigation }) {
   const [diaryData, setDiaryData] = useState([]);
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = React.useState("");
+  const isFocused = useIsFocused();
+
 
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
     getDiaryData()
-  }, [])
+  }, [isFocused])
 
   // const isLogin = async () => {
   //   const userId = await AsyncStorage.getItem('id')

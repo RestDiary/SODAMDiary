@@ -11,6 +11,7 @@ import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import { SearchBar } from 'react-native-elements';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -43,11 +44,12 @@ const getTheme = async () => {
   const [dataTmp, setDataTmp] = useState([]);
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = useState("");
+  const isFocused = useIsFocused();
 
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
     getDiaryData()
-  }, [])
+  }, [isFocused])
 
   // const isLogin = async () => {
   //   const userId = await AsyncStorage.getItem('id')
