@@ -113,7 +113,7 @@ function FindPwScreen({ navigation }) {
 
     
     return (
-        <View style={{ ...styles.container, backgroundColor:nowTheme.bg }}>
+        <View style={{ ...styles.container, backgroundColor:nowTheme.cardBg }}>
           {/* 로고 박스 */}
           <View style={{...styles.logoBox}}>
             <Image resizeMode="contain" style={{width:SCREEN_WIDTH/2}}source={nowTheme.logo} ></Image>

@@ -14,6 +14,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 //screen
 import CalenderScreen from './screens/CalenderScreen';
 import WriteScreen from './screens/WriteScreen';
@@ -24,6 +26,8 @@ import ChartScreen from './screens/ChartScreen';
 import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
+import ChangeEmailScreen from './screens/ChangeEmailScreen';
+import UserInfoScreen from './screens/UserInfoScreen';
 import LoginScreen from './screens/LoginScreen';
 import ShareScreen from './screens/ShareScreen'; 
 import ShareAllScreen from './screens/ShareAllScreen';
@@ -142,14 +146,14 @@ function CustomDrawerContent(props) {
           </TouchableOpacity>
         </View>
 
-        {/* 백업 기능 */}
+        {/* 개인정보 변경 기능 */}
         <View>
           <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
             // label="Close drawer"
-            onPress={() => props.navigation.navigate("백업기능")}
+            onPress={() => props.navigation.navigate("UserInfo")}
           >
-            <MaterialCommunityIcons name="backup-restore" size={24} color="white" />
-            <Text style={styles.drawerItemText}>백업</Text>
+            <FontAwesome5 name="user" size={24} color="white" />
+            <Text style={styles.drawerItemText}> 개인정보</Text>
           </TouchableOpacity>
         </View>
 
@@ -164,16 +168,6 @@ function CustomDrawerContent(props) {
           </TouchableOpacity>
         </View>
 
-        {/* 공유 기능 */}
-        <View>
-          <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
-            // label="Close drawer"
-            onPress={() => props.navigation.navigate("공유기능")}
-          >
-            <Entypo name="share" size={24} color="white" />
-            <Text style={styles.drawerItemText}>공유</Text>
-          </TouchableOpacity>
-        </View>
 
         {/* 로그아웃 기능 */}
         <View style={{}}>
@@ -183,6 +177,17 @@ function CustomDrawerContent(props) {
           >
             <MaterialIcons name="logout" size={24} color="white" />
             <Text style={styles.drawerItemText}>로그아웃</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 계정탈퇴 기능 */}
+        <View>
+          <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
+            // label="Close drawer"
+            onPress={() => props.navigation.navigate("계정탈퇴기능")}
+          >
+            <AntDesign name="deleteuser" size={24} color="red" />
+            <Text style={styles.drawerItemText}>계정탈퇴</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -244,6 +249,8 @@ function MyStack() {
       <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black" }} />
       <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black" }} />
       <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{ headerTintColor: "black" }} />
+      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ headerTintColor: "black" }} />
+      <Stack.Screen name="UserInfo" component={UserInfoScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Theme" component={ThemeScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Modify" component={ModifyScreen} options={{ headerTintColor: "black" }} />
