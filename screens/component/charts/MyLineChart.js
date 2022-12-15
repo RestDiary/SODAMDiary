@@ -9,16 +9,17 @@ function MyLineChart(props) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <LineChart
                 data={{
-                    labels: ["January", "February", "March", "April", "May", "June"],
+                    labels: ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                     datasets: [
                         {
                             data: [
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
+                                25.40,
+                                76.66,
+                                43.48,
+                                65.80,
+                                35.40,
+                                50.48,
+                                79.52,
                             ]
                         }
                     ]

@@ -13,5 +13,7 @@ export const API = {
   MYDIARY: `${BASE_URL}/myDiary`,
   DIARYINFO: `${BASE_URL}/diaryInfo`,
   DELETE: `${BASE_URL}/diaryDelete`,
-  ALBUM: `${BASE_URL}/album`
+  ALBUM: `${BASE_URL}/album`,
+  SCORE: `${BASE_URL}/userScore`,
+  COUNT: `${BASE_URL}/count`,
 };

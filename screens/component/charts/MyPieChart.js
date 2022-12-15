@@ -11,21 +11,21 @@ function MyPieChart(props) {
                 data={[
                     {
                         name: '긍정',
-                        population: 30,
+                        population: props.data[0][0].count,
                         color: 'rgba(131, 167, 234, 1)',
                         legendFontColor: '#7F7F7F',
                         legendFontSize: 15,
                     },
                     {
                         name: '보통',
-                        population: 36,
+                        population: props.data[1][0].count,
                         color: '#ffffff',
                         legendFontColor: '#7F7F7F',
                         legendFontSize: 15,
                     },
                     {
                         name: '부정',
-                        population: 50,
+                        population: props.data[2][0].count,
                         color: '#F00',
                         legendFontColor: '#7F7F7F',
                         legendFontSize: 15,

@@ -9,10 +9,10 @@ function MyBarChart(props) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <BarChart
                 data={{
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                    labels: [props.data[0].keyword, props.data[1].keyword, props.data[2].keyword, props.data[3].keyword, props.data[4].keyword],
                     datasets: [
                         {
-                            data: [0, 5, 10, 15, 20, 25],
+                            data: [props.data[0].cnt, props.data[1].cnt, props.data[2].cnt, props.data[3].cnt, props.data[4].cnt],
                         },
                     ],
                 }}
@@ -20,16 +20,23 @@ function MyBarChart(props) {
                 width={SCREEN_WIDTH/1.05} 
                 height={SCREEN_HEIGHT/4}
 
+                showValuesOnTopOfBars={true}
+                fromZero={true}
+
                 chartConfig={{
                     backgroundColor: '#1cc910',
                     //배경 색
                     backgroundGradientFrom: '#eff3ff',
                     backgroundGradientTo: '#efefef',
 
-                    fillShadowGradientOpacity: 0.8,
+                    //막대 색
+                    fillShadowGradientOpacity: 0.8, //투명도
+                    fillShadowGradientFrom : 'blue',
                     
-                    decimalPlaces: 2,
-                    // 막대 색
+                    //소수점
+                    decimalPlaces: 0,
+
+                    // 레이블, 전체적인 색
                     color: (opacity = 1) => `rgba(2, 55, 55, ${opacity})`,
                     
                     style: {
