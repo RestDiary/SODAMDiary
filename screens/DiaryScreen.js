@@ -124,7 +124,7 @@ function DiaryScreen({ navigation }) {
       <>
         {temp[0] &&
           <View style={styles.moon}>
-            <View style={{ borderBottomWidth: 1, borderColor: nowTheme.cardBorder, marginLeft: 8, width: "30%" }}>
+            <View style={{ marginLeft:10, marginRight:10,borderRadius:10 ,backgroundColor:nowTheme.btn}}>
               <Text style={{ ...styles.moonText, color: nowTheme.font }}>{temp[0].month}월</Text>
             </View>
             <View style={styles.cardContainer}>
@@ -160,11 +160,11 @@ function DiaryScreen({ navigation }) {
       {/* <ImageBackground style={{ ...styles.container, backgroundColor: nowTheme.cardBg, width:SCREEN_WIDTH, height:SCREEN_HEIGHT }} source={nowTheme.image} resizeMode={'cover'}> */}
         <SafeAreaView style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
           <ScrollView >
-            <View >
+            <View style={{alignItems: 'center',justifyContent: 'center',}}>
               {/* 세로 스크롤 뷰 */}
               {loading && <ActivityIndicator size="large" color="white" />}
               {/* 년도 */}
-              <View style={{ ...styles.year,  }}>
+              <View style={{ ...styles.year, borderBottomWidth:1, borderColor:nowTheme.cardBorder, marginBottom:16, }}>
                 {/*----------------------------<year>------------------------------  */}
                 {/* 년 선택하는 것으로 변경예정 */}
                 <TouchableOpacity>
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   moonText: {
     margin: 16,
     color: "#fff",
-    fontSize: SCREEN_WIDTH / 16,
+
   },
 
   scrollView: {

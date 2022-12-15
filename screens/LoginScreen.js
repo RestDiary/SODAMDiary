@@ -9,7 +9,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function LoginScreen({ navigation }) {
   //테마
-  const [nowTheme, setNowTheme] = useState({});
+  const [nowTheme, setNowTheme] = useState({dark});
 
     const getTheme = async () => {
       // AsyncStorage.clear() // 스토리지 초기화
@@ -47,6 +47,7 @@ function LoginScreen({ navigation }) {
     if (userId) {
       // Alert.alert(userId+"님 반갑습니다.")
       navigation.navigate("Home")
+      // navigation.reset({route: [{name: "Home"}]})
     }
   }
 

@@ -1,11 +1,13 @@
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 export const dark={
     logo:require('../../assets/images/logo.png'),
     logoColor:"#32cd99",
     icon:<Entypo name="moon" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/nightStar.png'),
     bg:"#000000",
     cardBg:"#252958",
@@ -27,6 +29,7 @@ export const votanical={
     logo:require('../../assets/images/logoVotanical.png'),
     logoColor:"#f23619",
     icon:<Ionicons name="leaf" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/votanical.png'),
     bg:"#003034",
     cardBg:"#003034",
@@ -48,6 +51,7 @@ export const town={
     logo:require('../../assets/images/logoTown.png'),
     logoColor:"#c97c91",
     icon:<Entypo name="home" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/town.png'),
     bg:"#D9D0C0",
     cardBg:"#D9D0C0",
@@ -68,7 +72,8 @@ export const town={
 export const classic={
     logo:require('../../assets/images/logoClassic.png'),
     logoColor:"#d6ad75",
-    icon:<MaterialCommunityIcons name="ceiling-light" size={36} color="white" />,
+    icon:<MaterialCommunityIcons name="ceiling-light" size={36} color="black" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/classic.png'),
     bg:"#B28B58",
     cardBg:"#B28B58",
@@ -90,6 +95,7 @@ export const purple={
     logo:require('../../assets/images/logoPurple.png'),
     logoColor:"#d9ba1f",
     icon:<Ionicons name="flower" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/purple.png'),
     bg:"#1F0630",
     cardBg:"#1F0630",
@@ -111,6 +117,7 @@ export const block={
     logo:require('../../assets/images/logoBlock.png'),
     logoColor:"#dbcfbf",
     icon:<MaterialCommunityIcons name="puzzle" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/block.png'),
     bg:"#013E98",
     cardBg:"#013E98",
@@ -132,6 +139,7 @@ export const pattern={
     logo:require('../../assets/images/logoPattern.png'),
     logoColor:"#ebe0cc",
     icon:<Entypo name="houzz" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/pattern.png'),
     bg:"#9E9789",
     cardBg:"#9E9789",
@@ -153,6 +161,7 @@ export const magazine={
     logo:require('../../assets/images/logoMagazine.png'),
     logoColor:"#6eb5a8",
     icon:<Ionicons name="ios-newspaper-sharp" size={36} color="white" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="white" />,
     image:require('../../assets/images/magazine.png'),
     bg:"#5B3920",
     cardBg:"#5B3920",
@@ -173,7 +182,8 @@ export const magazine={
 export const winter={
     logo:require('../../assets/images/logoWinter.png'),
     logoColor:"#727370",
-    icon:<Ionicons name="snow" size={36} color="white" />,
+    icon:<Ionicons name="snow" size={36} color="black" />,
+    menu:<SimpleLineIcons name="menu" size={24} color="black" />,
     image:require('../../assets/images/winter.png'),
     bg:"#F2F3ED",
     cardBg:"#F2F3ED",

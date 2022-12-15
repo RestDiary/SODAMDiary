@@ -66,7 +66,7 @@ function HomeScreen({ navigation }) {
                         <ImageBackground style={{height:'100%', width:'100%'}} source={nowTheme.image}>
                             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                                 <View style={{marginLeft:'5.5%', marginTop:'6%',}}>
-                                    <SimpleLineIcons name="menu" size={24} color="white" />
+                                    {nowTheme.menu}
                                 </View>
                             </TouchableOpacity>
 

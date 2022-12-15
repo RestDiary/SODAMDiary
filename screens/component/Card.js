@@ -142,7 +142,8 @@ function Card({ data }) {
           </View>
           {/* 제목  */}
           <View style={{ ...styles.frontTitle }}>
-            <Text style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14 }}>{data.title}</Text>
+            <Text numberOfLines={1}
+              ellipsizeMode="tail" style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14 }}>{data.title}</Text>
           </View>
         </ImageBackground>
         </Animated.View>
