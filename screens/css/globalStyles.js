@@ -20,7 +20,7 @@ export const dark={
     back:"#274180",
     font:"white",
     btn:"#456185",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const votanical={
@@ -41,7 +41,7 @@ export const votanical={
     back:"#007D60",
     font:"white",
     btn:"#009775",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const town={
@@ -62,7 +62,7 @@ export const town={
     back:"#D4937D",
     font:"black",
     btn:"#D4937D",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const classic={
@@ -83,7 +83,7 @@ export const classic={
     back:"#A37A72",
     font:"white",
     btn:"#5A6D70",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const purple={
@@ -104,7 +104,7 @@ export const purple={
     back:"#80386C",
     font:"white",
     btn:"#4D420B",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const block={
@@ -125,7 +125,7 @@ export const block={
     back:"#1D6A96",
     font:"white",
     btn:"#A66F2B",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const pattern={
@@ -146,7 +146,7 @@ export const pattern={
     back:"#5E5A52",
     font:"white",
     btn:"#63596B",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const magazine={
@@ -167,7 +167,7 @@ export const magazine={
     back:"#C2B291",
     font:"white",
     btn:"#C2B291",
-    cardBorder:"#555",
+    cardBorder:"#fff",
 }
 
 export const winter={
@@ -188,5 +188,5 @@ export const winter={
     back:"#B5C0CE",
     font:"black",
     btn:"#9492A6",
-    cardBorder:"#555",
+    cardBorder:"#000",
 }

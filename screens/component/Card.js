@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable } from 'react-native';
+import { StyleSheet, Button, View, Text, Dimensions, Animated, Image, Pressable, ImageBackground } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Entypo } from '@expo/vector-icons';
@@ -121,10 +121,11 @@ function Card({ data }) {
         {/* 앞면 */}
         <Animated.View
           style={{ ...styles.front, backgroundColor: nowTheme.front, borderColor: nowTheme.cardBorder, ...flipToFrontStyle, }}>
+        <ImageBackground style={{ backgroundColor: nowTheme.front,height: (SCREEN_WIDTH / 1.8) * 1.59  }} source={nowTheme.image} resizeMode={'cover'}>
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
-            <Text style={{ color: "white" }}>{data.day}일</Text>
-            <Text style={{ color: "white" }}>#{data.keyword}</Text>
+            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>{data.day}일</Text>
+            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>#{data.keyword}</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -141,23 +142,24 @@ function Card({ data }) {
           </View>
           {/* 제목  */}
           <View style={{ ...styles.frontTitle }}>
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: SCREEN_WIDTH / 20 }}>{data.title}</Text>
+            <Text style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14 }}>{data.title}</Text>
           </View>
+        </ImageBackground>
         </Animated.View>
 
         {/* 뒷면 */}
         <Animated.View
-          style={{ ...styles.back, backgroundColor: nowTheme.back, ...flipToBackStyle }}>
+          style={{ ...styles.back, backgroundColor: nowTheme.back, borderColor: nowTheme.cardBorder, ...flipToBackStyle }}>
           {/* 대표 이미지 */}
           <View style={{ ...styles.backImageBox }}>
             {(data.img !== null && data.img !== "") ?
               <Image source={{ uri: data.img }} style={styles.imageSize} resizeMode={'stretch'}></Image> :
-              <Image source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQfvaxDliUnxIm0pwpprZSMszh_UVFNfjmtQ&usqp=CAU" }} style={styles.imageSize} resizeMode={'contain'}></Image>
+              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'stretch'}></Image>
             }
           </View>
           {/* 내용 */}
-          <View style={styles.backTextView}>
-            <Text style={styles.backText}
+          <View style={{...styles.backTextView, borderColor: nowTheme.cardBorder,}}>
+            <Text style={{...styles.backText, color:nowTheme.font}}
               numberOfLines={7}
               ellipsizeMode="tail"
             >
@@ -171,7 +173,7 @@ function Card({ data }) {
               null
               :
               <View style={styles.backVoiceView}>
-                <MaterialIcons name="keyboard-voice" size={24} color="white" />
+                <MaterialIcons name="keyboard-voice" size={24} color={nowTheme.font} />
               </View>
           }
 
@@ -184,20 +186,21 @@ function Card({ data }) {
 const styles = StyleSheet.create({
   container: {
     fontSize: '3%',
-    height: (SCREEN_WIDTH / 2) * 1.86,
+    height: (SCREEN_WIDTH / 1.8) * 1.86,
     alignItems: "center",
     justifyContent: "center",
-
+    
   },
 
   front: {
-    width: SCREEN_WIDTH / 2,
-    height: (SCREEN_WIDTH / 2) * 1.6,
+    width: SCREEN_WIDTH / 1.8,
+    height: (SCREEN_WIDTH / 1.8) * 1.6,
     backgroundColor: "#152F5E",
     marginRight: 16,
+    marginLeft: 16,
     position: "absolute",
     backfaceVisibility: "hidden",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "#555",
     //IOS
     shadowColor: "#000", //그림자색
@@ -205,34 +208,39 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 }, //그림자 위치
     // ANDROID
     elevation: 3,
+
   },
 
   frontKeyWordBox: {
     // 
     justifyContent: "space-between",
-    marginTop: 5,
-    marginRight: 5,
+    marginTop: 10,
+    marginRight: 10,
+    marginLeft:10,
     minHeight: "20%",
     flexDirection: "row"
+  
   },
 
   frontIcon: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "50%",
+    minHeight: "50%",  
   },
 
   frontTitle: {
     minHeight: "20%",
     alignItems: "center",
-
+    justifyContent:"center"
+  
   },
 
   back: {
-    width: SCREEN_WIDTH / 2,
-    height: (SCREEN_WIDTH / 2) * 1.6,
+    width: SCREEN_WIDTH / 1.8,
+    height: (SCREEN_WIDTH / 1.8) * 1.6,
     backgroundColor: "#274180",
-    marginRight: 30,
+    marginRight: 16,
+    marginLeft: 16,
     alignItems: 'center',
     position: "relative",
     backfaceVisibility: "hidden",
@@ -244,36 +252,43 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 }, //그림자 위치
     // ANDROID
     elevation: 3,
+
+  },
+
+  backTitle: {
+    minHeight: "20%",
   },
 
   backText: {
     color: "white",
-
   },
 
   backImageBox: {
-    margin: 4,
+    margin: 8,
     minHeight: "30%",
     width: "90%",
     height: "40%",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "white",
+    
   },
   imageSize: {
     alignItems: "center",
     justifyContent: "center",
-    width: '100%',
-    height: "100%",
-
+    width: '95%',
+    height: "93%",
+    borderRadius: 10,
+  
   },
 
   backTextView: {
     margin: 6,
     alignItems: "center",
-    justifyContent: "flex-start",
-    minHeight: "50%",
+    width: "90%",
+    borderTopWidth: 1,
+    borderColor: "white",
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 
   backVoiceView: {
