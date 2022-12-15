@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import { SearchBar } from 'react-native-elements';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {YearPicker} from 'react-native-propel-kit';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -22,7 +23,9 @@ function DiaryScreen({ navigation }) {
     getTheme()
   }, [])
 
+
   const [nowTheme, setNowTheme] = useState({});
+
 
   const getTheme = async () => {
     let selectedTheme = await AsyncStorage.getItem('theme');
@@ -44,18 +47,16 @@ function DiaryScreen({ navigation }) {
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = useState("");
   const isFocused = useIsFocused();
+  const [year, setYear] = useState(2022);
 
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
     getDiaryData()
   }, [isFocused])
 
-  // const isLogin = async () => {
-  //   const userId = await AsyncStorage.getItem('id')
-  //   if (userId) {
-  //     setUserId(userId)
-  //   }
-  // }
+  useEffect(() => {
+    getDiaryData()
+  }, [year])
 
   //일기 data 요청
   const getDiaryData = async () => {
@@ -67,13 +68,17 @@ function DiaryScreen({ navigation }) {
         url: `${API.MYDIARY}`,
         params: {
           id: userId, //****작성자 id
-          year: 2022,
+
+          year: year,
+
         }
       }, null)
         .then(res => {
           setDiaryData(res.data)
           setDataTmp(res.data)
-          console.log("들어온", res.data[0])
+
+          // console.log("들어온",res.data[0])
+
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")
@@ -148,6 +153,7 @@ function DiaryScreen({ navigation }) {
 
   return (
     <>
+
       <View>
         <SearchBar value={search} onChangeText={(search) => updateSearch(search)} placeholder=" 내용을 검색해보세요 "></SearchBar>
       </View>
@@ -183,10 +189,12 @@ function DiaryScreen({ navigation }) {
         </SafeAreaView>
       {/* </ImageBackground> */}
     </>
+    
   );
 }
 
 export default DiaryScreen;
+
 
 const styles = StyleSheet.create({
 
