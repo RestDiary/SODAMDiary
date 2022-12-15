@@ -68,9 +68,7 @@ function DiaryScreen({ navigation }) {
         url: `${API.MYDIARY}`,
         params: {
           id: userId, //****작성자 id
-
           year: year,
-
         }
       }, null)
         .then(res => {
@@ -164,10 +162,12 @@ function DiaryScreen({ navigation }) {
               {/* 세로 스크롤 뷰 */}
               {loading && <ActivityIndicator size="large" color="white" />}
               {/* 년도 */}
-              <View style={{ ...styles.year, }}>
+              <View style={{ ...styles.year,  }}>
                 {/*----------------------------<year>------------------------------  */}
                 {/* 년 선택하는 것으로 변경예정 */}
-                <Text style={{ ...styles.yearText, color: nowTheme.font }}>( 2022년 )</Text>
+                <TouchableOpacity>
+            <YearPicker style={{ ...styles.yearText, color: nowTheme.font, height:SCREEN_HEIGHT/14 }} title="년도 선택" value={year} onChange={setYear} />
+            </TouchableOpacity>
               </View>
               <View>
                 {getDiary(12)}
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
 
   year: {
-    marginTop: 8,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
