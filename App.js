@@ -290,25 +290,25 @@ function MyStack() {
       <Stack.Screen name="Home" component={MyDrawer} options={{ headerShown: false, headerTintColor: "black" }} />
 
       {/* Home */}
-      <Stack.Screen name="Calender" component={CalenderScreen} options={{  headerTintColor: "black" }} />
-      <Stack.Screen name="Chart" component={ChartScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Write" component={WriteScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Diary" component={DiaryScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Picture" component={PictureScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Share" component={ShareScreen} options={{ headerTintColor: "black" }}/>
+      <Stack.Screen name="Calender" component={CalenderScreen} options={{  headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Chart" component={ChartScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Write" component={WriteScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Diary" component={DiaryScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Picture" component={PictureScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Share" component={ShareScreen} options={{ headerTintColor: "black", headerShown: false }}/>
 
       {/* 기타 스크린 */}
-      <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black" }} />
-      <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black" }} />
-      <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="NewPw" component={NewPwScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="UserInfo" component={UserInfoScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Theme" component={ThemeScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Modify" component={ModifyScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Album" component={PictureDeailScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="ShareAll" component={ShareAllScreen} options={{ headerTintColor: "black" }}/>
+      <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="NewPw" component={NewPwScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="UserInfo" component={UserInfoScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Theme" component={ThemeScreen} options={{ headerTintColor: "black" , headerShown: false}} />
+      <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTintColor: "black" , headerShown: false}} />
+      <Stack.Screen name="Modify" component={ModifyScreen} options={{ headerTintColor: "black" , headerShown: false}} />
+      <Stack.Screen name="Album" component={PictureDeailScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="ShareAll" component={ShareAllScreen} options={{ headerTintColor: "black", headerShown: false }}/>
 
     </Stack.Navigator>
   );
