@@ -53,7 +53,7 @@ function CustomDrawerContent(props) {
   //스크린 이동할 때 lifecycle 실행
   const isFocused = useIsFocused();
   //테마
-  const [nowTheme, setNowTheme] = useState({});
+  const [nowTheme, setNowTheme] = useState(dark);
 
   useEffect(() => {
     getTheme()
@@ -290,7 +290,7 @@ function MyStack() {
       <Stack.Screen name="Home" component={MyDrawer} options={{ headerShown: false, headerTintColor: "black" }} />
 
       {/* Home */}
-      <Stack.Screen name="Calender" component={CalenderScreen} options={{ headerTintColor: "black" }} />
+      <Stack.Screen name="Calender" component={CalenderScreen} options={{  headerTintColor: "black" }} />
       <Stack.Screen name="Chart" component={ChartScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Write" component={WriteScreen} options={{ headerTintColor: "black" }} />
       <Stack.Screen name="Diary" component={DiaryScreen} options={{ headerTintColor: "black" }} />
@@ -325,7 +325,7 @@ export default function App() {
       await AsyncStorage.setItem('theme', "dark");
       console.log("없어서 설정")
     } else{
-      console.log("있ㅇ", theme)
+      console.log("있어", theme)
     }
   }
 
