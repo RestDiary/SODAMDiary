@@ -9,6 +9,7 @@ import MyContributionGraph from './component/charts/MyContributionGraph';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import { API } from "../config.js";
+import Modal from "react-native-modal";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -17,6 +18,7 @@ function ChartScreen({ navigation }) {
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState();
+  const [isModalVisible, setModalVisible] = useState(false);
   //차트데이터
   const [barData, setBarData] = useState([]);
   const [pieData, setPieData] = useState([]);
@@ -50,6 +52,11 @@ function ChartScreen({ navigation }) {
   const showAlert = (msg) => {
     Alert.alert(msg)
   }
+
+  //모달
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   //감정스코어
   const getScore = async () => {
@@ -101,7 +108,7 @@ function ChartScreen({ navigation }) {
   }
 
   //PieChart
-  const getPieData = async () => {
+  const getPieData = async () => {                                             
     setLoading(true)
     const userId = await AsyncStorage.getItem("id");
     try {
@@ -150,11 +157,31 @@ function ChartScreen({ navigation }) {
 
   return (
     <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
+      {/* Modal */}
+      <Modal isVisible={isModalVisible}>
+        <View style={{ flex: 0.3, padding:5, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={styles.whiteText}>감정점수는 일기에서 분석한 감정을 토대로 소담의 알고리즘을 적용한 점수에요.</Text>
+          <View style={{height:15}}/>
+          <Text style={styles.whiteText}>점수가 30점 보다 낮아지면 스트레스가 많이 쌓인 상태에요. 적절한 관리가 필요해요.</Text>
+          <View style={{height:20}}/>
+          <Button title='확인했어요!' style={{marginTop:'auto'}} onPress={toggleModal} ></Button>
+        </View>
+      </Modal>
+      
       <SafeAreaView>
         <ScrollView>
           {/* 나의 감정 점수 */}
           <View style={styles.emotionScoreView}>
-            <Text style={{color:'white', fontSize:SCREEN_HEIGHT/40}}> {id && id}님의 감정점수는 {score}점이에요.</Text>
+            <Text style={{ color: '#32CD99', fontSize: SCREEN_HEIGHT / 40 }}> {id && id}</Text>
+            <Text style={{ color: 'white', fontSize: SCREEN_HEIGHT / 40 }}> 님의 감정점수는</Text>
+            <Text style={{ color: '#32CD99', fontSize: SCREEN_HEIGHT / 40 }}> {score}</Text>
+            <Text style={{ color: 'white', fontSize: SCREEN_HEIGHT / 40 }}> 점이에요.</Text>
+          </View>
+
+          <View style={{ width: '100%' }}>
+            <TouchableOpacity onPress={toggleModal}>
+              <Text style={{ ...styles.whiteText, marginLeft: 'auto', color: '#0984e3', marginRight:12 }}>감정점수란?</Text>
+            </TouchableOpacity>
           </View>
 
           {/* 파이차트 */}
@@ -235,7 +262,8 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH/1.05,
     height:SCREEN_HEIGHT/9,
     borderRadius: 16,
-    backgroundColor:'rgba(0, 0, 0, 0.7)'
+    backgroundColor:'rgba(0, 0, 0, 0.7)',
+    flexDirection:'row',
   },
   whiteText:{
     marginLeft:3,
