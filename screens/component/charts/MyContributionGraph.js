@@ -10,20 +10,7 @@ function MyContributionGraph(props) {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ContributionGraph
-                values={[
-                    { date: '2022-11-02', count: 5 },
-                    { date: '2022-11-03', count: 5 },
-                    { date: '2022-11-04', count: 5 },
-                    { date: '2022-11-05', count: 5 },
-                    { date: '2022-11-06', count: 5 },
-                    { date: '2022-11-30', count: 5 },
-                    { date: '2022-12-01', count: 5 },
-                    { date: '2022-12-03', count: 5 },
-                    { date: '2022-12-05', count: 5 },
-                    { date: '2022-12-07', count: 5 },
-                    { date: '2022-12-08', count: 5 },
-                    { date: '2022-12-14', count: 5 },
-                ]}
+                values={props.data}
 
                 endDate={date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()}
                 numDays={105}
@@ -33,8 +20,12 @@ function MyContributionGraph(props) {
 
                 chartConfig={{
                     backgroundColor: '#1cc910',
-                    backgroundGradientFrom: '#eff3ff',
-                    backgroundGradientTo: '#efefef',
+
+                    backgroundGradientFrom: '#0000',
+                    backgroundGradientTo: '#0000',
+                    backgroundGradientFromOpacity: 0.4,
+                    backgroundGradientToOpacity: 0.4,
+                    
                     decimalPlaces: 2,
                     color: (opacity = 1) => `rgba(51, 184, 100, ${opacity})`,
                     style: {

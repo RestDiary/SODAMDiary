@@ -40,6 +40,11 @@ function MyLineChart(props) {
                     backgroundGradientTo: "#ffa726",
                     decimalPlaces: 2, // optional, defaults to 2dp
 
+                    backgroundGradientFrom: '#0000',
+                    backgroundGradientTo: '#0000',
+                    backgroundGradientFromOpacity: 0.4,
+                    backgroundGradientToOpacity: 0.4,
+
                     //색깔 넣는 곳
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -51,7 +56,7 @@ function MyLineChart(props) {
                     propsForDots: {
                         r: "6",
                         strokeWidth: "2",
-                        stroke: "#ffa726"
+                        stroke: "white"
                     }
                 }}
                 bezier

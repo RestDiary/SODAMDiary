@@ -22,22 +22,25 @@ function MyBarChart(props) {
 
                 showValuesOnTopOfBars={true}
                 fromZero={true}
+                withInnerLines={false}
 
                 chartConfig={{
                     backgroundColor: '#1cc910',
                     //배경 색
-                    backgroundGradientFrom: '#eff3ff',
-                    backgroundGradientTo: '#efefef',
+                    backgroundGradientFrom: '#0000',
+                    backgroundGradientTo: '#0000',
+                    backgroundGradientFromOpacity: 0.4,
+                    backgroundGradientToOpacity: 0.4,
 
                     //막대 색
-                    fillShadowGradientOpacity: 0.8, //투명도
-                    fillShadowGradientFrom : 'blue',
+                    fillShadowGradientOpacity: 1, //투명도
+                    fillShadowGradientFrom : '#f780f4',
                     
                     //소수점
                     decimalPlaces: 0,
 
                     // 레이블, 전체적인 색
-                    color: (opacity = 1) => `rgba(2, 55, 55, ${opacity})`,
+                    color: (opacity = 1) => `rgba(255, 255, 255, 1)`,
                     
                     style: {
                         borderRadius: 16,

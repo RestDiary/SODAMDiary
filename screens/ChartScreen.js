@@ -28,6 +28,7 @@ function ChartScreen({ navigation }) {
     getBarData()
     getScore()
     getPieData()
+    getContriButionData()
   }, [])
 
   //테마
@@ -82,7 +83,7 @@ function ChartScreen({ navigation }) {
     try {
       await axios({
         method: "post",
-        url: `http://192.168.2.97:3001/chart/bar`,
+        url: `${API.BAR}`,
         params: {
           id: userId, //****작성자 id
         }
@@ -106,7 +107,7 @@ function ChartScreen({ navigation }) {
     try {
       await axios({
         method: "post",
-        url: `${API.COUNT}`,
+        url: `${API.PIE}`,
         params: {
           id: userId, //****작성자 id
         }
@@ -153,7 +154,7 @@ function ChartScreen({ navigation }) {
         <ScrollView>
           {/* 나의 감정 점수 */}
           <View style={styles.emotionScoreView}>
-            <Text> {id && id}님의 감정점수는 {score}점이에요.</Text>
+            <Text style={{color:'white', fontSize:SCREEN_HEIGHT/40}}> {id && id}님의 감정점수는 {score}점이에요.</Text>
           </View>
 
           {/* 파이차트 */}
@@ -203,7 +204,13 @@ function ChartScreen({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={{marginTop:8}}/>
-          <MyContributionGraph/>
+          {contribution.length>0 ?
+            <MyContributionGraph data={contribution}/>
+            :
+            <View style={styles.loadingView}>
+              <ActivityIndicator size="large" color="white" />
+            </View>
+          }
 
           <View style={{height:SCREEN_HEIGHT/25}}/>
         </ScrollView>
@@ -228,12 +235,12 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH/1.05,
     height:SCREEN_HEIGHT/9,
     borderRadius: 16,
-    backgroundColor:'green'
+    backgroundColor:'rgba(0, 0, 0, 0.7)'
   },
   whiteText:{
     marginLeft:3,
     color:'white',
-    fontSize:16,
+    fontSize:SCREEN_HEIGHT/52,
   },
   loadingView:{
     justifyContent:'center',

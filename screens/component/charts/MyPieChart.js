@@ -6,27 +6,27 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function MyPieChart(props) {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'rgba(0,0,0,0.4)', borderRadius:16, marginTop:8}}>
             <PieChart
                 data={[
                     {
                         name: '긍정',
                         population: props.data[0][0].count,
-                        color: 'rgba(131, 167, 234, 1)',
+                        color: '#58B19F',
                         legendFontColor: '#7F7F7F',
                         legendFontSize: 15,
                     },
                     {
                         name: '보통',
                         population: props.data[1][0].count,
-                        color: '#ffffff',
+                        color: '#F8EFBA',
                         legendFontColor: '#7F7F7F',
                         legendFontSize: 15,
                     },
                     {
                         name: '부정',
                         population: props.data[2][0].count,
-                        color: '#F00',
+                        color: '#FD7272',
                         legendFontColor: '#7F7F7F',
                         legendFontSize: 15,
                     },
@@ -36,9 +36,10 @@ function MyPieChart(props) {
                 height={SCREEN_HEIGHT/4}
 
                 chartConfig={{
-                    backgroundColor: '#1cc910',
-                    backgroundGradientFrom: '#eff3ff',
-                    backgroundGradientTo: '#efefef',
+                    //배경 색
+                    backgroundGradientFrom: '#0000',
+                    backgroundGradientTo: '#0000',
+
                     decimalPlaces: 2,
                     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                     style: {
