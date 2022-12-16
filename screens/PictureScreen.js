@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, View, Text, Alert, Image,SafeAreaView,ScrollView } from 'react-native';
+import { Button, View, Text, Alert, Image, SafeAreaView, ScrollView, Dimensions, Modal } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { API } from '../config.js'
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function PictureScreen({ navigation }) {
   //테마
@@ -12,11 +14,11 @@ function PictureScreen({ navigation }) {
     getTheme()
   }, [])
 
-const [nowTheme, setNowTheme] = useState({});
+  const [nowTheme, setNowTheme] = useState({});
 
-const getTheme = async () => {
+  const getTheme = async () => {
     let selectedTheme = await AsyncStorage.getItem('theme');
-    
+
     if (selectedTheme.includes("dark")) setNowTheme(dark);
     else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
     else if (selectedTheme.includes("town")) setNowTheme(town);
@@ -26,15 +28,13 @@ const getTheme = async () => {
     else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
     else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
     else if (selectedTheme.includes("winter")) setNowTheme(winter);
-}    
+  }
   const [albumData, setAlbumData] = useState([]);
   const [loading, setLoading] = useState(false)
-
 
   useEffect(() => {
     getAlbumData()
   }, [])
-
 
   //앨범 data 요청
   const getAlbumData = async () => {
@@ -50,7 +50,6 @@ const getTheme = async () => {
       }, null)
         .then(res => {
           setAlbumData(res.data)
-          console.log("들어온", res.data)
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")
@@ -62,23 +61,24 @@ const getTheme = async () => {
     setLoading(false)
   }
 
-
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:nowTheme.cardBg }}>
-      <SafeAreaView>
-        <ScrollView>
-          {albumData.map((al) => {
+
+      <SafeAreaView style={{ flex: 1, backgroundColor: nowTheme.cardBg, }}>
+        <ScrollView >
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: 'flex-start', margin: 5 }}>
+
+          {albumData.map((al, index) => {
             return (
-              <TouchableOpacity onLongPress={() => navigation.navigate('Album', { album: al.diarykey })}>
-                {(al.img !== null && al.img !== "") && <Image source={{ uri: al.img }} style={{ width: 200, height: 200 }} />}
+              <TouchableOpacity key={index} onLongPress={() => navigation.navigate('Album', { album: al.diarykey })}>
+                {(al.img !== null && al.img !== "") &&
+                  <Image source={{ uri: al.img }} style={{ width: SCREEN_WIDTH / 3.3, height: SCREEN_HEIGHT / 5, margin: 4, }} />}
               </TouchableOpacity>
             );
           })}
+
+          </View>
         </ScrollView>
       </SafeAreaView>
-
-    </View>
-
   );
 }
 

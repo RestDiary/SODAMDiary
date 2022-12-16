@@ -139,7 +139,7 @@ function JoinScreen({ navigation }) {
       setChangePW("비밀번호가 일치하지 않습니다.");
 
     }
-  }), [pw2];
+  }, [pw2]);
 
   React.useEffect(() => {
     if (email === "") {
@@ -150,7 +150,7 @@ function JoinScreen({ navigation }) {
       setChangeEmail("사용할 수 있는 이메일입니다.");
     }
 
-  })
+  }, [email])
 
 
   return (

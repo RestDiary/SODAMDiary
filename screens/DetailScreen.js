@@ -140,7 +140,6 @@ function DetailScreen( card ) {
   const [id, setId] = useState("");
   const navigation = useNavigation(); 
 
-
   //이미지 업로드용
   const [image,setImage]  = useState("");
   const [send,setSend] = useState("");
@@ -157,7 +156,6 @@ function DetailScreen( card ) {
   const [img, setImg] = useState("");
   const [keyword, setKeyword] = useState("");
   const [voice2, setVoice] = useState("");
-
 
   useEffect(() => {
     detail();
@@ -191,7 +189,6 @@ function DetailScreen( card ) {
     }
   }
 
-
   //일기 삭제
   const deletDiary = () => {
     let lmgkey = image.split("com/");
@@ -206,8 +203,8 @@ function DetailScreen( card ) {
     }, null)
       .then(res => {
         console.log("삭제함");
-        Alert.alert("삭제되었습니다.")
-        navigation.replace('Diary')
+        Alert.alert("삭제되었습니다.");
+        navigation.pop();
       })
       .catch(function (error) {
         console.log(error);
@@ -242,15 +239,11 @@ function DetailScreen( card ) {
     setModalVisible(!isModalVisible);
   };
 
-
-
   //키워드 제거
   const delEmotion = (keyword) => {
     let temp = [...Emotions]
     setEmotions(temp.filter((i) => i !== keyword))
   }
-
-
 
   //자식에서 부모에게 Audio 데이터 전달
   const [audio, setAudio] = useState()
@@ -271,7 +264,7 @@ function DetailScreen( card ) {
   };
 
    //id값 꺼내오기
-   useEffect(() => {
+  useEffect(() => {
     AsyncStorage.getItem('id', (err, result) => {
       setId(result);
     });
@@ -279,7 +272,6 @@ function DetailScreen( card ) {
 
   //서버 요청 로딩
   const [loading, setLoading] = useState(false)
-
 
   return (
     <View style={{...styles.container, backgroundColor:nowTheme.cardBg}}>
@@ -302,20 +294,7 @@ function DetailScreen( card ) {
       <SafeAreaView style={styles.feelingLayout}>
         {/* 오늘의 기분 키워드 피커 */}
         <View>
-          <Text style={{color:nowTheme.font, margin:10}}>키워드: {card.route.params.card.keyword}</Text>
-        </View>
-
-        {/* 선택한 감정 보이는 곳 */}
-        <View style={{...styles.feelingBtnBox,color:nowTheme.font}}>
-          {Emotions &&
-            Emotions.map((emo, index) => {
-              return (
-                <Chip compact='true' onClose={(keyword) => delEmotion(emo)}>
-                  {"emoFunc"}
-                </Chip>
-              )
-            })
-          }
+          <Text style={{color:nowTheme.font, margin:10}}>키워드: {"#"+card.route.params.card.keyword}</Text>
         </View>
       </SafeAreaView>
 
@@ -330,10 +309,6 @@ function DetailScreen( card ) {
         </View>
       </SafeAreaView>
 
-   
-
-      
-
       {/*--------------------- 에디터 --------------------- */}
       {editorColor.backgroundColor &&
       <>
@@ -342,8 +317,8 @@ function DetailScreen( card ) {
           <ScrollView>
             {/* {이미지 보이는 곳} */}
           <Pressable >
-            {card.route.params.card.img && < Image source={{uri: card.route.params.card.img}} style={{ width: 200, height: 200 }} />}
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            {card.route.params.card.img && < Image source={{uri: card.route.params.card.img}} style={{ width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5 }} />}
+        {image && <Image source={{ uri: image }} style={{ width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5 }} />}
         </Pressable>
             {/* 음성 플레이어 영역 */}
             {card.route.params.card.voice && <AudioPlayer audio={card.route.params.card.voice}></AudioPlayer>}
@@ -471,7 +446,7 @@ const styles = StyleSheet.create({
   },
 
   feelingLayout: {
-    marginTop: 10,
+    
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
     flexDirection: 'row',
@@ -481,7 +456,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH / 3,
     height: SCREEN_HEIGHT / 50,
     color: "#456185",
-    padding: 10,
   },
 
   feelingBtnBox: {
@@ -503,7 +477,6 @@ const styles = StyleSheet.create({
   dateLayout: {
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
-    marginTop: SCREEN_HEIGHT / 40,
   },
 
   contents: {

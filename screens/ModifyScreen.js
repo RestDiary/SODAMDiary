@@ -391,7 +391,7 @@ function DetailScreen(card) {
         .then(res => {
           console.log("성공", res.data)
           Alert.alert("일기가 수정되었어요.")
-          moveNavigate("Home")
+          moveNavigate("Diary")
         })
         .catch(function (error) {
           console.log(error.response.data)

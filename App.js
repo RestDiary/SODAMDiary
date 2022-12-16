@@ -8,12 +8,15 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import axios from 'axios';
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './screens/css/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 //screen
 import CalenderScreen from './screens/CalenderScreen';
 import WriteScreen from './screens/WriteScreen';
@@ -24,6 +27,9 @@ import ChartScreen from './screens/ChartScreen';
 import HomeScreen from './screens/Home';
 import FindPwScreen from './screens/FindPwScreen';
 import ChangePwScreen from './screens/ChangePwScreen';
+import NewPwScreen from './screens/NewPwScreen';
+import ChangeEmailScreen from './screens/ChangeEmailScreen';
+import UserInfoScreen from './screens/UserInfoScreen';
 import LoginScreen from './screens/LoginScreen';
 import ShareScreen from './screens/ShareScreen'; 
 import ShareAllScreen from './screens/ShareAllScreen';
@@ -47,7 +53,7 @@ function CustomDrawerContent(props) {
   //스크린 이동할 때 lifecycle 실행
   const isFocused = useIsFocused();
   //테마
-  const [nowTheme, setNowTheme] = useState({});
+  const [nowTheme, setNowTheme] = useState(dark);
 
   useEffect(() => {
     getTheme()
@@ -80,6 +86,79 @@ function CustomDrawerContent(props) {
       console.log(e)
     }
   }
+
+  //초기화 버튼 클릭 시
+  const deleteAll = () => {
+    Alert.alert(
+      "일기를 모두 지우시겠어요?",
+      "한 번 초기화하면 돌이킬 수 없어요!",
+      [                           
+        {
+          text: "네",                              
+          onPress: () => deleteAll2(),    
+          style: "cancel"
+        },
+        { text: "아니오", onPress: () => console.log("안한대") }, 
+      ],
+      { cancelable: false }
+    )
+    
+  }
+
+  const deleteAll2 = async() => {
+    await axios({
+      method: "post",
+      url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/deleteAll',
+      params: {
+        id: id, 
+      }
+    }, null)
+      .then(res => {
+        alert("일기가 초기화 되었습니다.")
+      })
+      .catch(function (error) {
+        Alert.alert("❗error : bad response")
+      })
+  }
+
+   // 계정 탈퇴 버튼 클릭 시
+   const withdrawal = () => {
+    Alert.alert(
+      "정말 탈퇴하시겠어요?",
+      "모든 추억이 다 사라져요!",
+      [                           
+        {
+          text: "네",                              
+          onPress: () => withdrawal2(),    
+          style: "cancel"
+        },
+        { text: "아니오", onPress: () => console.log("안한대") }, 
+      ],
+      { cancelable: false }
+    )
+    
+  }
+
+
+  const withdrawal2 = async() => {
+    await axios({
+      method: "post",
+      url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/withdrawal',
+      params: {
+        id: id, 
+      }
+    }, null)
+      .then(async res => {
+        await AsyncStorage.removeItem('id');
+        alert("탈퇴되었습니다.");
+        navigation.navigate("Login");
+
+      })
+      .catch(function (error) {
+        Alert.alert("❗error : bad response")
+      })
+  }
+
 
   useEffect(() => {
     AsyncStorage.getItem('id', (err, result) => {
@@ -142,14 +221,14 @@ function CustomDrawerContent(props) {
           </TouchableOpacity>
         </View>
 
-        {/* 백업 기능 */}
+        {/* 개인정보 변경 기능 */}
         <View>
           <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
             // label="Close drawer"
-            onPress={() => props.navigation.navigate("백업기능")}
+            onPress={() => props.navigation.navigate("UserInfo")}
           >
-            <MaterialCommunityIcons name="backup-restore" size={24} color="white" />
-            <Text style={styles.drawerItemText}>백업</Text>
+            <FontAwesome5 name="user" size={24} color="white" />
+            <Text style={styles.drawerItemText}> 개인정보</Text>
           </TouchableOpacity>
         </View>
 
@@ -157,23 +236,13 @@ function CustomDrawerContent(props) {
         <View>
           <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
             // label="Close drawer"
-            onPress={() => props.navigation.navigate("초기화기능")}
+            onPress={() => deleteAll()}
           >
             <Ionicons name="refresh" size={24} color="red" />
             <Text style={styles.drawerItemText}>초기화</Text>
           </TouchableOpacity>
         </View>
 
-        {/* 공유 기능 */}
-        <View>
-          <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
-            // label="Close drawer"
-            onPress={() => props.navigation.navigate("공유기능")}
-          >
-            <Entypo name="share" size={24} color="white" />
-            <Text style={styles.drawerItemText}>공유</Text>
-          </TouchableOpacity>
-        </View>
 
         {/* 로그아웃 기능 */}
         <View style={{}}>
@@ -183,6 +252,17 @@ function CustomDrawerContent(props) {
           >
             <MaterialIcons name="logout" size={24} color="white" />
             <Text style={styles.drawerItemText}>로그아웃</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 계정탈퇴 기능 */}
+        <View>
+          <TouchableOpacity style={{...styles.drawerItem,backgroundColor:nowTheme.btn}}
+            // label="Close drawer"
+            onPress={() => withdrawal()}
+          >
+            <AntDesign name="deleteuser" size={24} color="red" />
+            <Text style={styles.drawerItemText}>계정탈퇴</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -204,51 +284,31 @@ function MyDrawer() {
 }
 
 function MyStack() {
-  //스크린 이동할 때 lifecycle 실행
-  const isFocused = useIsFocused();
-  //테마
-  const [nowTheme, setNowTheme] = useState({});
-
-  useEffect(() => {
-    getTheme()
-  }, [isFocused])
-
-  const getTheme = async () => {
-    let selectedTheme = await AsyncStorage.getItem('theme');
-
-    if (selectedTheme.includes("dark")) setNowTheme(dark);
-    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
-    else if (selectedTheme.includes("town")) setNowTheme(town);
-    else if (selectedTheme.includes("classic")) setNowTheme(classic);
-    else if (selectedTheme.includes("purple")) setNowTheme(purple);
-    else if (selectedTheme.includes("block")) setNowTheme(block);
-    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
-    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
-    else if (selectedTheme.includes("winter")) setNowTheme(winter);
-  }
-
   return (
     <Stack.Navigator>
       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, headerTintColor: "black" }} />
       <Stack.Screen name="Home" component={MyDrawer} options={{ headerShown: false, headerTintColor: "black" }} />
 
       {/* Home */}
-      <Stack.Screen name="Calender" component={CalenderScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Chart" component={ChartScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Write" component={WriteScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Diary" component={DiaryScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Picture" component={PictureScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Share" component={ShareScreen} options={{ headerTintColor: "black" }}/>
+      <Stack.Screen name="Calender" component={CalenderScreen} options={{  headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Chart" component={ChartScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Write" component={WriteScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Diary" component={DiaryScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Picture" component={PictureScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Share" component={ShareScreen} options={{ headerTintColor: "black", headerShown: false }}/>
 
       {/* 기타 스크린 */}
-      <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black" }} />
-      <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black" }} />
-      <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Theme" component={ThemeScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Modify" component={ModifyScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="Album" component={PictureDeailScreen} options={{ headerTintColor: "black" }} />
-      <Stack.Screen name="ShareAll" component={ShareAllScreen} options={{ headerTintColor: "black" }}/>
+      <Stack.Screen name="Join" component={JoinScreen} options={{ title: "회원가입", headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="FindPw" component={FindPwScreen} options={{ title: "비밀번호 찾기", headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="ChangePw" component={ChangePwScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="NewPw" component={NewPwScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="ChangeEmail" component={ChangeEmailScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="UserInfo" component={UserInfoScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="Theme" component={ThemeScreen} options={{ headerTintColor: "black" , headerShown: false}} />
+      <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTintColor: "black" , headerShown: false}} />
+      <Stack.Screen name="Modify" component={ModifyScreen} options={{ headerTintColor: "black" , headerShown: false}} />
+      <Stack.Screen name="Album" component={PictureDeailScreen} options={{ headerTintColor: "black", headerShown: false }} />
+      <Stack.Screen name="ShareAll" component={ShareAllScreen} options={{ headerTintColor: "black", headerShown: false }}/>
 
     </Stack.Navigator>
   );
@@ -263,12 +323,9 @@ export default function App() {
     let theme = await AsyncStorage.getItem('theme');
     if(!theme){
       await AsyncStorage.setItem('theme', "dark");
-      console.log("없어서 설정")
-    } else{
-      console.log("있ㅇ", theme)
     }
   }
-  
+
   return (
     <NavigationContainer>
       <MyStack />

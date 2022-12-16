@@ -9,42 +9,38 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function LoginScreen({ navigation }) {
   //테마
-  useEffect(() => {
-    getTheme()
-  }, [])
+  const [nowTheme, setNowTheme] = useState({});
 
-const [nowTheme, setNowTheme] = useState({});
+    const getTheme = async () => {
+      // AsyncStorage.clear() // 스토리지 초기화
 
-const getTheme = async () => {
-  await AsyncStorage.setItem('theme', "dark");
-    let selectedTheme = await AsyncStorage.getItem('theme');
+      let selectedTheme = await AsyncStorage.getItem('theme');
     
-    if (selectedTheme.includes("dark")) setNowTheme(dark);
-    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
-    else if (selectedTheme.includes("town")) setNowTheme(town);
-    else if (selectedTheme.includes("classic")) setNowTheme(classic);
-    else if (selectedTheme.includes("purple")) setNowTheme(purple);
-    else if (selectedTheme.includes("block")) setNowTheme(block);
-    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
-    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
-    else if (selectedTheme.includes("winter")) setNowTheme(winter);
-    else {
-      setNowTheme(dark)
-      await AsyncStorage.setItem('theme',("dark"))
-}
-} 
+      if (selectedTheme.includes("dark")) setNowTheme(dark);
+      else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+      else if (selectedTheme.includes("town")) setNowTheme(town);
+      else if (selectedTheme.includes("classic")) setNowTheme(classic);
+      else if (selectedTheme.includes("purple")) setNowTheme(purple);
+      else if (selectedTheme.includes("block")) setNowTheme(block);
+      else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+      else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+      else if (selectedTheme.includes("winter")) setNowTheme(winter);
+    } 
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
   
 
-  
+  useEffect(() =>{
+    getTheme()
+  }, [nowTheme])
 
-  //로그인 여부 확인
+
+  //state 추가되면 실행
   useEffect(() => {
     isLogin()
-    getTheme()
   }, [])
+
 
   const isLogin = async () => {
     const userId = await AsyncStorage.getItem('id')
