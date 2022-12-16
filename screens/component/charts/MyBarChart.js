@@ -34,7 +34,7 @@ function MyBarChart(props) {
 
                     //막대 색
                     fillShadowGradientOpacity: 1, //투명도
-                    fillShadowGradientFrom : '#f780f4',
+                    fillShadowGradientTo : '#f780f4',
                     
                     //소수점
                     decimalPlaces: 0,

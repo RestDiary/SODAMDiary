@@ -54,7 +54,7 @@ function MyLineChart(props) {
                     },
 
                     propsForDots: {
-                        r: "6",
+                        r: "2.5",
                         strokeWidth: "2",
                         stroke: "white"
                     }
