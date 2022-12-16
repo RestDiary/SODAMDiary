@@ -14,7 +14,7 @@ import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
-
+import ImageModal from 'react-native-image-modal';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -137,10 +137,13 @@ function PictureDetailScreen(Album) {
   const [img, setImg] = useState("");
   const [keyword, setKeyword] = useState("");
   const [voice, setVoice] = useState("");
+  const [checkImage, setCheckImage] = useState(false);
+
 
 
   const richText = React.useRef();
   const [Emotions, setEmotions] = useState([]);
+
 
 
 
@@ -177,6 +180,10 @@ function PictureDetailScreen(Album) {
     }
   }
 
+const check = () => {
+  setCheckImage(true)
+}
+
   //키워드 제거
   const delEmotion = (keyword) => {
     let temp = [...Emotions]
@@ -208,6 +215,9 @@ function PictureDetailScreen(Album) {
 
 
   return (
+
+    
+
     <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
       {/* 제목 */}
       <SafeAreaView style={styles.titleLayout}>
@@ -240,6 +250,25 @@ function PictureDetailScreen(Album) {
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}style={{ flex: 0.95,  borderColor:nowTheme.cardBorder,  }}>
             <SafeAreaView>
               <ScrollView>
+
+                {/* {이미지 보이는 곳} */}
+                <Pressable onPress={check}>
+                  {img && <TouchableOpacity onPress={()=> {
+                        setCheckImage(true);
+                    }}>
+                        <ImageModal
+                            swipeToDismiss={false}
+                            resizeMode="contain"
+                            imageBackgroundColor="#000000"
+                            style={{ width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5 }}
+                            source={{
+                                uri: img,
+                            }}
+                        />
+                        {/* <Image source={{ uri: imageUri }} style={styles.asd} /> */}
+                    </TouchableOpacity>}
+                </Pressable>
+
                 {/* 음성 플레이어 영역 */}
                 {voice && <AudioPlayer audio={voice}></AudioPlayer>}
                 {audio &&
@@ -251,6 +280,21 @@ function PictureDetailScreen(Album) {
                 <Pressable >
                   {img && < Image source={{ uri: img }} style={{ marginLeft:10, marginTop:16, width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5, borderWidth:1, borderColor:nowTheme.cardBorder, borderRadius:20, }} />}
                 </Pressable>
+
+                    {checkImage && 
+                    <ImageModal
+                        swipeToDismiss={false}
+                        resizeMode="contain"
+                        imageBackgroundColor="#000000"
+                        style={{
+                            width: SCREEN_WIDTH,
+                            height: SCREEN_HEIGHT,
+                        }}
+                        source={{
+                            uri: img,
+                        }}
+                    />
+                }
 
                 <RichEditor
                   ref={richText} // from useRef()

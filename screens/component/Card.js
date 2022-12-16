@@ -106,6 +106,16 @@ function Card({ data }) {
     firstWork = firstWork.replace(/<div>/g, '\n');
     firstWork = firstWork.replace(/<br>/g, '\n');
     firstWork = firstWork.replace(/&nbsp/g, ' ');
+    firstWork = firstWork.replace(/<b style="font-size: 1em;">/g, ' ');
+    firstWork = firstWork.replace(/<i>/g, ' ');
+    firstWork = firstWork.replace(/<u>/g, ' ');
+    firstWork = firstWork.replace(/<strike>/g, ' ');
+    firstWork = firstWork.replace(/<\/b>/g, ' ');
+    firstWork = firstWork.replace(/<\/i>/g, ' ');
+    firstWork = firstWork.replace(/<\/u>/g, ' ');
+    firstWork = firstWork.replace(/<\/strike>/g, ' ');
+
+
     setNewContent(firstWork);
   })
 

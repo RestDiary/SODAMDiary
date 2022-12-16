@@ -10,9 +10,11 @@ import { Button } from 'react-native-paper';
 import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+
 import { SearchBar } from 'react-native-elements';
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import {YearPicker} from 'react-native-propel-kit';
+
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -47,6 +49,7 @@ function ShareScreen({ navigation }) {
   const isFocused = useIsFocused();
   const [year, setYear] = useState(2022);
 
+
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
     getDiaryData()
@@ -56,12 +59,6 @@ function ShareScreen({ navigation }) {
     getDiaryData()
   }, [year])
 
-  // const isLogin = async () => {
-  //   const userId = await AsyncStorage.getItem('id')
-  //   if (userId) {
-  //     setUserId(userId)
-  //   }
-  // }
 
   //일기 data 요청
   const getDiaryData = async () => {
@@ -153,6 +150,7 @@ function ShareScreen({ navigation }) {
   }
 
   return (
+
     <>
 
       <View>
@@ -187,6 +185,7 @@ function ShareScreen({ navigation }) {
                 {getDiary(2)}
                 {getDiary(1)}
               </View>
+
 
             </View>
           </ScrollView>

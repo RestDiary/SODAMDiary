@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { API } from '../config.js'
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -38,6 +39,9 @@ function CalenderScreen({ navigation }) {
   const [reObjDiary, setReObjDiary] = useState([]); //선택한 다이어리 객체 재 리스트화 (사용)
   const [markingDate, setMarkingDate] = useState([]); // 날짜에 마킹한 객체를 집어넣는곳
   const [mergeObj, setMergeObj] = useState({});
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  // let year = new Date().getFullYear();
 
   //일기 data 요청
   const getDiaryData = async () => {
@@ -50,6 +54,7 @@ function CalenderScreen({ navigation }) {
         url: `${API.MYDIARY}`,
         params: {
           id: userId, //****작성자 id
+          year: year,
         }
       }, null)
         .then(res => {
@@ -69,7 +74,7 @@ function CalenderScreen({ navigation }) {
     getDiaryData()
     console.log("객체 0번째 출력")
     console.log(JSON.stringify(diaryData[0], null, 4))
-  }, [])
+  }, [year])
 
 
 
@@ -136,7 +141,8 @@ function CalenderScreen({ navigation }) {
             monthFormat={'yyyy-MM'}
             // 달력에서 보이는 달이 바뀔 때 실행되는 핸들러. 기본값 = 정의되지 않음
             onMonthChange={month => {
-              console.log('month changed', month);
+              setYear(month.year);
+              console.log('month changed', month.year);
             }}
             // 월 탐색 화살표 숨기기 기본 = 거짓
             hideArrows={true}
