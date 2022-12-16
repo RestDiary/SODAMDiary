@@ -10,6 +10,10 @@ import { Button } from 'react-native-paper';
 import { API } from '../config.js'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {YearPicker} from 'react-native-propel-kit';
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+
+
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -19,6 +23,30 @@ function DiaryScreen({ navigation }) {
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = React.useState("");
   const isFocused = useIsFocused();
+  const [year, setYear] = useState(2022);
+
+   //테마
+   useEffect(() => {
+    getTheme()
+  }, [])
+
+
+  const [nowTheme, setNowTheme] = useState({});
+
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
+  }
+
 
 
   //로그인 여부 확인 및 일기 불러오기
@@ -26,12 +54,10 @@ function DiaryScreen({ navigation }) {
     getDiaryData()
   }, [isFocused])
 
-  // const isLogin = async () => {
-  //   const userId = await AsyncStorage.getItem('id')
-  //   if (userId) {
-  //     setUserId(userId)
-  //   }
-  // }
+  useEffect(() => {
+    getDiaryData()
+  }, [year])
+
 
   //일기 data 요청
   const getDiaryData = async () => {
@@ -43,6 +69,7 @@ function DiaryScreen({ navigation }) {
         url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/myShare',
         params: {
           id: userId, //****작성자 id
+          year: year,
         }
       }, null)
         .then(res => {
@@ -107,7 +134,9 @@ function DiaryScreen({ navigation }) {
           <View style={styles.year}>
             {/*----------------------------<year>------------------------------  */}
             {/* 년 선택하는 것으로 변경예정 */}
-            <Text style={styles.yearText}>2022</Text>
+            <TouchableOpacity>
+            <YearPicker style={{ ...styles.yearText, color: nowTheme.font, height:SCREEN_HEIGHT/14 }} title="년도 선택" value={year} onChange={setYear} />
+            </TouchableOpacity>
           </View>
 
           {loading && <ActivityIndicator size="large" color="white" />}
@@ -150,7 +179,9 @@ const styles = StyleSheet.create({
   },
 
   yearText: {
-    color: "#fff"
+    color: "#fff",
+    fontSize: SCREEN_WIDTH / 14,
+    fontWeight: 'bold',
   },
 
   moon: {

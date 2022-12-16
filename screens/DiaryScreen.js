@@ -68,9 +68,7 @@ function DiaryScreen({ navigation }) {
         url: `${API.MYDIARY}`,
         params: {
           id: userId, //****작성자 id
-
           year: year,
-
         }
       }, null)
         .then(res => {

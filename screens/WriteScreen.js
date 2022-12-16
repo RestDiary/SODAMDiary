@@ -315,6 +315,7 @@ function WriteScreen({ navigation }) {
   const submitContentHandle = async () => {
     const replaceHTML = descHTML.replace(/<(.|\n)*?>/g, "").trim();
     const replaceWhiteSpace = replaceHTML.replace(/&nbsp;/g, "").trim();
+    let score;
 
     if (titleText.length <= 0) {
       setShowDescError(true);
@@ -356,6 +357,20 @@ function WriteScreen({ navigation }) {
 
     // 서버 데이터 전송
     setLoading(true);
+    await axios({
+      method: "post",
+      url: `${API.SCORE}`,
+      params: {
+        id: id, 
+      }	
+    }, null)
+      .then(res => {
+          score = res.data;
+      })
+      .catch(function (error) {
+        Alert.alert("❗error : bad response")
+      })
+    
 
     try {
       await axios(
@@ -372,6 +387,7 @@ function WriteScreen({ navigation }) {
             img: url, //****이미지 추가
             voice: audio?.file,
             keyword: Emotions,
+            score: score,
           },
         },
         null
@@ -401,7 +417,7 @@ function WriteScreen({ navigation }) {
       <SafeAreaView style={styles.titleLayout}>
         <TextInput
           autoFocus
-          placeholder="제목:"
+          placeholder="제목"
           placeholderTextColor={"#456185"}
           style={{ ...styles.title, color: nowTheme.font, fontWeight: "bold" }}
           onChangeText={onChangeTitleText}
