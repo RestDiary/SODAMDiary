@@ -15,5 +15,8 @@ export const API = {
   DELETE: `${BASE_URL}/diaryDelete`,
   ALBUM: `${BASE_URL}/album`,
   SCORE: `${BASE_URL}/userScore`,
+  PIE: `${BASE_URL}/count`,
+  BAR: `${BASE_URL}/chart/bar`,
+  CONTRIBUTION: `${BASE_URL}/chart/contribution`,
 
 };
