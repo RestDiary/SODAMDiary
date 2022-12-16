@@ -59,9 +59,9 @@ function ThemeScreen({ navigation }) {
                   // 테마카드 불러오기
                   themeData.map((my, index) => {
                     return (
-                      <TouchableOpacity onPress={(selected)=>saveTheme(themeTitle[index])} >
+                      <TouchableOpacity key={index} onPress={(selected)=>saveTheme(themeTitle[index])} >
                             
-                      <View key={index} style={{ ...styles.card }}>
+                      <View  style={{ ...styles.card }}>
                         {/* 테마 이미지 */}
                         <View style={{ ...styles.cardImageBox }}>
                           <Image source={themeData[index]} style={styles.imageSize} resizeMode={'stretch'}></Image>
