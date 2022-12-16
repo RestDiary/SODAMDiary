@@ -71,7 +71,7 @@ function PictureScreen({ navigation }) {
             return (
               <TouchableOpacity key={index} onPress={() => navigation.navigate('Album', { album: al.diarykey })}>
                 {(al.img !== null && al.img !== "") &&
-                  <Image source={{ uri: al.img }} style={{ width: SCREEN_WIDTH / 3.3, height: SCREEN_HEIGHT / 5, margin: 4, }} />}
+                  <Image source={{ uri: al.img }} style={{ width: SCREEN_WIDTH / 3.3, height: SCREEN_WIDTH / 3.3, margin: 4, }} />}
               </TouchableOpacity>
             );
           })}

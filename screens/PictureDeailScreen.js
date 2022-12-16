@@ -18,7 +18,7 @@ import ImageModal from 'react-native-image-modal';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function DetailScreen(Album) {
+function PictureDetailScreen(Album) {
   //스크린 이동할 때 lifecycle 실행
   const isFocused = useIsFocused();
   //테마
@@ -233,51 +233,27 @@ const check = () => {
       </SafeAreaView>
 
       {/* 감정선택 */}
-      <SafeAreaView style={styles.feelingLayout}>
+      <SafeAreaView style={{...styles.feelingLayout, backgroundColor: nowTheme.btn, borderColor:nowTheme.cardBorder, }}>
         {/* 오늘의 기분 키워드 피커 */}
         <View>
-          <Text style={{ color: nowTheme.font, margin: 10 }}>키워드: {keyword}</Text>
+          <Text style={{ color: nowTheme.font, margin: 10 }}>키워드: {"#" + keyword}</Text>
         </View>
-
-        {/* 선택한 감정 보이는 곳 */}
-        <View style={{ ...styles.feelingBtnBox, color: nowTheme.font }}>
-          {Emotions &&
-            Emotions.map((emo, index) => {
-              return (
-                <Chip compact='true' onClose={(keyword) => delEmotion(emo)}>
-                  {"emoFunc"}
-                </Chip>
-              )
-            })
-          }
-        </View>
+        {/* 날짜 */}
+        <Text style={{ ...styles.date, color: nowTheme.font }}>
+          날짜: {year}년 {month}월 {day}일
+        </Text>
       </SafeAreaView>
-
-      {/* 날짜 */}
-      <SafeAreaView style={styles.extendLayout}>
-        <View style={styles.dateLayout}>
-          <TouchableOpacity>
-            <Text style={{ ...styles.date, color: nowTheme.font }}>
-              날짜: {year}년 {month}월 {day}일
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-
-
-
-
 
       {/*--------------------- 에디터 --------------------- */}
       {editorColor.backgroundColor &&
         <>
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}style={{ flex: 0.95,  borderColor:nowTheme.cardBorder,  }}>
             <SafeAreaView>
               <ScrollView>
+
                 {/* {이미지 보이는 곳} */}
                 <Pressable onPress={check}>
                   {img && <TouchableOpacity onPress={()=> {
-                        console.log("이미지 확대 클릭")
                         setCheckImage(true);
                     }}>
                         <ImageModal
@@ -292,6 +268,7 @@ const check = () => {
                         {/* <Image source={{ uri: imageUri }} style={styles.asd} /> */}
                     </TouchableOpacity>}
                 </Pressable>
+
                 {/* 음성 플레이어 영역 */}
                 {voice && <AudioPlayer audio={voice}></AudioPlayer>}
                 {audio &&
@@ -299,6 +276,10 @@ const check = () => {
                     <AudioPlayer audio={audio}></AudioPlayer>
                   </View>
                 }
+                {/* {이미지 보이는 곳} */}
+                <Pressable >
+                  {img && < Image source={{ uri: img }} style={{ marginLeft:10, marginTop:16, width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5, borderWidth:1, borderColor:nowTheme.cardBorder, borderRadius:20, }} />}
+                </Pressable>
 
                     {checkImage && 
                     <ImageModal
@@ -336,7 +317,7 @@ const check = () => {
   );
 }
 
-export default DetailScreen;
+export default PictureDetailScreen;
 
 const styles = StyleSheet.create({
   errorTextStyle: {
@@ -351,9 +332,8 @@ const styles = StyleSheet.create({
   },
 
   saveButtonView: {
-    alignItems: "center",
     justifyContent: "space-evenly",
-    flexDirection: "row",
+    flexDirection:"row",
   },
 
   saveButtonStyle: {
@@ -404,14 +384,16 @@ const styles = StyleSheet.create({
 
   title: {
     color: "white",
-    fontSize: SCREEN_HEIGHT / 30,
-    height: SCREEN_HEIGHT / 16,
-    padding: 10,
+    fontSize: SCREEN_HEIGHT / 36,
+    height: SCREEN_HEIGHT / 20,
+    margin:10,
   },
 
   titleLayout: {
-    marginTop: 10,
-    height: SCREEN_HEIGHT / 20,
+   
+    borderColor:"white",
+    justifyContent:'center',
+
   },
 
   extendLayout: {
@@ -419,17 +401,16 @@ const styles = StyleSheet.create({
   },
 
   feelingLayout: {
-    marginTop: 10,
-    height: SCREEN_HEIGHT / 20,
-    width: SCREEN_WIDTH / 2,
     flexDirection: 'row',
+    
+    borderColor:"white",
+   
+       
   },
 
   feeling: {
     width: SCREEN_WIDTH / 3,
-    height: SCREEN_HEIGHT / 50,
     color: "#456185",
-    padding: 10,
   },
 
   feelingBtnBox: {
@@ -443,7 +424,6 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    width: SCREEN_WIDTH,
     color: "white",
     padding: 10,
   },
@@ -451,13 +431,15 @@ const styles = StyleSheet.create({
   dateLayout: {
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
-    marginTop: SCREEN_HEIGHT / 40,
+    borderBottomWidth:1,
+    borderColor:"white",
   },
 
   contents: {
     padding: 10,
     flexShrink: 1,
     color: "white",
+    
   },
 
   modalView: {

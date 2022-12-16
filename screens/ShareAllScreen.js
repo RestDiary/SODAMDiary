@@ -8,12 +8,35 @@ import { getProfileData } from 'react-native-calendars/src/Profiler';
 import axios from 'axios';
 import { Button } from 'react-native-paper';
 import { API } from '../config.js'
+import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-function DiaryScreen( share ) {
+function ShareAllScreen( share ) {
+  //테마
+  useEffect(() => {
+    getTheme()
+  }, [])
+
+  const [nowTheme, setNowTheme] = useState({});
+  const isFocused = useIsFocused();
+
+  const getTheme = async () => {
+    let selectedTheme = await AsyncStorage.getItem('theme');
+
+    if (selectedTheme.includes("dark")) setNowTheme(dark);
+    else if (selectedTheme.includes("votanical")) setNowTheme(votanical);
+    else if (selectedTheme.includes("town")) setNowTheme(town);
+    else if (selectedTheme.includes("classic")) setNowTheme(classic);
+    else if (selectedTheme.includes("purple")) setNowTheme(purple);
+    else if (selectedTheme.includes("block")) setNowTheme(block);
+    else if (selectedTheme.includes("pattern")) setNowTheme(pattern);
+    else if (selectedTheme.includes("magazine")) setNowTheme(magazine);
+    else if (selectedTheme.includes("winter")) setNowTheme(winter);
+  }
+
   console.log("share", share.route.params.share.keyword);
 
   const [diaryData, setDiaryData] = useState([]);
@@ -24,7 +47,7 @@ function DiaryScreen( share ) {
   useEffect(() => {
     isLogin();
     getDiaryData();
-  }, [])
+  }, [isFocused])
 
   const isLogin = async () => {
     const userId = await AsyncStorage.getItem('id')
@@ -94,7 +117,9 @@ function DiaryScreen( share ) {
       <>
         {temp[0] &&
           <View style={styles.moon}>
-            <Text style={styles.moonText}>{temp[0].emotion}</Text>
+            <View style={{ marginLeft:10, marginRight:10, borderRadius:10 ,backgroundColor:nowTheme.btn }}>
+              <Text style={{...styles.moonText,color: nowTheme.font }}>{temp[0].emotion}</Text>
+            </View>
             <View style={styles.cardContainer}>
               <SafeAreaView>
                 {/* 가로 스크롤 뷰 */}
@@ -120,32 +145,25 @@ function DiaryScreen( share ) {
   }
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
+    <SafeAreaView style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
         {/* 세로 스크롤 뷰 */}
         <ScrollView>
-          {/* 년도 */}
-          <View style={styles.year}>
-            {/*----------------------------<year>------------------------------  */}
-            {/* 년 선택하는 것으로 변경예정 */}
-            <Text style={styles.yearText}>2022</Text>
-          </View>
+        <View style={{alignItems: 'center', justifyContent: 'center',}}>
 
           {loading && <ActivityIndicator size="large" color="white" />}
 
           <View>
             {getDiary(share.route.params.share.keyword)}
-
           </View>
-
+          </View>
         </ScrollView>
       </SafeAreaView>
-    </View>
+    
 
   );
 }
 
-export default DiaryScreen;
+export default ShareAllScreen;
 
 const styles = StyleSheet.create({
 
@@ -154,26 +172,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  searchBar: {
+    backgroundColor: "#fff"
+  },
+
   year: {
-    marginTop: 8,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   yearText: {
-    color: "#fff"
-  },
-
-  moon: {
-    marginTop: 8,
+    color: "#fff",
+    fontSize: SCREEN_WIDTH / 14,
+    fontWeight: 'bold',
   },
 
   moonText: {
-    marginBottom: 16,
-    marginLeft: 24,
-    marginRight: 24,
+    margin: 16,
     color: "#fff",
-    fontSize: 24,
   },
 
   scrollView: {
@@ -181,11 +198,11 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    height: (SCREEN_WIDTH/2)*2,
+    height: (SCREEN_WIDTH / 1.8) * 2,
   },
 
-  notCard:{
-    width: SCREEN_WIDTH / 3,
-    height: SCREEN_HEIGHT / 3,
+  notCard: {
+    width: SCREEN_WIDTH / 5.4,
+    height: SCREEN_HEIGHT / 5.4,
   }
 });

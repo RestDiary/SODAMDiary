@@ -114,10 +114,10 @@ const styles = StyleSheet.create({
 
   card: {
     width: SCREEN_WIDTH / 1.3,
-    marginTop: 50,
+    marginTop: 80,
     marginRight: 10,
     marginLeft: 10,
-    marginBottom: 180,
+    marginBottom: 220,
     borderWidth: 3,
     borderRadius: 20,
   },

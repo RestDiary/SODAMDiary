@@ -428,24 +428,27 @@ function WriteScreen({ navigation }) {
       </SafeAreaView>
 
       {/* 감정선택 */}
-      <SafeAreaView style={styles.feelingLayout}>
+      <SafeAreaView style={{...styles.feelingLayout, justifyContent:"space-between"}}>
         {/* 오늘의 기분 키워드 피커 */}
         <View>
           <Picker
             style={{
               ...styles.feeling,
-              backgroundColor: nowTheme.cardBg,
+              backgroundColor: nowTheme.btn,
               color: nowTheme.font,
+              justifyContent:"space-between"
+
             }}
             onValueChange={(itemValue) => addEmotion(itemValue)}
           >
-            <Picker.Item enabled={false} label="감정 선택" value="emo" />
+            <Picker.Item style={{backgroundColor: nowTheme.btn, color: nowTheme.font}} enabled={false} label="감정 선택" value="emo" />
             <Picker.Item label="추억" value="추억" />
             <Picker.Item label="추천" value="추천" />
             <Picker.Item label="성취" value="성취" />
             <Picker.Item label="좋음" value="좋음" />
             <Picker.Item label="즐거움" value="즐거움" />
             <Picker.Item label="행복" value="행복" />
+            <Picker.Item label="화남" value="화남" />
             <Picker.Item label="기대" value="기대" />
             <Picker.Item label="감사" value="감사" />
             <Picker.Item label="부러움" value="부러움" />
@@ -548,19 +551,24 @@ function WriteScreen({ navigation }) {
           <Modal isVisible={isModalVisible}>
             <View
               style={{
-                flex: 0.3,
-                backgroundColor: "#456185",
+                flex: 0.4,
+                backgroundColor: nowTheme.cardBg,
                 justifyContent: "center",
                 alignItems: "center",
+                borderRadius:20,
               }}
             >
               <AudioRecorder getAudio={getAudio} />
 
               <View style={{ marginTop: "6%" }}>
                 {isRecording ? (
-                  <Text style={{ color: "white" }}>녹음 중입니다.</Text>
+                  <Text style={{...styles.textButtonStyle, color:nowTheme.font }}>녹음 중입니다.</Text>
                 ) : (
-                  <Button title="닫기" onPress={toggleModal}></Button>
+                  <TouchableOpacity style={{backgroundColor:nowTheme.btn, padding:10, borderRadius:10}} onPress={toggleModal}>
+                    <Text style={{...styles.textButtonStyle,}}>
+                      닫기
+                    </Text>
+                  </TouchableOpacity>
                 )}
               </View>
             </View>
@@ -569,32 +577,35 @@ function WriteScreen({ navigation }) {
           {/*--------------------- 에디터 --------------------- */}
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 0.8 }}
+            style={{ flex: 0.9 }}
           >
             <SafeAreaView>
               <ScrollView>
+                {/* 음성 플레이어 영역 */}
+                {audio && (
+                  <View
+                    style={{
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      flexDirection: "row",
+                      
+                    }}
+                  >
+                    <Pressable onLongPress={delAudio}>
+                    <AudioPlayer audio={audio}></AudioPlayer>
+                    </Pressable>
+
+                  </View>
+                )}
                 {/* {이미지 보이는 곳} */}
                 <Pressable onLongPress={delImg}>
                   {image && (
                     <Image
                       source={{ uri: image }}
-                      style={{ width: 200, height: 200 }}
+                      style={{ width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5, borderWidth:1, borderColor:nowTheme.cardBorder, margin:10, borderRadius:20, }}
                     />
                   )}
                 </Pressable>
-                {/* 음성 플레이어 영역 */}
-                {audio && (
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <AudioPlayer audio={audio}></AudioPlayer>
-                    <Button title="삭제" onPress={delAudio} />
-                  </View>
-                )}
 
                 <RichEditor
                   ref={richText} // from useRef()
@@ -653,7 +664,7 @@ const styles = StyleSheet.create({
     width: "25%",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#fff",
+    shadowColor: "#000",
     shadowOffset: {
       width: 2,
       height: 2,
@@ -694,7 +705,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: "white",
-    fontSize: SCREEN_HEIGHT / 32,
+    fontSize: SCREEN_HEIGHT / 35,
     height: SCREEN_HEIGHT / 16,
     marginLeft: 10,
   },

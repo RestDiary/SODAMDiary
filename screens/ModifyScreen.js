@@ -14,6 +14,7 @@ import axios from 'axios';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -151,6 +152,28 @@ function DetailScreen(card) {
   const formData = new FormData();
   let url = card.route.params.card.route.params.card.img; //서버에서 받아올 aws이미지 경로
   let showImage = true;
+
+    //날짜 선택 보일지 여부 선택
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [year, setYear] = useState(date.getFullYear());
+    const [month, setMonth] = useState(date.getMonth() + 1);
+    const [day, setDay] = useState(date.getDate());
+
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+  
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+  
+    const handleConfirm = (date) => {
+      setYear(date.getFullYear());
+      setMonth(date.getMonth() + 1);
+      setDay(date.getDate());
+  
+      hideDatePicker();
+    };
 
   useEffect(() => {
     getDiaryData()
@@ -298,7 +321,7 @@ function DetailScreen(card) {
   }
 
   //자식에서 부모에게 Audio 데이터 전달
-  const [audio, setAudio] = useState()
+  const [audio, setAudio] = useState(card.route.params.card.route.params.card.voice)
   const [isRecording, setIsRecording] = useState(false)
   const getAudio = (audio, isRecording) => {
     setAudio(audio)
@@ -421,19 +444,24 @@ function DetailScreen(card) {
       </SafeAreaView>
 
       {/* 감정선택 */}
-      <SafeAreaView style={styles.feelingLayout}>
+      <SafeAreaView style={{...styles.feelingLayout, justifyContent:"space-between"}}>
         {/* 오늘의 기분 키워드 피커 */}
         <View>
           <Picker
-            style={{ ...styles.feeling, backgroundColor: nowTheme.cardBg, color: nowTheme.font }}
+            style={{ ...styles.feeling, 
+              backgroundColor: nowTheme.btn, 
+              color: nowTheme.font,
+              justifyContent:"space-between"
+             }}
             onValueChange={(itemValue) => addEmotion(itemValue)}>
-            <Picker.Item enabled={false} label="감정 선택" value="emo" />
+            <Picker.Item style={{backgroundColor: nowTheme.btn, color: nowTheme.font}} enabled={false} label="감정 선택" value="emo" />
             <Picker.Item label="추억" value="추억" />
             <Picker.Item label="추천" value="추천" />
             <Picker.Item label="성취" value="성취" />
             <Picker.Item label="좋음" value="좋음" />
             <Picker.Item label="즐거움" value="즐거움" />
             <Picker.Item label="행복" value="행복" />
+            <Picker.Item label="화남" value="화남" />
             <Picker.Item label="기대" value="기대" />
             <Picker.Item label="감사" value="감사" />
             <Picker.Item label="부러움" value="부러움" />
@@ -465,13 +493,25 @@ function DetailScreen(card) {
       {/* 날짜 */}
       <SafeAreaView style={styles.extendLayout}>
         <View style={styles.dateLayout}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={showDatePicker}>
             <Text style={{ ...styles.date, color: nowTheme.font }}>
-              {card.route.params.card.route.params.card.year}년 {card.route.params.card.route.params.card.month}월 {card.route.params.card.route.params.card.day}일
+            {year +
+                "년 " +
+                month +
+                "월 " +
+                day +
+                "일"}
             </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
+      <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+                date={date}
+            />
 
       {/* 키보드 닫기 버튼 */}
       <View style={styles.keyboardButtonView}>
@@ -523,34 +563,58 @@ function DetailScreen(card) {
 
           {/* Modal */}
           <Modal isVisible={isModalVisible}>
-            <View style={{ flex: 0.3, backgroundColor: '#456185', justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ 
+            flex: 0.4,
+            backgroundColor: nowTheme.cardBg,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 20,
+                }}>
               <AudioRecorder getAudio={getAudio} />
 
               <View style={{ marginTop: '6%' }}>
                 {isRecording ?
-                  <Text style={{ color: 'white' }}>녹음 중입니다.</Text>
+                   <Text style={{...styles.textButtonStyle, color:nowTheme.font }}>녹음 중입니다.</Text>
                   :
-                  <Button title='닫기' onPress={toggleModal} ></Button>
+                  <TouchableOpacity style={{backgroundColor:nowTheme.btn, padding:10, borderRadius:10}} onPress={toggleModal}>
+                    <Text style={{...styles.textButtonStyle,}}>
+                      닫기
+                    </Text>
+                  </TouchableOpacity>
                 }
               </View>
             </View>
           </Modal>
 
           {/*--------------------- 에디터 --------------------- */}
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.8 }}>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 0.9 }}>
             <SafeAreaView>
               <ScrollView>
-                {/* {이미지 보이는 곳} */}
-                <Pressable onLongPress={delImg}>
-                  {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-                </Pressable>
-                {/* 음성 플레이어 영역 */}
-                {audio &&
-                  <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+               {/* 음성 플레이어 영역 */}
+               {audio && (
+                  <View
+                    style={{
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      flexDirection: "row",
+                      
+                    }}
+                  >
+                    <Pressable onLongPress={delAudio}>
                     <AudioPlayer audio={audio}></AudioPlayer>
-                    <Button title='삭제' onPress={delAudio} />
+                    </Pressable>
+
                   </View>
-                }
+                )}
+               {/* {이미지 보이는 곳} */}
+               <Pressable onLongPress={delImg}>
+                  {image && (
+                    <Image
+                      source={{ uri: image }}
+                      style={{ width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5, borderWidth:1, borderColor:nowTheme.cardBorder, margin:10, borderRadius:20, }}
+                    />
+                  )}
+                </Pressable>
 
                 <RichEditor
                   ref={richText} // from useRef()
@@ -575,7 +639,7 @@ function DetailScreen(card) {
             <TouchableOpacity
               style={{ ...styles.saveButtonStyle, backgroundColor: nowTheme.btn }}
               onPress={submitContentHandle}>
-              <Text style={styles.textButtonStyle}>저장</Text>
+              <Text style={styles.textButtonStyle}>수정</Text>
             </TouchableOpacity>
 
           </View>
@@ -595,13 +659,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "flex-end",
     marginRight: 12,
-    marginBottom: 8
+    marginBottom: 8,
   },
 
   saveButtonView: {
     alignItems: "center",
-    justifyContent: "space-evenly",
-    flexDirection: "row",
+    justifyContent: "center",
   },
 
   saveButtonStyle: {
@@ -611,12 +674,11 @@ const styles = StyleSheet.create({
     width: "25%",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#fff",
+    shadowColor: "#000",
     shadowOffset: {
       width: 2,
       height: 2,
     },
-
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
@@ -646,15 +708,15 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    backgroundColor: '#071D3A',
+    backgroundColor: "#071D3A",
     flex: 1,
   },
 
   title: {
     color: "white",
-    fontSize: SCREEN_HEIGHT / 30,
+    fontSize: SCREEN_HEIGHT / 35,
     height: SCREEN_HEIGHT / 16,
-    padding: 10,
+    marginLeft: 10,
   },
 
   titleLayout: {
@@ -663,14 +725,14 @@ const styles = StyleSheet.create({
   },
 
   extendLayout: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   feelingLayout: {
     marginTop: 10,
     height: SCREEN_HEIGHT / 20,
     width: SCREEN_WIDTH / 2,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   feeling: {
@@ -681,13 +743,13 @@ const styles = StyleSheet.create({
   },
 
   feelingBtnBox: {
-    flexDirection: 'row',
+    flexDirection: "row",
     width: SCREEN_WIDTH / 1.5,
     height: SCREEN_HEIGHT / 14.5,
     color: "#456185",
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 
   date: {
@@ -710,8 +772,8 @@ const styles = StyleSheet.create({
 
   modalView: {
     flex: 0.3,
-    backgroundColor: '#456185',
-    justifyContent: 'center',
-    alignItems: 'center'
+    backgroundColor: "#456185",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
