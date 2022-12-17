@@ -17,5 +17,5 @@ export const API = {
   PIE: `${BASE_URL}/count`,
   BAR: `${BASE_URL}/chart/bar`,
   CONTRIBUTION: `${BASE_URL}/chart/contribution`,
-
+  SCORE: `${BASE_URL}/userScore`
 };
