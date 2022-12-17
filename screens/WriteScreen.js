@@ -357,21 +357,6 @@ function WriteScreen({ navigation }) {
 
     // 서버 데이터 전송
     setLoading(true);
-    await axios({
-      method: "post",
-      url: `${API.SCORE}`,
-      params: {
-        id: id, 
-      }	
-    }, null)
-      .then(res => {
-          score = res.data;
-      })
-      .catch(function (error) {
-        Alert.alert("❗error : bad response")
-      })
-    
-
     try {
       await axios(
         {
@@ -387,7 +372,6 @@ function WriteScreen({ navigation }) {
             img: url, //****이미지 추가
             voice: audio?.file,
             keyword: Emotions,
-            score: score,
           },
         },
         null
