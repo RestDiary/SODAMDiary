@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Button, View, Text, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Button, View, Text, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from './component/Card'
@@ -157,6 +157,11 @@ function CalenderScreen({ navigation }) {
 
         </View>
         <Text style={{...styles.textStyle, color:nowTheme.font}}>{selectDay.dateString}</Text>
+
+        {loading && 
+        <ActivityIndicator/>
+        }
+
         {/* 카드 가로 뷰 */}
         <View style={styles.cardContainer}>
           <SafeAreaView>
@@ -173,9 +178,6 @@ function CalenderScreen({ navigation }) {
                 })
               }
               <View style={styles.notCard}></View>
-
-
-
             </ScrollView>
           </SafeAreaView>
         </View>
