@@ -69,7 +69,6 @@ function HomeScreen({ navigation }) {
                                     {nowTheme.menu}
                                 </View>
                             </TouchableOpacity>
-
                         </ImageBackground>
 
                     </View>
@@ -79,7 +78,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.headWidgetContainer}>
                                 <View style={styles.headWidgetDiv1} >
                                     <TouchableOpacity  onPress={(screen) => moveNavigate('Calender')}>
-                                        <View style={{...styles.longWidget, backgroundColor: nowTheme.calender}}>
+                                        <View style={{...styles.longWidget, backgroundColor: nowTheme.calender, borderRadius:20}}>
                                             <Entypo name="calendar" size={24} color="white" />
                                             <Text style={styles.textStyle}>calender</Text>
                                         </View>
@@ -89,7 +88,7 @@ function HomeScreen({ navigation }) {
                                 <View  style={styles.headWidgetDiv2}>
                                     <View style={styles.smallWidgetContaner}>
                                         <TouchableOpacity onPress={(screen) => moveNavigate('Chart')}>
-                                            <View style={{...styles.smallWidget, backgroundColor:nowTheme.chart}}>
+                                            <View style={{...styles.smallWidget, backgroundColor:nowTheme.chart, borderRadius:20}}>
                                                 <AntDesign name="piechart" size={24} color="white" />
                                                 <Text style={styles.textStyle}>chart</Text>
                                             </View>
@@ -97,7 +96,7 @@ function HomeScreen({ navigation }) {
                                     </View>
                                     <View style={styles.smallWidgetContaner}>
                                         <TouchableOpacity onPress={(screen) => moveNavigate('Diary')}>
-                                            <View style={{...styles.smallWidget, backgroundColor:nowTheme.diary}}>
+                                            <View style={{...styles.smallWidget, backgroundColor:nowTheme.diary, borderRadius:20}}>
                                                 <Entypo name="list" size={24} color="white" />
                                                 <Text style={styles.textStyle}>diary</Text>
                                             </View>
@@ -108,7 +107,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.widgetContainer}>
                             <View style={styles.smallWidgetContaner}>
                             <TouchableOpacity onPress={(screen) => moveNavigate('Picture')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:nowTheme.picture}}>
+                                    <View style={{...styles.smallWidget, backgroundColor:nowTheme.picture, borderRadius:20}}>
                                         <MaterialIcons name="photo-album" size={24} color="white" />
                                         <Text style={styles.textStyle}>picture</Text>
                                     </View>
@@ -116,7 +115,7 @@ function HomeScreen({ navigation }) {
                             </View>
                             <View style={styles.smallWidgetContaner}>
                                 <TouchableOpacity onPress={(screen) => moveNavigate('Write')}>
-                                    <View style={{...styles.smallWidget, backgroundColor:nowTheme.write}}>
+                                    <View style={{...styles.smallWidget, backgroundColor:nowTheme.write, borderRadius:20}}>
                                         <FontAwesome name="pencil-square-o" size={24} color="white" />  
                                         <Text style={styles.textStyle}>write</Text>
                                     </View>
@@ -126,7 +125,7 @@ function HomeScreen({ navigation }) {
                         <View style={styles.widgetContainer}>
                             <View style={styles.smallWidgetContaner}>
                             <TouchableOpacity onPress={(screen) => moveNavigate('Share')}>
-                                    <View style={{...styles.smallWidget2, backgroundColor:nowTheme.share}}>
+                                    <View style={{...styles.smallWidget2, backgroundColor:nowTheme.share, borderRadius:20}}>
                                         <Entypo name="shareable" size={24} color="white" />
                                         <Text style={styles.textStyle}>Share</Text>
                                     </View>
@@ -199,7 +198,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#de8260',
         alignItems:'center',
         justifyContent:'center',
-        borderRadius: 20,
     },
     smallWidget2:{
         height:SCREEN_HEIGHT/5.8,
@@ -207,7 +205,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#de8260',
         alignItems:'center',
         justifyContent:'center',
-        borderRadius: 20,
     },
     textStyle:{
         color:'white',

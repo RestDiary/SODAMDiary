@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Button, View, Text, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Button, View, Text, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 import { Calendar, LocaleConfig } from "react-native-calendars";
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from './component/Card'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import { API } from '../config.js'
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -37,11 +35,8 @@ function CalenderScreen({ navigation }) {
   const [selectDay, setSelectDay] = useState([]); //선택한 캘린더
   const [loading, setLoading] = useState(false); //데이터 불러오는동안 로딩 표시
   const [reObjDiary, setReObjDiary] = useState([]); //선택한 다이어리 객체 재 리스트화 (사용)
-  const [markingDate, setMarkingDate] = useState([]); // 날짜에 마킹한 객체를 집어넣는곳
-  const [mergeObj, setMergeObj] = useState({});
+  const [markingDate, setMarkingDate] = useState({}); // 날짜에 마킹한 객체를 집어넣는곳
   const [year, setYear] = useState(new Date().getFullYear());
-
-  // let year = new Date().getFullYear();
 
   //일기 data 요청
   const getDiaryData = async () => {
@@ -72,10 +67,7 @@ function CalenderScreen({ navigation }) {
   //로그인 여부 확인 및 일기 불러오기
   useEffect(() => {
     getDiaryData()
-    console.log("객체 0번째 출력")
-    console.log(JSON.stringify(diaryData[0], null, 4))
   }, [year])
-
 
 
   //데이터 불러오고 난후 캘린더에 쓴날 표시 → 객체 state에 집넣기
@@ -97,7 +89,6 @@ function CalenderScreen({ navigation }) {
     }
     setMarkingDate(result)
   }, [diaryData])
-
 
   //===================================================================================
 
@@ -162,14 +153,15 @@ function CalenderScreen({ navigation }) {
             // }}
             // 월간 스와이프 옵션을 활성화합니다. 기본값 = 거짓       
             enableSwipeMonths={true}
-
-
-
-
           />
 
         </View>
         <Text style={{...styles.textStyle, color:nowTheme.font}}>{selectDay.dateString}</Text>
+
+        {loading && 
+        <ActivityIndicator/>
+        }
+
         {/* 카드 가로 뷰 */}
         <View style={styles.cardContainer}>
           <SafeAreaView>
@@ -186,9 +178,6 @@ function CalenderScreen({ navigation }) {
                 })
               }
               <View style={styles.notCard}></View>
-
-
-
             </ScrollView>
           </SafeAreaView>
         </View>
