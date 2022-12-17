@@ -259,8 +259,8 @@ const check = () => {
                         <ImageModal
                             swipeToDismiss={false}
                             resizeMode="contain"
-                            imageBackgroundColor="#000000"
-                            style={{ width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5 }}
+                            imageBackgroundColor={nowTheme.cardBg}
+                            style={{ marginLeft:10, marginTop:16, width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5, borderWidth:1, borderColor:nowTheme.cardBorder, borderRadius:20, }}
                             source={{
                                 uri: img,
                             }}
@@ -276,10 +276,7 @@ const check = () => {
                     <AudioPlayer audio={audio}></AudioPlayer>
                   </View>
                 }
-                {/* {이미지 보이는 곳} */}
-                <Pressable >
-                  {img && < Image source={{ uri: img }} style={{ marginLeft:10, marginTop:16, width: SCREEN_WIDTH/1.5, height: SCREEN_WIDTH/1.5, borderWidth:1, borderColor:nowTheme.cardBorder, borderRadius:20, }} />}
-                </Pressable>
+    
 
                     {checkImage && 
                     <ImageModal

@@ -64,7 +64,7 @@ function ChangePwScreen({ navigation }) {
     })
       .then(res => {
         console.log(res.data);
-        navigation.replace('Setting');
+        navigation.replace('Login');
 
       })
       .catch(function (error) {
