@@ -4,6 +4,7 @@ import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API } from '../config'
 import { dark, votanical, town, classic, purple, block, pattern, magazine, winter } from './css/globalStyles';
+import {useIsFocused} from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -29,25 +30,22 @@ function LoginScreen({ navigation }) {
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
-  
 
   useEffect(() =>{
     getTheme()
   }, [nowTheme])
 
+  const isFocused = useIsFocused();
 
   //state 추가되면 실행
   useEffect(() => {
     isLogin()
-  }, [])
-
+  }, [isFocused])
 
   const isLogin = async () => {
     const userId = await AsyncStorage.getItem('id')
     if (userId) {
-      // Alert.alert(userId+"님 반갑습니다.")
       navigation.navigate("Home")
-      // navigation.reset({route: [{name: "Home"}]})
     }
   }
 
