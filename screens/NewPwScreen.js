@@ -74,7 +74,7 @@ console.log("newPw")
 
   //아이디 저장
   React.useEffect(() => {
-    AsyncStorage.getItem('tempId', (err, result) => {
+    AsyncStorage.getItem('id', (err, result) => {
       console.log(result); // User1 출력
       setId(result);
     });
