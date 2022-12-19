@@ -200,7 +200,8 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: '#00000',
-    padding: SCREEN_WIDTH / 10
+    marginLeft: SCREEN_WIDTH / 10,
+    marginTop: SCREEN_WIDTH / 10,
   },
   moon: {
     marginTop: 8,
@@ -219,11 +220,10 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    height: SCREEN_HEIGHT / 2,
   },
   notCard: {
-    width: SCREEN_WIDTH / 3,
-    height: SCREEN_HEIGHT / 3,
+    width: SCREEN_WIDTH / 5.4,
+    height: SCREEN_HEIGHT / 5.4,
   },
 
   calendar: {

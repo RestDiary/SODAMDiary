@@ -149,7 +149,7 @@ function WriteScreen({ navigation }) {
   const [id, setId] = useState("");
 
   //이미지 업로드용
-  const [image, setImage] = useState();
+  const [image, setImage] = useState("");
   const [send, setSend] = useState("");
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const formData = new FormData();
@@ -351,7 +351,7 @@ function WriteScreen({ navigation }) {
           console.log(url);
         })
         .catch((err) => {
-          console.log(err);
+          console.log("22",err);
         });
     }
 
@@ -377,8 +377,27 @@ function WriteScreen({ navigation }) {
         null
       )
         .then((res) => {
+          let emotion = res.data[0];
+          let score = res.data[1];
+          let ment = "";
+
           console.log("성공", res.data);
-          Alert.alert("일기가 저장되었어요.");
+          score = score.toString();
+
+          if(emotion === "positive"){
+            emotion = "긍정";
+            ment = "좋은 하루를 보내셨네요!"
+          }else if(emotion === "negative"){
+            emotion = "부정";
+            ment = "가끔은 쉬어가는 것은 어떨까요?"
+          }else if(emotion === "neutral"){
+            emotion = "중립";
+            ment = "소중한 시간을 담았어요!"
+          }
+
+
+          Alert.alert(ment,emotion + ": " + score + "%");
+
           moveNavigate("Home");
         })
         .catch(function (error) {

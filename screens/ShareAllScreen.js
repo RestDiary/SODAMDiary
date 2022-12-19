@@ -148,14 +148,14 @@ function ShareAllScreen( share ) {
     <SafeAreaView style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
         {/* 세로 스크롤 뷰 */}
         <ScrollView>
-        <View style={{alignItems: 'center', justifyContent: 'center',}}>
+        <View style={{alignItems: 'center', justifyContent: 'center', marginTop:40,}}>
 
           {loading && <ActivityIndicator size="large" color="white" />}
 
           <View>
             {getDiary(share.route.params.share.keyword)}
           </View>
-          </View>
+        </View>
         </ScrollView>
       </SafeAreaView>
     

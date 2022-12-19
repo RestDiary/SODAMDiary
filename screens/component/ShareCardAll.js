@@ -34,6 +34,22 @@ function ShareCardAll({data}) {
   const [newContent,setNewContent] = useState(""); 
 
 
+  const [emotionKor, setEmotionKor] = useState("");
+  const [maxValue, setMaxValue] = useState();
+
+  useEffect(() => {
+    if(data.emotion === "positive") {
+      setEmotionKor("긍정");
+    }else if(data.emotion === "negative") {
+      setEmotionKor("부정");
+    }else if(data.emotion === "neutral") {
+      setEmotionKor("중립");
+    }
+
+    setMaxValue(Math.max(data.positive, data.negative, data.neutral).toFixed());
+  }, [])
+
+
   const one = async() => {
     const onlyOne = await AsyncStorage.getItem("one");
     if(onlyOne === 'one') {
@@ -146,7 +162,8 @@ function ShareCardAll({data}) {
         <ImageBackground style={{ backgroundColor: nowTheme.front,height: (SCREEN_WIDTH / 1.8) * 1.59  }} source={nowTheme.image} resizeMode={'cover'}>
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
-            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>#{data.keyword}</Text>
+            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>{emotionKor}: {maxValue}%</Text>
+            
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -164,7 +181,8 @@ function ShareCardAll({data}) {
           {/* 제목  */}
           <View style={{ ...styles.frontTitle }}>
             <Text numberOfLines={1}
-              ellipsizeMode="tail" style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14 }}>{data.title}</Text>
+              ellipsizeMode="tail" style={{color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14, borderBottomWidth:1,borderBottomColor:nowTheme.font,marginLeft:16, marginRight:16 }}>{data.title}</Text>
+              <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20, marginTop:4 }}>#{data.keyword}</Text>
           </View>
         </ImageBackground>
         </Animated.View>
@@ -176,7 +194,7 @@ function ShareCardAll({data}) {
           <View style={{ ...styles.backImageBox }}>
             {(data.img !== null && data.img !== "") ?
               <Image source={{ uri: data.img }} style={styles.imageSize} resizeMode={'stretch'}></Image> :
-              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'stretch'}></Image>
+              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'contain'}></Image>
             }
           </View>
           {/* 내용 */}

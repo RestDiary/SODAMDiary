@@ -12,6 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 function ShareCard({data}) {
+  
+
   //테마
   useEffect(() => {
     getTheme()
@@ -49,6 +51,20 @@ function ShareCard({data}) {
   // 뒤에서 앞으로 다시 뒤집기위해 값 초기화
   flipAnimation.addListener(({ value }) => flipRotation = value);
 
+  const [emotionKor, setEmotionKor] = useState("");
+  const [maxValue, setMaxValue] = useState();
+
+  useEffect(() => {
+    if(data.emotion === "positive") {
+      setEmotionKor("긍정");
+    }else if(data.emotion === "negative") {
+      setEmotionKor("부정");
+    }else if(data.emotion === "neutral") {
+      setEmotionKor("중립");
+    }
+
+    setMaxValue(Math.max(data.positive, data.negative, data.neutral).toFixed());
+  }, [])
 
     //일기 공유 선택
     const shareDiary = () => {
@@ -175,7 +191,7 @@ function ShareCard({data}) {
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
             <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>{data.day}일</Text>
-            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>#{data.emotion}</Text>
+            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>{emotionKor}: {maxValue}%</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -193,7 +209,8 @@ function ShareCard({data}) {
           {/* 제목  */}
           <View style={{ ...styles.frontTitle }}>
             <Text numberOfLines={1}
-              ellipsizeMode="tail" style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14 }}>{data.title}</Text>
+              ellipsizeMode="tail" style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14, borderBottomWidth:1,borderBottomColor:nowTheme.font,marginLeft:16, marginRight:16 }}>{data.title}</Text>
+               <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20, marginTop:4 }}>#{data.keyword}</Text>
           </View>
         </ImageBackground>
         </Animated.View>
@@ -205,7 +222,7 @@ function ShareCard({data}) {
           <View style={{ ...styles.backImageBox }}>
             {(data.img !== null && data.img !== "") ?
               <Image source={{ uri: data.img }} style={styles.imageSize} resizeMode={'stretch'}></Image> :
-              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'stretch'}></Image>
+              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'contain'}></Image>
             }
           </View>
           {/* 내용 */}

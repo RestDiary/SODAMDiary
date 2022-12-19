@@ -15,6 +15,7 @@ function Card({ data }) {
   useEffect(() => {
     getTheme()
   }, [])
+  
 
   const [nowTheme, setNowTheme] = useState({});
 
@@ -40,6 +41,21 @@ function Card({ data }) {
   const moveNavigate = (screen) => {
     navigation.navigate(screen)
   }
+
+  const [emotionKor, setEmotionKor] = useState("");
+  const [maxValue, setMaxValue] = useState();
+
+  useEffect(() => {
+    if(data.emotion === "positive") {
+      setEmotionKor("긍정");
+    }else if(data.emotion === "negative") {
+      setEmotionKor("부정");
+    }else if(data.emotion === "neutral") {
+      setEmotionKor("중립");
+    }
+
+    setMaxValue(Math.max(data.positive, data.negative, data.neutral).toFixed());
+  }, [])
 
   // 리렌더링 시 값이 초기화 되는 것을 막기 위해 ref 사용.
   const flipAnimation = useRef(new Animated.Value(0)).current;
@@ -135,7 +151,7 @@ function Card({ data }) {
           {/* 키워드 */}
           <View style={{ ...styles.frontKeyWordBox }}>
             <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>{data.day}일</Text>
-            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>#{data.keyword}</Text>
+            <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20 }}>{emotionKor}: {maxValue}%</Text>
             {/* {
               props.data.keyword.map(function(id,index){
                 return(
@@ -151,9 +167,10 @@ function Card({ data }) {
             {nowTheme.icon}
           </View>
           {/* 제목  */}
-          <View style={{ ...styles.frontTitle }}>
+          <View style={{ ...styles.frontTitle,  }}>
             <Text numberOfLines={1}
-              ellipsizeMode="tail" style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14 }}>{data.title}</Text>
+              ellipsizeMode="tail" style={{ color: nowTheme.font, fontWeight: "bold", fontSize: SCREEN_WIDTH / 14, borderBottomWidth:1,borderBottomColor:nowTheme.font,marginLeft:16, marginRight:16 }}>{data.title}</Text>
+               <Text style={{ color: nowTheme.font, fontSize: SCREEN_WIDTH / 20, marginTop:4 }}>#{data.keyword}</Text>
           </View>
         </ImageBackground>
         </Animated.View>
@@ -165,7 +182,7 @@ function Card({ data }) {
           <View style={{ ...styles.backImageBox }}>
             {(data.img !== null && data.img !== "") ?
               <Image source={{ uri: data.img }} style={styles.imageSize} resizeMode={'stretch'}></Image> :
-              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'stretch'}></Image>
+              <Image source={ nowTheme.logo } style={styles.imageSize} resizeMode={'contain'}></Image>
             }
           </View>
           {/* 내용 */}
@@ -242,8 +259,7 @@ const styles = StyleSheet.create({
   frontTitle: {
     minHeight: "20%",
     alignItems: "center",
-    justifyContent:"center"
-  
+    justifyContent:"center",
   },
 
   back: {

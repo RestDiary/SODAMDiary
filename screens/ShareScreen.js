@@ -76,7 +76,6 @@ function ShareScreen({ navigation }) {
         .then(res => {
           setDiaryData(res.data)
           setDataTmp(res.data)
-          console.log("들어온",res.data)
         })
         .catch(function (error) {
           Alert.alert("❗error : bad response")

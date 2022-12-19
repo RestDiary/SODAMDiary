@@ -220,7 +220,7 @@ const check = () => {
 
     <View style={{ ...styles.container, backgroundColor: nowTheme.cardBg }}>
       {/* 제목 */}
-      <SafeAreaView style={styles.titleLayout}>
+      <SafeAreaView style={{...styles.titleLayout, backgroundColor: nowTheme.btn, borderColor:nowTheme.cardBorder,}}>
         <Text
           placeholder="제목:"
           placeholderTextColor={"#456185"}
