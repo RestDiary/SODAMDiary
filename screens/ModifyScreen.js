@@ -403,9 +403,9 @@ function DetailScreen(card) {
           diarykey: card.route.params.card.route.params.card.diarykey,
           title: titleText,
           content: descHTML,
-          year: date.getFullYear(),
-          month: date.getMonth() + 1,
-          day: date.getDate(),
+          year: year,
+          month: month,
+          day: day,
           img: url, //****이미지 추가
           voice: audio?.file,
           keyword: Emotions,

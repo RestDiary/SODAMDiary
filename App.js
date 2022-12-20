@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Image, Dimensions, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Button, Image, Dimensions, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
@@ -40,6 +40,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DetailScreen from './screens/DetailScreen';
 import ModifyScreen from './screens/ModifyScreen';
 import PictureDeailScreen from './screens/PictureDeailScreen';
+import MyPieChart from './screens/component/charts/MyPieChart';
+import EmotionPieChart from './screens/component/charts/EmotionPieChart';
 
 
 const Drawer = createDrawerNavigator();
@@ -58,6 +60,11 @@ function CustomDrawerContent(props) {
   useEffect(() => {
     getTheme()
   }, [isFocused])
+  
+  useEffect(() => {
+    getPieData()
+  },[])
+
 
   const getTheme = async () => {
     let selectedTheme = await AsyncStorage.getItem('theme');
@@ -75,6 +82,7 @@ function CustomDrawerContent(props) {
 
   const [id, setId] = useState("");
   const navigation = useNavigation();
+  const [pieData, setPieData] = useState([]);
 
   //로그아웃 버튼
   const logOut = async () => {
@@ -166,6 +174,25 @@ function CustomDrawerContent(props) {
     });
   }, [])
 
+  //getPiedata
+  const getPieData = async() => {
+    let userId = await AsyncStorage.getItem('id')
+
+    await axios({
+      method: "post",
+      url: 'http://people-env.eba-35362bbh.ap-northeast-2.elasticbeanstalk.com:3001/ratio',
+      params: {
+        id: userId, 
+      }
+    }, null)
+      .then(res => {
+        setPieData(res.data)
+      })
+      .catch(function (error) {
+        Alert.alert("❗error : bad response")
+      })
+  }
+
   return (
     <DrawerContentScrollView style={{ ...styles.drawerBox, backgroundColor: nowTheme.drawer }} {...props} contentContainerStyle={{ flex: 1 }}>
       <View style={{ height: SCREEN_HEIGHT / 5, alignItems: 'center', justifyContent: "center", flexDirection: 'row' }}>
@@ -183,32 +210,14 @@ function CustomDrawerContent(props) {
       </View>
 
 
+{/* 파이차트 */}
+{pieData.length > 0 ? (
+        <EmotionPieChart data={pieData} />
+      ) : (
+        <ActivityIndicator size="large" color="white" />
+      )}
 
-      {/* 감정차트*/}
-      <View style={{ marginTop: 20 }}>
-        {/* 행복 */}
-        <Text style={{ color: "white", marginLeft: 24, marginBottom: 8, fontWeight: 'bold' }}>
-          Happy
-        </Text>
-        <View style={styles.drawerChart}>
-          <View style={styles.drawerInnerChart}></View>
-        </View>
-
-        {/* 중립 */}
-        <Text style={{ color: "white", marginLeft: 24, marginBottom: 8, fontWeight: 'bold' }}>
-          Netural
-        </Text>
-        <View style={styles.drawerChart}>
-          <View style={styles.drawerInnerChart2}></View>
-        </View>
-
-        {/* 슬픔 */}
-        <Text style={{ color: "white", marginLeft: 24, marginBottom: 8, fontWeight: 'bold' }}>
-          Sad
-        </Text>
-        <View style={styles.drawerChart}>
-          <View style={styles.drawerInnerChart3}></View>
-        </View>
+      
 
         {/* 테마변경 기능 */}
         <View style={{ marginTop: 20 }}>
@@ -265,7 +274,6 @@ function CustomDrawerContent(props) {
             <Text style={styles.drawerItemText}>계정탈퇴</Text>
           </TouchableOpacity>
         </View>
-      </View>
     </DrawerContentScrollView>
   );
 }
